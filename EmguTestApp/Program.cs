@@ -1,4 +1,4 @@
-﻿#define KOMESSAGE
+﻿#define FIGHT
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,23 +50,25 @@ namespace EmguTestApp
 
         static double TotalFrames;
 
-        static string WinCapture = "Win";
-        static string WinCapture2 = "Win2";
-        static string WinCaptureCol = "WinCol";
-        static string WinCaptureCol2 = "Win2Col";
+        static List<string> WindowsList;// = new List<string>();
 
-        static string WinTitleCapture = "Title";
-        static string WinChoosePlayer = "ChoosePlayer";
-        static string WinChoosePlayer2 = "ChoosePlayer2";
-        static string WinRoundMessage = "RoundMessage";
-        static string WinGoMessage = "GoMessage";
+        //static string WinCapture = "Win";
+        //static string WinCapture2 = "Win2";
+        //static string WinCaptureCol = "WinCol";
+        //static string WinCaptureCol2 = "Win2Col";
 
-        static string WinResultP1Color = "ResultP1Color";
-        static string WinResultP2Color = "ResultP2Color";
-        static string WinResultP1ResultGray = "ResultP1Gray";
-        static string WinResultP2Gray = "ResultP2Gray";
+        //static string WinTitleCapture = "Title";
+        //static string WinChoosePlayer = "ChoosePlayer";
+        //static string WinChoosePlayer2 = "ChoosePlayer2";
+        //static string WinRoundMessage = "RoundMessage";
+        //static string WinGoMessage = "GoMessage";
 
-        static string WinTime = "Time";
+        //static string WinResultP1Color = "ResultP1Color";
+        //static string WinResultP2Color = "ResultP2Color";
+        //static string WinResultP1ResultGray = "ResultP1Gray";
+        //static string WinResultP2Gray = "ResultP2Gray";
+
+        //static string WinTime = "Time";
 
         static void Main(string[] args)
         {
@@ -77,12 +79,21 @@ namespace EmguTestApp
 #if CHOOSEPLAYER
             #region Player Choose
             FileToPlay = @"d:\Q4Vid\ChoosePlayers.mp4";
-            
-            CvInvoke.NamedWindow(WinTitleCapture);
-            CvInvoke.NamedWindow(WinChoosePlayer);
-            CvInvoke.NamedWindow(WinChoosePlayer2);
 
-            CvInvoke.NamedWindow(WinGoMessage);
+            WindowsList = new List<string>()
+            {
+                "Title",
+                "Player1Name",
+                "Player2Name",
+                "TitleGray"
+            };
+            WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
+
+            //CvInvoke.NamedWindow(WinTitleCapture);
+            //CvInvoke.NamedWindow(WinChoosePlayer);
+            //CvInvoke.NamedWindow(WinChoosePlayer2);
+            //CvInvoke.NamedWindow(WinGoMessage);
+
             #endregion
 #elif TITLE
 
@@ -90,8 +101,14 @@ namespace EmguTestApp
             #region Title Test
             FileToPlay = @"d:\Q4Vid\Menus.mp4";
 
-            CvInvoke.NamedWindow(WinTitleCapture);
-            CvInvoke.NamedWindow(WinGoMessage);
+            WindowsList = new List<string>() 
+            { 
+                "TitleColor",
+                "TitleGray",
+            };
+            WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
+            //CvInvoke.NamedWindow(WinTitleCapture);
+            //CvInvoke.NamedWindow(WinGoMessage);
             #endregion
 
             //Test Figth
@@ -99,29 +116,55 @@ namespace EmguTestApp
             #region Fight Test
             //FileToPlay = @"d:\Q4Vid\Players\Antonov.mp4";
             FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
-            CvInvoke.NamedWindow(WinCapture);
-            CvInvoke.NamedWindow(WinCapture2);
-            CvInvoke.NamedWindow(WinRoundMessage);
-            //CvInvoke.NamedWindow(WinGoMessage);
-            CvInvoke.NamedWindow(WinCaptureCol);
-            CvInvoke.NamedWindow(WinCaptureCol2);
-            CvInvoke.NamedWindow(WinTime);
+            WindowsList = new List<string>()
+            {
+                "Player1NameColor",
+                "Player2NameColor",
+                "RoundReadyMessage",
+                "Player1NameGray",
+                "Player2NameGray",
+                "Time"
+            };
+            WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
+
+            //CvInvoke.NamedWindow(WinCapture);
+            //CvInvoke.NamedWindow(WinCapture2);
+            //CvInvoke.NamedWindow(WinRoundMessage);
+            
+            //CvInvoke.NamedWindow(WinCaptureCol);
+            //CvInvoke.NamedWindow(WinCaptureCol2);
+            //CvInvoke.NamedWindow(WinTime);
             #endregion
             //WinLose
 #elif RESULT
             #region WinLose After Match
             FileToPlay = @"d:\Q4Vid\PerfectGame.mp4";
-            
-            CvInvoke.NamedWindow(WinTitleCapture);
-            CvInvoke.NamedWindow(WinResultP1Color);
-            CvInvoke.NamedWindow(WinResultP2Color);
-            CvInvoke.NamedWindow(WinResultP1ResultGray);
-            CvInvoke.NamedWindow(WinResultP2Gray);
+
+            WindowsList = new List<string>()
+            { 
+                "Title",
+                "Result1Color",
+                "Result2Color",
+                "Result1Gray",
+                "Result2Gray",
+            };
+            WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
+
+            //CvInvoke.NamedWindow(WinTitleCapture);
+            //CvInvoke.NamedWindow(WinResultP1Color);
+            //CvInvoke.NamedWindow(WinResultP2Color);
+            //CvInvoke.NamedWindow(WinResultP1ResultGray);
+            //CvInvoke.NamedWindow(WinResultP2Gray);
             #endregion
 #elif KOMESSAGE
             FileToPlay = @"d:\Q4Vid\Players\Mai.mp4";
-            CvInvoke.NamedWindow(WinCapture);
-            CvInvoke.NamedWindow(WinCapture2);
+            WindowsList = new List<string>() 
+            { 
+                "Ko Message Color",
+                "Ko Message Gray",
+            };
+            CvInvoke.NamedWindow(WindowsList[0]);
+            CvInvoke.NamedWindow(WindowsList[1]);
 #endif
             var capture = new Capture(FileToPlay);
             TotalFrames = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
@@ -195,38 +238,38 @@ namespace EmguTestApp
 
 #if FIGHT
             #region Fight Test
-            CvInvoke.Imshow(WinCapture, p1NameColor);
-            CvInvoke.Imshow(WinCapture2, p2NameColor);
-            CvInvoke.Imshow(WinRoundMessage, RoundReadyMessage);
+            CvInvoke.Imshow(WindowsList[0], p1NameColor);
+            CvInvoke.Imshow(WindowsList[1], p2NameColor);
+            CvInvoke.Imshow(WindowsList[2], RoundReadyMessage);
 
-            CvInvoke.Imshow(WinCaptureCol, p1NameGray);
-            CvInvoke.Imshow(WinCaptureCol2, p2NameGray);
-            CvInvoke.Imshow(WinTime, timeMessage);
+            CvInvoke.Imshow(WindowsList[3], p1NameGray);
+            CvInvoke.Imshow(WindowsList[4], p2NameGray);
+            CvInvoke.Imshow(WindowsList[5], timeMessage);
             #endregion
 #elif CHOOSEPLAYER
             #region Player Choose
-            CvInvoke.Imshow(WinChoosePlayer2, choosePlayer2);
-            CvInvoke.Imshow(WinChoosePlayer, choosePlayer);
-            CvInvoke.Imshow(WinTitleCapture, titleColor);
-            CvInvoke.Imshow(WinGoMessage, titleGray);
+            CvInvoke.Imshow(WindowsList[2], choosePlayer2);
+            CvInvoke.Imshow(WindowsList[1], choosePlayer);
+            CvInvoke.Imshow(WindowsList[0], titleColor);
+            CvInvoke.Imshow(WindowsList[3], titleGray);
             #endregion
 #elif TITLE
             #region Title Test
-            CvInvoke.Imshow(WinTitleCapture, titleColor);
-            CvInvoke.Imshow(WinGoMessage, titleGray);
+            CvInvoke.Imshow(WindowsList[0], titleColor);
+            CvInvoke.Imshow(WindowsList[1], titleGray);
             #endregion
             //Task.Delay(1000);
 #elif RESULT
             #region WinLose After Match
-            CvInvoke.Imshow(WinTitleCapture, titleColor);
-            CvInvoke.Imshow(WinResultP1Color, ResultP1Color);
-            CvInvoke.Imshow(WinResultP2Color, ResultP2Color);
-            CvInvoke.Imshow(WinResultP1ResultGray, ResultP1Gray);
-            CvInvoke.Imshow(WinResultP2Gray, ResultP2Gray);
+            CvInvoke.Imshow(WindowsList[0], titleColor);
+            CvInvoke.Imshow(WindowsList[1], ResultP1Color);
+            CvInvoke.Imshow(WindowsList[2], ResultP2Color);
+            CvInvoke.Imshow(WindowsList[3], ResultP1Gray);
+            CvInvoke.Imshow(WindowsList[4], ResultP2Gray);
             #endregion
 #elif KOMESSAGE
-            CvInvoke.Imshow(WinCapture, KoMessageColor);
-            CvInvoke.Imshow(WinCapture2, KoMessageGray);
+            CvInvoke.Imshow(WindowsList[0], KoMessageColor);
+            CvInvoke.Imshow(WindowsList[1], KoMessageGray);
 #endif
             //string stt = System.IO.Path.Combine(svDir, DateTime.Now.ToString("yyyyMMdd_HHmmssffff"));
             //p1Name.ToBitmap().Save(stt + "Maip1.bmp");
