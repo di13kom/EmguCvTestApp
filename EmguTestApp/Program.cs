@@ -1,4 +1,4 @@
-﻿#define FIGHT
+﻿#define KOMESSAGE
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +24,10 @@ namespace EmguTestApp
 
         static public Tuple<Bgr, Bgr> RoundReadyColors = Tuple.Create(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
         static public Tuple<Bgr, Bgr> GoMessageColors = Tuple.Create(new Bgr(100, 240, 240), new Bgr(180, 255, 255));
+
         static public Tuple<Bgr, Bgr> KoMessageColors = Tuple.Create(new Bgr(140, 230, 240), new Bgr(/*205*/190, 255, 255));
-        static public Tuple<Gray, Gray> KoMessageGray = Tuple.Create(new Gray(150), new Gray(170));
-        
+        static public Tuple<Gray, Gray> KoMessageGray = Tuple.Create(new Gray(240), new Gray(255));
+
 
         //static public Tuple<Bgr, Bgr> WinLoseAfterMatch = Tuple.Create(new Bgr(200, 192, 188), new Bgr(255, 255, 255));
         static public Tuple<Bgr, Bgr> WinLoseAfterMatchColor = Tuple.Create(new Bgr(0, 0, 0), new Bgr(60, 45, 35));
@@ -118,8 +119,9 @@ namespace EmguTestApp
             CvInvoke.NamedWindow(WinResultP2Gray);
             #endregion
 #elif KOMESSAGE
-            FileToPlay = @"d:\Q4Vid\Mai.mp4";
+            FileToPlay = @"d:\Q4Vid\Players\Mai.mp4";
             CvInvoke.NamedWindow(WinCapture);
+            CvInvoke.NamedWindow(WinCapture2);
 #endif
             var capture = new Capture(FileToPlay);
             TotalFrames = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
@@ -174,21 +176,21 @@ namespace EmguTestApp
             var ResultP2Gray = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
                 .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
 
-            //var komessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210)).Convert<Gray, byte>();
-            //komessage = komessage.InRange(ColorsThresHolds.KoMessageGray.Item1, ColorsThresHolds.KoMessageGray.Item2);
+            var KoMessageGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.KoMessageGray.Item1, ColorsThresHolds.KoMessageGray.Item2);
 
-            var komessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210))
+            var KoMessageColor = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210))
                 .InRange(ColorsThresHolds.KoMessageColors.Item1, ColorsThresHolds.KoMessageColors.Item2);
             var timeMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
-            .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2);
-                //.InRange(ColorsThresHolds.Time.Item1, ColorsThresHolds.Time.Item2);
+                .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2);
+            //.InRange(ColorsThresHolds.Time.Item1, ColorsThresHolds.Time.Item2);
 
 
-            var p1NameGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray,byte>()
+            var p1NameGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2);
-            var p2NameGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray,byte>()
+            var p2NameGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2);
-            var titleGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray,byte>()
+            var titleGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
 
 #if FIGHT
@@ -223,7 +225,8 @@ namespace EmguTestApp
             CvInvoke.Imshow(WinResultP2Gray, ResultP2Gray);
             #endregion
 #elif KOMESSAGE
-            CvInvoke.Imshow(WinCapture, komessage);
+            CvInvoke.Imshow(WinCapture, KoMessageColor);
+            CvInvoke.Imshow(WinCapture2, KoMessageGray);
 #endif
             //string stt = System.IO.Path.Combine(svDir, DateTime.Now.ToString("yyyyMMdd_HHmmssffff"));
             //p1Name.ToBitmap().Save(stt + "Maip1.bmp");
