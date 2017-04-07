@@ -1,4 +1,4 @@
-﻿#define CHOOSEPLAYER
+﻿#define RESULT
 //#define SAVEREQUIRED
 using System;
 using System.Collections.Generic;
@@ -51,8 +51,10 @@ namespace EmguTestApp
 
         static double TotalFrames;
 
-        static List<string> WindowsList;// = new List<string>();
+        static List<string> WindowsList;
 
+        static List<Image<Gray, byte>> ImagesGrayTransformationList = new List<Image<Gray, byte>>();
+        static List<Image<Gray, byte>> ImagesColorTransformationList = new List<Image<Gray, byte>>();
         
         static void Main(string[] args)
         {
@@ -151,91 +153,100 @@ namespace EmguTestApp
             Capture cp = sender as Capture;
 
             cp.Retrieve(imgFrame);
-            var p1NameColor = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15))
-                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2);
-            //.InRange(new Bgr(170, 160, 0), new Bgr(230, 225, 100));
-            var p2NameColor = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15))
-                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2);
-            //.InRange(new Bgr(0, 190, 95), new Bgr(95, 250, 150));
-            var choosePlayer = imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
-                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2);
-            //.InRange(new Bgr(180, 160, 0), new Bgr(230, 205, 100));
-            var choosePlayer2 = imgFrame.GetSubRect(new System.Drawing.Rectangle(1475, 895, 410, 25))
-                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2);
-            //.InRange(new Bgr(5, 190, 100), new Bgr(80, 250, 140));
 
-            var RoundReadyMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(480, 505, 800, 70))
-                .InRange(ColorsThresHolds.RoundReadyColors.Item1, ColorsThresHolds.RoundReadyColors.Item2);
-            //.InRange(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15))
+                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2));
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15))
+                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2));
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(480, 505, 800, 70))
+                .InRange(ColorsThresHolds.RoundReadyColors.Item1, ColorsThresHolds.RoundReadyColors.Item2));
+
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2));
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2));
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2));
+
+#if CHOOSEPLAYER
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
+                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2));
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(1475, 895, 410, 25))
+                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2));
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
+                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2));
+
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2));
+#endif
+#if TITLE
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
+                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2));
+
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2));
+#endif
+
+#if RESULT
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
+                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2));
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65))
+                .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2));//ResultP1Color
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65))
+                .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2));//ResultP2Color
+
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65)).Convert<Gray, byte>()
+                .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2));//ResultP1Gray
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
+                .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2));
+
+#endif
+
             var GoMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(580, 435, 750, 200))
                 .InRange(ColorsThresHolds.GoMessageColors.Item1, ColorsThresHolds.GoMessageColors.Item2);
-            //.InRange(new Bgr(100, 240, 240), new Bgr(180, 255, 255));
+#if KOMESSAGE
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210))
+                .InRange(ColorsThresHolds.KoMessageColors.Item1, ColorsThresHolds.KoMessageColors.Item2));
 
-            var titleColor = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
-                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2);
-            //.InRange(new Bgr(5, 150, 215), new Bgr(90, 200, 246));
+            ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210)).Convert<Gray, byte>()
+                .ThresholdBinary(ColorsThresHolds.KoMessageGray.Item1, ColorsThresHolds.KoMessageGray.Item2));
+#endif
 
-            var ResultP1Color = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65))
-                .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2);
-            var ResultP1Gray = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65)).Convert<Gray, byte>()
-                .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
-
-            var ResultP2Color = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65))
-                .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2);
-            var ResultP2Gray = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
-                .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
-
-            var KoMessageGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.KoMessageGray.Item1, ColorsThresHolds.KoMessageGray.Item2);
-
-            var KoMessageColor = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210))
-                .InRange(ColorsThresHolds.KoMessageColors.Item1, ColorsThresHolds.KoMessageColors.Item2);
-            var timeMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2);
-            //.InRange(ColorsThresHolds.Time.Item1, ColorsThresHolds.Time.Item2);
-
-
-            var p1NameGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2);
-            var p2NameGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2);
-            var titleGray = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
 
 #if FIGHT
             #region Fight Test
-            CvInvoke.Imshow(WindowsList[0], p1NameColor);
-            CvInvoke.Imshow(WindowsList[1], p2NameColor);
-            CvInvoke.Imshow(WindowsList[2], RoundReadyMessage);
+            CvInvoke.Imshow(WindowsList[0], ImagesColorTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[1], ImagesColorTransformationList[1]);
+            CvInvoke.Imshow(WindowsList[2], ImagesColorTransformationList[2]);
 
-            CvInvoke.Imshow(WindowsList[3], p1NameGray);
-            CvInvoke.Imshow(WindowsList[4], p2NameGray);
-            CvInvoke.Imshow(WindowsList[5], timeMessage);
+            CvInvoke.Imshow(WindowsList[3], ImagesGrayTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[4], ImagesGrayTransformationList[1]);
+            CvInvoke.Imshow(WindowsList[5], ImagesGrayTransformationList[2]);
             #endregion
 #elif CHOOSEPLAYER
             #region Player Choose
-            CvInvoke.Imshow(WindowsList[2], choosePlayer2);
-            CvInvoke.Imshow(WindowsList[1], choosePlayer);
-            CvInvoke.Imshow(WindowsList[0], titleColor);
-            CvInvoke.Imshow(WindowsList[3], titleGray);
+            CvInvoke.Imshow(WindowsList[2], ImagesColorTransformationList[1]);
+            CvInvoke.Imshow(WindowsList[1], ImagesColorTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[0], ImagesColorTransformationList[2]);
+            CvInvoke.Imshow(WindowsList[3], ImagesGrayTransformationList[0]);
             #endregion
 #elif TITLE
             #region Title Test
-            CvInvoke.Imshow(WindowsList[0], titleColor);
-            CvInvoke.Imshow(WindowsList[1], titleGray);
+            CvInvoke.Imshow(WindowsList[0], ImagesColorTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[1], ImagesGrayTransformationList[0]);
             #endregion
             //Task.Delay(1000);
 #elif RESULT
             #region WinLose After Match
-            CvInvoke.Imshow(WindowsList[0], titleColor);
-            CvInvoke.Imshow(WindowsList[1], ResultP1Color);
-            CvInvoke.Imshow(WindowsList[2], ResultP2Color);
-            CvInvoke.Imshow(WindowsList[3], ResultP1Gray);
-            CvInvoke.Imshow(WindowsList[4], ResultP2Gray);
+            CvInvoke.Imshow(WindowsList[0], ImagesColorTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[1], ImagesColorTransformationList[1]);
+            CvInvoke.Imshow(WindowsList[2], ImagesColorTransformationList[2]);
+            CvInvoke.Imshow(WindowsList[3], ImagesGrayTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[4], ImagesGrayTransformationList[1]);
             #endregion
 #elif KOMESSAGE
-            CvInvoke.Imshow(WindowsList[0], KoMessageColor);
-            CvInvoke.Imshow(WindowsList[1], KoMessageGray);
+            CvInvoke.Imshow(WindowsList[0], ImagesColorTransformationList[0]);
+            CvInvoke.Imshow(WindowsList[1], ImagesGrayTransformationList[0]);
 #endif
 #if SAVEREQUIRED
             string stt = System.IO.Path.Combine(svDir, DateTime.Now.ToString("yyyyMMdd_HHmmssffff"));
@@ -246,6 +257,8 @@ namespace EmguTestApp
             //RoundReadyMessage.ToBitmap().Save(stt + ".bmp");
             //titleCap.ToBitmap().Save(stt + ".bmp");
 #endif
+            ImagesGrayTransformationList.Clear();
+            ImagesColorTransformationList.Clear();
         }
     }
 }
