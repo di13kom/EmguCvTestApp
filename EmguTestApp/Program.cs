@@ -52,24 +52,7 @@ namespace EmguTestApp
 
         static List<string> WindowsList;// = new List<string>();
 
-        //static string WinCapture = "Win";
-        //static string WinCapture2 = "Win2";
-        //static string WinCaptureCol = "WinCol";
-        //static string WinCaptureCol2 = "Win2Col";
-
-        //static string WinTitleCapture = "Title";
-        //static string WinChoosePlayer = "ChoosePlayer";
-        //static string WinChoosePlayer2 = "ChoosePlayer2";
-        //static string WinRoundMessage = "RoundMessage";
-        //static string WinGoMessage = "GoMessage";
-
-        //static string WinResultP1Color = "ResultP1Color";
-        //static string WinResultP2Color = "ResultP2Color";
-        //static string WinResultP1ResultGray = "ResultP1Gray";
-        //static string WinResultP2Gray = "ResultP2Gray";
-
-        //static string WinTime = "Time";
-
+        
         static void Main(string[] args)
         {
 
@@ -89,11 +72,6 @@ namespace EmguTestApp
             };
             WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
 
-            //CvInvoke.NamedWindow(WinTitleCapture);
-            //CvInvoke.NamedWindow(WinChoosePlayer);
-            //CvInvoke.NamedWindow(WinChoosePlayer2);
-            //CvInvoke.NamedWindow(WinGoMessage);
-
             #endregion
 #elif TITLE
 
@@ -107,8 +85,6 @@ namespace EmguTestApp
                 "TitleGray",
             };
             WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
-            //CvInvoke.NamedWindow(WinTitleCapture);
-            //CvInvoke.NamedWindow(WinGoMessage);
             #endregion
 
             //Test Figth
@@ -127,13 +103,6 @@ namespace EmguTestApp
             };
             WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
 
-            //CvInvoke.NamedWindow(WinCapture);
-            //CvInvoke.NamedWindow(WinCapture2);
-            //CvInvoke.NamedWindow(WinRoundMessage);
-            
-            //CvInvoke.NamedWindow(WinCaptureCol);
-            //CvInvoke.NamedWindow(WinCaptureCol2);
-            //CvInvoke.NamedWindow(WinTime);
             #endregion
             //WinLose
 #elif RESULT
@@ -150,11 +119,6 @@ namespace EmguTestApp
             };
             WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
 
-            //CvInvoke.NamedWindow(WinTitleCapture);
-            //CvInvoke.NamedWindow(WinResultP1Color);
-            //CvInvoke.NamedWindow(WinResultP2Color);
-            //CvInvoke.NamedWindow(WinResultP1ResultGray);
-            //CvInvoke.NamedWindow(WinResultP2Gray);
             #endregion
 #elif KOMESSAGE
             FileToPlay = @"d:\Q4Vid\Players\Mai.mp4";
