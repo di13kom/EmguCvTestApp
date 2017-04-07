@@ -1,4 +1,5 @@
-﻿#define FIGHT
+﻿#define CHOOSEPLAYER
+//#define SAVEREQUIRED
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,8 +91,9 @@ namespace EmguTestApp
             //Test Figth
 #elif FIGHT
             #region Fight Test
-            //FileToPlay = @"d:\Q4Vid\Players\Antonov.mp4";
-            FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
+            FileToPlay = @"d:\Q4Vid\Players\Hein.mp4";
+            //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
+            //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
             WindowsList = new List<string>()
             {
                 "Player1NameColor",
@@ -235,11 +237,15 @@ namespace EmguTestApp
             CvInvoke.Imshow(WindowsList[0], KoMessageColor);
             CvInvoke.Imshow(WindowsList[1], KoMessageGray);
 #endif
-            //string stt = System.IO.Path.Combine(svDir, DateTime.Now.ToString("yyyyMMdd_HHmmssffff"));
-            //p1Name.ToBitmap().Save(stt + "Maip1.bmp");
-            //p2Name.ToBitmap().Save(stt + "Maip2.bmp");
+#if SAVEREQUIRED
+            string stt = System.IO.Path.Combine(svDir, DateTime.Now.ToString("yyyyMMdd_HHmmssffff"));
+            p1NameColor.ToBitmap().Save(stt + "Hein1c.bmp");
+            p1NameGray.ToBitmap().Save(stt + "Hein1g.bmp");
+            p2NameColor.ToBitmap().Save(stt + "Hein2c.bmp");
+            p2NameGray.ToBitmap().Save(stt + "Hein2g.bmp");
             //RoundReadyMessage.ToBitmap().Save(stt + ".bmp");
             //titleCap.ToBitmap().Save(stt + ".bmp");
+#endif
         }
     }
 }
