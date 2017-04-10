@@ -1,4 +1,9 @@
-﻿#define RESULT
+﻿#define FIGHT
+//#define CHOOSEPLAYER
+//#define RESULT
+//#define KOMESSAGE
+//#define TITLE
+
 //#define SAVEREQUIRED
 using System;
 using System.Collections.Generic;
@@ -36,6 +41,9 @@ namespace EmguTestApp
 
         static public Tuple<Bgr, Bgr> TimeColor = Tuple.Create(new Bgr(180, 160, 149), new Bgr(230, 230, 190));
         static public Tuple<Gray, Gray> TimeGray = Tuple.Create(new Gray(190), new Gray(255));
+
+        //static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 110, 0), new Bgr(156, 244, 145));//Green only
+        static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 60, 180), new Bgr(156, 246, 255));//Orange only
     }
 
     class Program
@@ -93,9 +101,9 @@ namespace EmguTestApp
             //Test Figth
 #elif FIGHT
             #region Fight Test
-            FileToPlay = @"d:\Q4Vid\Players\Hein.mp4";
+            //FileToPlay = @"d:\Q4Vid\Players\Hein.mp4";
             //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
-            //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
+            FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
             WindowsList = new List<string>()
             {
                 "Player1NameColor",
@@ -103,7 +111,8 @@ namespace EmguTestApp
                 "RoundReadyMessage",
                 "Player1NameGray",
                 "Player2NameGray",
-                "Time"
+                "Time",
+                "p1Lives"
             };
             WindowsList.ForEach(x => CvInvoke.NamedWindow(x));
 
@@ -160,6 +169,9 @@ namespace EmguTestApp
                 .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2));
             ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(480, 505, 800, 70))
                 .InRange(ColorsThresHolds.RoundReadyColors.Item1, ColorsThresHolds.RoundReadyColors.Item2));
+
+            ImagesColorTransformationList.Add(imgFrame.GetSubRect(new Rectangle(116, 77, 770, 15))
+                .InRange(ColorsThresHolds.p1Lives.Item1, ColorsThresHolds.p1Lives.Item2));
 
             ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2));
@@ -218,6 +230,7 @@ namespace EmguTestApp
             CvInvoke.Imshow(WindowsList[0], ImagesColorTransformationList[0]);
             CvInvoke.Imshow(WindowsList[1], ImagesColorTransformationList[1]);
             CvInvoke.Imshow(WindowsList[2], ImagesColorTransformationList[2]);
+            CvInvoke.Imshow(WindowsList[6], ImagesColorTransformationList[3]);
 
             CvInvoke.Imshow(WindowsList[3], ImagesGrayTransformationList[0]);
             CvInvoke.Imshow(WindowsList[4], ImagesGrayTransformationList[1]);
