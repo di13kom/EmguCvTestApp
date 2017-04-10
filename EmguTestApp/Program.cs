@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 using Emgu.CV;
 using Emgu.CV.Structure;
 using System.Drawing;
-
+using System.Threading;
 
 namespace EmguTestApp
 {
@@ -58,6 +58,11 @@ namespace EmguTestApp
         static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
 
         static double TotalFrames;
+        //static double currentFrame;
+        static DateTime LastUpdateTime;
+
+        static Timer tmr;
+        static Capture capture;
 
         static List<string> WindowsList;
 
@@ -67,7 +72,8 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-
+            TimerCallback tk = new TimerCallback(TimerCallback);
+            tmr = new Timer(tk, null, 1000, 1000);
 
             //Test Players Choose
 #if CHOOSEPLAYER
@@ -143,12 +149,12 @@ namespace EmguTestApp
             CvInvoke.NamedWindow(WindowsList[0]);
             CvInvoke.NamedWindow(WindowsList[1]);
 #endif
-            var capture = new Capture(FileToPlay);
+            capture = new Capture(FileToPlay);
             TotalFrames = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
+            Console.WriteLine("total frames:{0}", TotalFrames);
 
             capture.ImageGrabbed += Capture_ImageGrabbed;
             capture.Start();
-
             CvInvoke.WaitKey(0);
 
             CvInvoke.DestroyAllWindows();
@@ -158,7 +164,10 @@ namespace EmguTestApp
 
         private static void Capture_ImageGrabbed(object sender, EventArgs e)
         {
-
+            //lock (locker)
+            //{
+                LastUpdateTime = DateTime.Now;
+            //}
             Capture cp = sender as Capture;
 
             cp.Retrieve(imgFrame);
@@ -272,6 +281,19 @@ namespace EmguTestApp
 #endif
             ImagesGrayTransformationList.Clear();
             ImagesColorTransformationList.Clear();
+            //Console.WriteLine($"current frame:{currentFrame++}");
+        }
+
+        public static void TimerCallback(object obj)
+        {
+            DateTime dt = DateTime.Now;
+            if ((dt - LastUpdateTime)>TimeSpan.FromSeconds(2))
+            {
+                Console.WriteLine("Stoping capture");
+                capture.Stop();
+                
+                //capture.Dispose();
+            }
         }
     }
 }
