@@ -63,7 +63,7 @@ namespace EmguTestApp
 
         static List<Image<Gray, byte>> ImagesGrayTransformationList = new List<Image<Gray, byte>>();
         static List<Image<Gray, byte>> ImagesColorTransformationList = new List<Image<Gray, byte>>();
-        
+
         static void Main(string[] args)
         {
 
@@ -162,7 +162,7 @@ namespace EmguTestApp
             Capture cp = sender as Capture;
 
             cp.Retrieve(imgFrame);
-
+#if FIGHT
             ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15))
                 .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2));
             ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15))
@@ -179,7 +179,7 @@ namespace EmguTestApp
                 .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2));
             ImagesGrayTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2));
-
+#endif
 #if CHOOSEPLAYER
             ImagesColorTransformationList.Add(imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
                 .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2));
