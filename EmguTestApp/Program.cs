@@ -71,9 +71,6 @@ namespace EmguTestApp
         static Timer tmr;
         static Capture capture;
 
-        static List<string> WindowsList;
-
-
         static Dictionary<string, Image<Gray, byte>> ResultDict = null;
 
         static void Main(string[] args)
@@ -263,14 +260,6 @@ namespace EmguTestApp
             ResultDict["Player1NameColor"].ToBitmap().Save(FileFullNameP1);
             ResultDict["Player2NameColor"].ToBitmap().Save(FileFullNameP2);
 
-
-            //p1NameColor.ToBitmap().Save(stt + "Hein1c.bmp");
-            //p1NameGray.ToBitmap().Save(stt + "Hein1g.bmp");
-            //p2NameColor.ToBitmap().Save(stt + "Hein2c.bmp");
-            //p2NameGray.ToBitmap().Save(stt + "Hein2g.bmp");
-
-            //RoundReadyMessage.ToBitmap().Save(stt + ".bmp");
-            //titleCap.ToBitmap().Save(stt + ".bmp");
 #endif
 #endif
             //ImagesGrayTransformationList.Clear();
