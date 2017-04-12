@@ -170,7 +170,8 @@ namespace EmguTestMachineLearningWithImages
             Matrix<float> mtr = new Matrix<float>(1, 15 * 125);
             //Matrix<byte> mtr = new Matrix<byte>(pic.Rows, pic.Cols);
 
-            Matrix<int> predict = new Matrix<int>(1, 1);
+            Matrix<float> predict = new Matrix<float>(1, 1);
+            predict[0, 0] = 300;
 
             try
             {
@@ -184,7 +185,9 @@ namespace EmguTestMachineLearningWithImages
                     sMod.Read(fs1.GetRoot());
                     fs1.ReleaseAndGetString();
 
-                    sMod.Predict(mtr, predict);
+                    var ret = sMod.Predict(mtr, predict);
+                    //Console.WriteLine($"Player is :{PlayersEnum.Players.Values.Where(x => x.ClassNum==predict[0,0]).First().LongName}");
+                    Console.WriteLine($"Player is :{PlayersEnum.Players.Where(x => x.Value.ClassNum==predict[0,0]).FirstOrDefault().Key}");
                 }
             }
             catch (Exception ex)
