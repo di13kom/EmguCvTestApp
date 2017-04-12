@@ -13,7 +13,7 @@ namespace EmguTestMachineLearningWithImages
     class SvmModelTrain
     {
         string ImgFileExtension = ".bmp";
-        string fileName = "SVM_mlp_model.xml";
+        static string fileName = "SVM_mlp_model.xml";
         SVM svmModel;
 
         int LastMatrixIndex = 0;
@@ -35,7 +35,7 @@ namespace EmguTestMachineLearningWithImages
                 numSamples += Directory.EnumerateFiles(x, "*.bmp").Count();
             });
 
-            TrainingData = new Matrix<float>(numSamples, 15 * 128);//
+            TrainingData = new Matrix<float>(numSamples, 15 * 125);//
             TrainingClasses = new Matrix<int>(numSamples, 1);
             //TrainingClasses = new Matrix<int>(numSamples, numClasses);
 
@@ -96,7 +96,7 @@ namespace EmguTestMachineLearningWithImages
                 {
                     for (int j = 0; j < img.Width; j++)
                     {
-                        int matInd = i * j + j;
+                        int matInd = i * img.Width + j;
                         TrainingData[ind, matInd] = img.Data[i, j, 0];
                         //img.CopyTo(TrainingData[ind]);
                     }
@@ -112,20 +112,26 @@ namespace EmguTestMachineLearningWithImages
             LastMatrixIndex++;
         }
 
-        public byte[] ConvertToArray(Image<Gray, byte> img)
+        static public /*byte[]*/void ConvertToArray(Image<Gray, byte> img, Matrix<float> mtr)
         {
-
-            //Image<Gray, byte> img = mt.ToImage<Gray, byte>();
-            byte[] Arr = new byte[img.Width * img.Height];
-            for (int i = 0; i < img.Height; i++)
+            try
             {
-                for (int j = 0; j < img.Width; j++)
+                //Image<Gray, byte> img = mt.ToImage<Gray, byte>();
+                //byte[] Arr = new byte[img.Width * img.Height];
+                for (int i = 0; i < img.Height; i++)
                 {
-                    Arr[i + i*j] = img.Data[i, j, 0];
+                    for (int j = 0; j < img.Width; j++)
+                    {
+                        mtr.Data[0, i * img.Width + j] = img.Data[i, j, 0];
+                        //Console.WriteLine($"i - {i} j - {j} - data:{img.Data[i, j, 0]}");
+                    }
                 }
             }
-
-            return Arr;
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //return Arr;
         }
 
         public void TrianOnDataSave()
@@ -135,6 +141,9 @@ namespace EmguTestMachineLearningWithImages
             {
                 svmModel = new SVM();
                 svmModel.TrainAuto(td);
+
+                if (File.Exists(fileName))
+                    File.Delete(fileName);
 
                 FileStorage fs = new FileStorage(fileName, FileStorage.Mode.Write);
                 svmModel.Write(fs);
@@ -148,6 +157,39 @@ namespace EmguTestMachineLearningWithImages
             {
                 svmModel.Dispose();
                 td.Dispose();
+            }
+        }
+
+        public static void LoadPredictData(string lFile)
+        {
+
+            Mat sMat = CvInvoke.Imread(lFile, Emgu.CV.CvEnum.LoadImageType.Grayscale);
+            Image<Gray, byte> pic = new Image<Gray, byte>(lFile);
+            Mat xmat = pic.Mat;
+
+            Matrix<float> mtr = new Matrix<float>(1, 15 * 125);
+            //Matrix<byte> mtr = new Matrix<byte>(pic.Rows, pic.Cols);
+
+            Matrix<int> predict = new Matrix<int>(1, 1);
+
+            try
+            {
+                //sMat.CopyTo(mtr);
+                ConvertToArray(pic, mtr);
+
+                using (SVM sMod = new SVM())
+                {
+                    FileStorage fs1 = new FileStorage(fileName, FileStorage.Mode.Read);
+
+                    sMod.Read(fs1.GetRoot());
+                    fs1.ReleaseAndGetString();
+
+                    sMod.Predict(mtr, predict);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }
