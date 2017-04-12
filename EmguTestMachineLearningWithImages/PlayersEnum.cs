@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace EmguTestMachineLearningWithImages
 {
-    class PlayersEnum
+    static class PlayersEnum
     {
-        class PlayerDef
+        public class PlayerDef
         {
             //public string Name { get; set; }
             public string LongName { get; set; }
             public int ClassNum { get; set; }
         }
 
-        Dictionary<string, PlayerDef> Players = new Dictionary<string, PlayerDef>()
+        public static Dictionary<string, PlayerDef> Players = new Dictionary<string, PlayerDef>()
         {
             {"Alice",       new PlayerDef() {LongName="Alice",                  ClassNum = 1 } },
             {"Andy",        new PlayerDef() {LongName="Andy Bogard",            ClassNum = 2 } },
@@ -24,14 +24,14 @@ namespace EmguTestMachineLearningWithImages
             {"Athena",      new PlayerDef() {LongName="Athena Asamiya",         ClassNum = 5 } },
             {"Bandeiras",   new PlayerDef() {LongName="Bandeiras Hattori",      ClassNum = 6 } },
             {"Benimaru",    new PlayerDef() {LongName="Benimaru Nikado",        ClassNum = 7 } },
-            { "Billy",      new PlayerDef() {LongName="Billy Kane",             ClassNum = 8 } },
+            {"Billy",       new PlayerDef() {LongName="Billy Kane",             ClassNum = 8 } },
             {"Chang",       new PlayerDef() {LongName="Chang Koehan",           ClassNum = 9 } },
             {"Chin",        new PlayerDef() {LongName="Chin Gentsai",           ClassNum = 10 } },
             {"Choi",        new PlayerDef() {LongName="Choi Bounge",            ClassNum = 11 } },
             {"Clark",       new PlayerDef() {LongName="Clark",                  ClassNum = 12 } },
             {"Diamon",      new PlayerDef() {LongName="Goro Diamon",            ClassNum = 13 } },
             {"Dinosaur",    new PlayerDef() {LongName="King of Dinosaurs",      ClassNum = 14 } },
-            {"Gang_Il",     new PlayerDef() {LongName="Gang_Il",                ClassNum = 15 } },
+            {"Gang_IL",     new PlayerDef() {LongName="Gang_IL",                ClassNum = 15 } },
             {"Geese",       new PlayerDef() {LongName="Geese Howard",           ClassNum = 16 } },
             {"Hein",        new PlayerDef() {LongName="Hein",                   ClassNum = 17 } },
             {"Iori",        new PlayerDef() {LongName="Iori Yagami",            ClassNum = 18 } },
@@ -50,7 +50,7 @@ namespace EmguTestMachineLearningWithImages
             {"Mature",      new PlayerDef() {LongName="Mature",                 ClassNum = 31 } },
             {"Maxima",      new PlayerDef() {LongName="Maxima",                 ClassNum = 32 } },
             {"Meitenkun",   new PlayerDef() {LongName="Meitenkun",              ClassNum = 33 } },
-            {"Main",        new PlayerDef() {LongName="Main",                   ClassNum = 34 } },
+            {"Mian",        new PlayerDef() {LongName="Mian",                   ClassNum = 34 } },
             {"Muimui",      new PlayerDef() {LongName="Muimui",                 ClassNum = 35 } },
             {"Nakoruru",    new PlayerDef() {LongName="Nakoruru",               ClassNum = 36 } },
             {"Nelson",      new PlayerDef() {LongName="Nelson",                 ClassNum = 37 } },
@@ -60,9 +60,10 @@ namespace EmguTestMachineLearningWithImages
             {"Ryo",         new PlayerDef() {LongName="Ryo Sakazaki",           ClassNum = 41 } },
             {"Shunei",      new PlayerDef() {LongName="Shunei",                 ClassNum = 42 } },
             {"Sylvie",      new PlayerDef() {LongName="Sylvie Paula Paula",     ClassNum = 43 } },
-            {"Terry",       new PlayerDef() {LongName="Terry Bogard",           ClassNum = 45 } },
-            {"Tung",        new PlayerDef() {LongName="Tung Fu Rue",            ClassNum = 46 } },
-            {"Verse",       new PlayerDef() {LongName="Verse",                  ClassNum = 47 } },
+            {"Terry",       new PlayerDef() {LongName="Terry Bogard",           ClassNum = 44 } },
+            {"Tung",        new PlayerDef() {LongName="Tung Fu Rue",            ClassNum = 45 } },
+            {"Verse",       new PlayerDef() {LongName="Verse",                  ClassNum = 46 } },
+            {"Vice",        new PlayerDef() {LongName="Vice",                   ClassNum = 47 } },
             {"Xanadu",      new PlayerDef() {LongName="Xanadu",                 ClassNum = 48 } },
             {"Yuri",        new PlayerDef() {LongName="Yuri Sakazaki",          ClassNum = 49 } },
             {"Zarina",      new PlayerDef() {LongName="Zarina",                 ClassNum = 50 } },
