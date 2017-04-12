@@ -13,6 +13,7 @@ namespace EmguTestMachineLearningWithImages
     class SvmModelTrain
     {
         string ImgFileExtension = ".bmp";
+        string fileName = "SVM_mlp_model.xml";
         SVM svmModel;
 
         int LastMatrixIndex = 0;
@@ -27,7 +28,7 @@ namespace EmguTestMachineLearningWithImages
 
         void CreateClassesData(string pth)
         {
-            int numClasses = Directory.EnumerateDirectories(pth).Count();
+            //int numClasses = Directory.EnumerateDirectories(pth).Count();
             int numSamples = 0;
             Directory.EnumerateDirectories(pth).ToList().ForEach(x =>
             {
@@ -35,12 +36,13 @@ namespace EmguTestMachineLearningWithImages
             });
 
             TrainingData = new Matrix<float>(numSamples, 15 * 128);//
-            TrainingClasses = new Matrix<int>(numSamples, numClasses);
+            TrainingClasses = new Matrix<int>(numSamples, 1);
+            //TrainingClasses = new Matrix<int>(numSamples, numClasses);
 
         }
 
 
-        public void LoadFiles(string pth)
+        public void LoadFiles(string pth, string curClassName)
         {
             string[] filesArray = Directory.GetFiles(pth);
 
@@ -58,6 +60,7 @@ namespace EmguTestMachineLearningWithImages
 
                     //Mat mtt = CvInvoke.Imread(fl,Emgu.CV.CvEnum.LoadImageType.Grayscale);
                     //curFile.CopyTo();
+                    FillMatrix(curFile, curClassName);
                 }
                 catch (Exception ex)
                 {
@@ -78,23 +81,33 @@ namespace EmguTestMachineLearningWithImages
                     curDirectory = curDirectory.TrimEnd('\\');
                 string curClassname = curDirectory.Substring(curDirectory.LastIndexOf('\\') + 1, curDirectory.Length - 1 - curDirectory.LastIndexOf('\\'));
                 Console.WriteLine(curClassname);
-                LoadFiles(curDirectory);
+                LoadFiles(curDirectory, curClassname);
             }
+
+            TrianOnDataSave();
         }
 
         public void FillMatrix(Image<Gray, byte> img, string className)
         {
-            int ind = LastMatrixIndex;
-            for (int i = 0; i < img.Height; i++)
+            try
             {
-                for (int j = 0; j < img.Width; j++)
+                int ind = LastMatrixIndex;
+                for (int i = 0; i < img.Height; i++)
                 {
-                    TrainingData[ind, i+j] = img.Data[i, j, 0];
-                    //img.CopyTo(TrainingData[ind]);
+                    for (int j = 0; j < img.Width; j++)
+                    {
+                        int matInd = i * j + j;
+                        TrainingData[ind, matInd] = img.Data[i, j, 0];
+                        //img.CopyTo(TrainingData[ind]);
+                    }
                 }
-            }
 
-            TrainingClasses[ind, 0] = className;
+                TrainingClasses[ind, 0] = PlayersEnum.Players[className].ClassNum;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
             LastMatrixIndex++;
         }
@@ -108,11 +121,34 @@ namespace EmguTestMachineLearningWithImages
             {
                 for (int j = 0; j < img.Width; j++)
                 {
-                    Arr[i + j] = img.Data[i, j, 0];
+                    Arr[i + i*j] = img.Data[i, j, 0];
                 }
             }
 
             return Arr;
+        }
+
+        public void TrianOnDataSave()
+        {
+            TrainData td = new TrainData(TrainingData, Emgu.CV.ML.MlEnum.DataLayoutType.RowSample, TrainingClasses);
+            try
+            {
+                svmModel = new SVM();
+                svmModel.TrainAuto(td);
+
+                FileStorage fs = new FileStorage(fileName, FileStorage.Mode.Write);
+                svmModel.Write(fs);
+                fs.ReleaseAndGetString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                svmModel.Dispose();
+                td.Dispose();
+            }
         }
     }
 }
