@@ -17,6 +17,9 @@ namespace EmguTestMachineLearningWithImages
 
         public static Dictionary<string, PlayerDef> Players = new Dictionary<string, PlayerDef>()
         {
+            {"_BlackFull",  new PlayerDef() {LongName="_BlackFull",             ClassNum = -1 } },
+            {"_WhiteFull",  new PlayerDef() {LongName="_WhiteFull",             ClassNum = -2 } },
+
             {"Alice",       new PlayerDef() {LongName="Alice",                  ClassNum = 1 } },
             {"Andy",        new PlayerDef() {LongName="Andy Bogard",            ClassNum = 2 } },
             {"Angel",       new PlayerDef() {LongName="Angel",                  ClassNum = 3 } },

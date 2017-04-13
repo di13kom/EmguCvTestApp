@@ -13,7 +13,10 @@ namespace EmguTestMachineLearningWithImages
     class SvmModelTrain
     {
         string ImgFileExtension = ".bmp";
-        static string fileName = "SVM_mlp_model.xml";
+        static string fileNameSaveLearnedData = "SVM_mlp_model.xml";
+
+        string SaveDir;
+
         SVM svmModel;
 
         int LastMatrixIndex = 0;
@@ -29,6 +32,8 @@ namespace EmguTestMachineLearningWithImages
         void CreateClassesData(string pth)
         {
             //int numClasses = Directory.EnumerateDirectories(pth).Count();
+            SaveDir = pth;
+
             int numSamples = 0;
             Directory.EnumerateDirectories(pth).ToList().ForEach(x =>
             {
@@ -142,10 +147,12 @@ namespace EmguTestMachineLearningWithImages
                 svmModel = new SVM();
                 svmModel.TrainAuto(td);
 
-                if (File.Exists(fileName))
-                    File.Delete(fileName);
+                string saveFile = Path.Combine(SaveDir, fileNameSaveLearnedData);
 
-                FileStorage fs = new FileStorage(fileName, FileStorage.Mode.Write);
+                if (File.Exists(saveFile))
+                    File.Delete(saveFile);
+
+                FileStorage fs = new FileStorage(saveFile, FileStorage.Mode.Write);
                 svmModel.Write(fs);
                 fs.ReleaseAndGetString();
             }
@@ -160,7 +167,7 @@ namespace EmguTestMachineLearningWithImages
             }
         }
 
-        public static void LoadPredictData(string lFile)
+        public static void LoadPredictData(string lFile,string pathToLearnData)
         {
 
             Mat sMat = CvInvoke.Imread(lFile, Emgu.CV.CvEnum.LoadImageType.Grayscale);
@@ -180,7 +187,8 @@ namespace EmguTestMachineLearningWithImages
 
                 using (SVM sMod = new SVM())
                 {
-                    FileStorage fs1 = new FileStorage(fileName, FileStorage.Mode.Read);
+                    string LearnedData = Path.Combine(pathToLearnData, fileNameSaveLearnedData);
+                    FileStorage fs1 = new FileStorage(LearnedData, FileStorage.Mode.Read);
 
                     sMod.Read(fs1.GetRoot());
                     fs1.ReleaseAndGetString();
