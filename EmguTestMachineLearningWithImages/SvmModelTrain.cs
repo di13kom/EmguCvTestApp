@@ -170,9 +170,9 @@ namespace EmguTestMachineLearningWithImages
         public static void LoadPredictData(string lFile,string pathToLearnData)
         {
 
-            Mat sMat = CvInvoke.Imread(lFile, Emgu.CV.CvEnum.LoadImageType.Grayscale);
+            //Mat sMat = CvInvoke.Imread(lFile, Emgu.CV.CvEnum.LoadImageType.Grayscale);
             Image<Gray, byte> pic = new Image<Gray, byte>(lFile);
-            Mat xmat = pic.Mat;
+            //Mat xmat = pic.Mat;
 
             Matrix<float> mtr = new Matrix<float>(1, 15 * 125);
             //Matrix<byte> mtr = new Matrix<byte>(pic.Rows, pic.Cols);

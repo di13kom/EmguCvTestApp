@@ -4,7 +4,9 @@
 //#define KOMESSAGE
 //#define TITLE
 
-#define SAVEREQUIRED
+//#define SAVEREQUIRED
+#define SHOWREPREDICTRESULT
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,7 +55,7 @@ namespace EmguTestApp
 
         //static string FileToPlay = @"d:\Q4Vid\20170404162850.mp4";
 
-        static string CurrentName = "Kula";
+        static string CurrentName = "Alice";
         static string playersDir = @"d:\Q4Vid\Players\";
         static string pl1Subdir = @"Images\Player1\";
         static string pl2Subdir = @"Images\Player2\";
@@ -73,8 +75,15 @@ namespace EmguTestApp
 
         static Dictionary<string, Image<Gray, byte>> ResultDict = null;
 
+#if SHOWREPREDICTRESULT
+        static IngamePlayersTest predictClass;
+#endif
+
         static void Main(string[] args)
         {
+#if SHOWREPREDICTRESULT
+            predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml");
+#endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
             tmr = new Timer(tk, null, 1000, 1000);
@@ -109,10 +118,10 @@ namespace EmguTestApp
             //Test Figth
 #elif FIGHT
             #region Fight Test
-            //FileToPlay = @"d:\Q4Vid\Players\Hein.mp4";
+            FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
             //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
             //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
-            FileToPlay = playersDir + CurrentName + fileVideoExtension;
+            //FileToPlay = playersDir + CurrentName + fileVideoExtension;
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
             {
@@ -261,6 +270,10 @@ namespace EmguTestApp
             ResultDict["Player2NameColor"].ToBitmap().Save(FileFullNameP2);
 
 #endif
+#if SHOWREPREDICTRESULT
+            float[] predVal = predictClass.PredictImage(ResultDict["Player1NameColor"], ResultDict["Player2NameColor"]);
+            Console.WriteLine($"player1: {predVal[0]}, player2: {predVal[1]}");
+#endif
 #endif
             //ImagesGrayTransformationList.Clear();
             //ImagesColorTransformationList.Clear();
@@ -278,6 +291,24 @@ namespace EmguTestApp
                 Environment.Exit(1);
                 //capture.Dispose();
             }
+        }
+
+        public static bool CompareImagesByPixel(Image<Gray,byte> img1, Image<Gray, byte> img2)
+        {
+            bool retValue = false;
+            if(img1.Width == img2.Width || img1.Height == img2.Height)
+            {
+                for(int i=0;i<img1.Height;i++)
+                {
+                    for(int j=0;j<img1.Width;j++)
+                    {
+                        if (img1.Data[i, j, 0] != img2.Data[i, j, 0])
+                            return retValue;
+                    }
+                }
+                retValue = true;
+            }
+            return retValue;
         }
     }
 }
