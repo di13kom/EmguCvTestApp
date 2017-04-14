@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace EmguTestMachineLearningWithImages
 {
-    enum ModelType { SvnModel, KnModel };
+    public enum ModelType { SvnModel, KnModel };
 
-    class SvmModelTrain
+    public class SvmModelTrain
     {
         string ImgFileExtension = ".bmp";
         static string fileNameSaveLearnedData;
@@ -206,8 +206,9 @@ namespace EmguTestMachineLearningWithImages
             //}
         }
 
-        public static void LoadPredictData(string lFile, string pathToLearnData, ModelType modelType)
+        public static float LoadPredictData(string lFile, string pathToLearnData, ModelType modelType)
         {
+            
             IStatModel predictModel;
 
             Image<Gray, byte> pic = new Image<Gray, byte>(lFile);
@@ -273,6 +274,7 @@ namespace EmguTestMachineLearningWithImages
             //            break;
             //    }
             //}
+            return predictMatr[0, 0];
         }
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EmguTestMachineLearningWithImages
 {
-    static class PlayersEnum
+    public static class PlayersEnum
     {
         public class PlayerDef
         {

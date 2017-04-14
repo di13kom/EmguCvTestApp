@@ -17,6 +17,7 @@ using Emgu.CV.Structure;
 using System.Drawing;
 using System.Threading;
 using System.IO;
+using EmguTestMachineLearningWithImages;
 
 namespace EmguTestApp
 {
@@ -273,7 +274,9 @@ namespace EmguTestApp
 #endif
 #if SHOWREPREDICTRESULT
             float[] predVal = predictClass.PredictImage(ResultDict["Player1NameColor"], ResultDict["Player2NameColor"]);
-            Console.WriteLine($"player1: {predVal[0]}, player2: {predVal[1]}");
+            Console.WriteLine("player1: {0}, player2: {1}"
+                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal[0]).FirstOrDefault().Key
+                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal[1]).FirstOrDefault().Key);
 #endif
 #endif
             //ImagesGrayTransformationList.Clear();
