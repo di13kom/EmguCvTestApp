@@ -1,11 +1,11 @@
-﻿#define FIGHT
-//#define CHOOSEPLAYER
+﻿//#define FIGHT
+#define CHOOSEPLAYER
 //#define RESULT
 //#define KOMESSAGE
 //#define TITLE
 
 //#define SAVEREQUIRED
-#define SHOWREPREDICTRESULT
+//#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -97,8 +97,8 @@ namespace EmguTestApp
             ResultDict = new Dictionary<string, Image<Gray, byte>>
             {
                 { "Title",null },
-                {"Player1Name",null },
-                {"Player2Name",null },
+                {"Player1NameColor",null },
+                {"Player2NameColor",null },
                 {"TitleGray",null },
             };
 
@@ -119,10 +119,10 @@ namespace EmguTestApp
             //Test Figth
 #elif FIGHT
             #region Fight Test
-            //FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
+            FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
             //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
             //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
-            FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
+            //FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
             //FileToPlay = playersDir + CurrentName + fileVideoExtension;
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
@@ -211,9 +211,9 @@ namespace EmguTestApp
                 .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2);
             ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
-            ResultDict["Player1Name"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
+            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
                 .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2);
-            ResultDict["Player2Name"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1475, 895, 410, 25))
+            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1475, 895, 410, 25))
                 .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2);
 
 #endif
