@@ -76,15 +76,13 @@ namespace EmguTestApp
         static Dictionary<string, Image<Gray, byte>> ResultDict = null;
 
 #if SHOWREPREDICTRESULT
-        //static IngamePlayersTestSVM predictClass;
-        static IngamePlayersTestKN predictClass;
+        static IngamePlayersTest predictClass;
 #endif
 
         static void Main(string[] args)
         {
 #if SHOWREPREDICTRESULT
-            //predictClass = new IngamePlayersTestSVM(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml");
-            predictClass = new IngamePlayersTestKN(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml");
+            predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml", ModelTypes.KnModel);
 #endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
@@ -296,14 +294,14 @@ namespace EmguTestApp
             }
         }
 
-        public static bool CompareImagesByPixel(Image<Gray,byte> img1, Image<Gray, byte> img2)
+        public static bool CompareImagesByPixel(Image<Gray, byte> img1, Image<Gray, byte> img2)
         {
             bool retValue = false;
-            if(img1.Width == img2.Width || img1.Height == img2.Height)
+            if (img1.Width == img2.Width || img1.Height == img2.Height)
             {
-                for(int i=0;i<img1.Height;i++)
+                for (int i = 0; i < img1.Height; i++)
                 {
-                    for(int j=0;j<img1.Width;j++)
+                    for (int j = 0; j < img1.Width; j++)
                     {
                         if (img1.Data[i, j, 0] != img2.Data[i, j, 0])
                             return retValue;
