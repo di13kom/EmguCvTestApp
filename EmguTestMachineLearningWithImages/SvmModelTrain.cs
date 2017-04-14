@@ -14,6 +14,7 @@ namespace EmguTestMachineLearningWithImages
     {
         string ImgFileExtension = ".bmp";
         static string fileNameSaveLearnedData = "SVM_mlp_model.xml";
+        static string fileNameSaveLearnedDataKN = "KN_mlp_model.xml";
 
         string SaveDir;
 
@@ -89,7 +90,7 @@ namespace EmguTestMachineLearningWithImages
                 LoadFiles(curDirectory, curClassname);
             }
 
-            TrianOnDataSave();
+            TrianOnDataSaveKN();
         }
 
         public void FillMatrix(Image<Gray, byte> img, string className)
@@ -132,7 +133,7 @@ namespace EmguTestMachineLearningWithImages
                     }
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -147,7 +148,7 @@ namespace EmguTestMachineLearningWithImages
                 svmModel = new SVM();
                 svmModel.TrainAuto(td);
 
-                string saveFile = Path.Combine(SaveDir, fileNameSaveLearnedData);
+                string saveFile = Path.Combine(SaveDir, fileNameSaveLearnedDataKN);
 
                 if (File.Exists(saveFile))
                     File.Delete(saveFile);
@@ -167,7 +168,41 @@ namespace EmguTestMachineLearningWithImages
             }
         }
 
-        public static void LoadPredictData(string lFile,string pathToLearnData)
+        public void TrianOnDataSaveKN()
+        {
+            KNearest knn;
+            TrainData td;
+            try
+            {
+
+                td = new TrainData(TrainingData, Emgu.CV.ML.MlEnum.DataLayoutType.RowSample, TrainingClasses);
+                knn = new KNearest();
+                knn.DefaultK = 3;
+                //knn.
+                knn.Train(td,300);
+
+                string saveFile = Path.Combine(SaveDir, fileNameSaveLearnedDataKN);
+
+                if (File.Exists(saveFile))
+                    File.Delete(saveFile);
+
+                FileStorage fs = new FileStorage(saveFile, FileStorage.Mode.Write);
+                //svmModel.Write(fs);
+                knn.Write(fs);
+                fs.ReleaseAndGetString();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                //knn.Dispose();
+                //td.Dispose();
+            }
+        }
+
+        public static void LoadPredictData(string lFile, string pathToLearnData)
         {
 
             //Mat sMat = CvInvoke.Imread(lFile, Emgu.CV.CvEnum.LoadImageType.Grayscale);
@@ -195,7 +230,45 @@ namespace EmguTestMachineLearningWithImages
 
                     var ret = sMod.Predict(mtr, predict);
                     //Console.WriteLine($"Player is :{PlayersEnum.Players.Values.Where(x => x.ClassNum==predict[0,0]).First().LongName}");
-                    Console.WriteLine($"Player is :{PlayersEnum.Players.Where(x => x.Value.ClassNum==predict[0,0]).FirstOrDefault().Key}");
+                    Console.WriteLine($"Player is :{PlayersEnum.Players.Where(x => x.Value.ClassNum == predict[0, 0]).FirstOrDefault().Key}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void LoadPredictDataKN(string lFile, string pathToLearnData)
+        {
+
+            //Mat sMat = CvInvoke.Imread(lFile, Emgu.CV.CvEnum.LoadImageType.Grayscale);
+            Image<Gray, byte> pic = new Image<Gray, byte>(lFile);
+            //Mat xmat = pic.Mat;
+
+            Matrix<float> mtr = new Matrix<float>(1, 15 * 125);
+            //Matrix<byte> mtr = new Matrix<byte>(pic.Rows, pic.Cols);
+
+            Matrix<float> predict = new Matrix<float>(1, 1);
+            predict[0, 0] = 300;
+
+            try
+            {
+                //sMat.CopyTo(mtr);
+                ConvertToArray(pic, mtr);
+
+                using (KNearest sMod = new KNearest())
+                {
+                    sMod.DefaultK = 3;
+                    string LearnedData = Path.Combine(pathToLearnData, fileNameSaveLearnedDataKN);
+                    FileStorage fs1 = new FileStorage(LearnedData, FileStorage.Mode.Read);
+
+                    sMod.Read(fs1.GetRoot());
+                    fs1.ReleaseAndGetString();
+
+                    var ret = sMod.Predict(mtr, predict,300);
+                    //Console.WriteLine($"Player is :{PlayersEnum.Players.Values.Where(x => x.ClassNum==predict[0,0]).First().LongName}");
+                    Console.WriteLine($"Player is :{PlayersEnum.Players.Where(x => x.Value.ClassNum == predict[0, 0]).FirstOrDefault().Key}");
                 }
             }
             catch (Exception ex)

@@ -55,7 +55,7 @@ namespace EmguTestApp
 
         //static string FileToPlay = @"d:\Q4Vid\20170404162850.mp4";
 
-        static string CurrentName = "Alice";
+        static string CurrentName = "K'";
         static string playersDir = @"d:\Q4Vid\Players\";
         static string pl1Subdir = @"Images\Player1\";
         static string pl2Subdir = @"Images\Player2\";
@@ -76,13 +76,15 @@ namespace EmguTestApp
         static Dictionary<string, Image<Gray, byte>> ResultDict = null;
 
 #if SHOWREPREDICTRESULT
-        static IngamePlayersTest predictClass;
+        //static IngamePlayersTestSVM predictClass;
+        static IngamePlayersTestKN predictClass;
 #endif
 
         static void Main(string[] args)
         {
 #if SHOWREPREDICTRESULT
-            predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml");
+            //predictClass = new IngamePlayersTestSVM(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml");
+            predictClass = new IngamePlayersTestKN(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml");
 #endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
@@ -118,9 +120,10 @@ namespace EmguTestApp
             //Test Figth
 #elif FIGHT
             #region Fight Test
-            FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
+            //FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
             //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
             //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
+            FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
             //FileToPlay = playersDir + CurrentName + fileVideoExtension;
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
