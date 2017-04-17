@@ -31,7 +31,15 @@ namespace EmguTestApp
 
                 case ModelTypes.SvmModel:
                     p1PredictModel = new SVM();
+                    ((SVM)p1PredictModel).TermCriteria = new MCvTermCriteria(1000, 0.00001);
+                    ((SVM)p1PredictModel).C = 1;
+                    ((SVM)p1PredictModel).SetKernel(SVM.SvmKernelType.Linear);
+                    ((SVM)p1PredictModel).Type = SVM.SvmType.CSvc;
                     p2PredictModel = new SVM();
+                    ((SVM)p2PredictModel).TermCriteria = new MCvTermCriteria(1000, 0.00001);
+                    ((SVM)p2PredictModel).C = 1;
+                    ((SVM)p2PredictModel).SetKernel(SVM.SvmKernelType.Linear);
+                    ((SVM)p2PredictModel).Type = SVM.SvmType.CSvc;
                     break;
             }
 

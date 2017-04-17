@@ -1,11 +1,11 @@
-﻿//#define FIGHT
-#define CHOOSEPLAYER
+﻿#define FIGHT
+//#define CHOOSEPLAYER
 //#define RESULT
 //#define KOMESSAGE
 //#define TITLE
 
 //#define SAVEREQUIRED
-//#define SHOWREPREDICTRESULT
+#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -56,7 +56,7 @@ namespace EmguTestApp
 
         //static string FileToPlay = @"d:\Q4Vid\20170404162850.mp4";
 
-        static string CurrentName = "K'";
+        static string CurrentName = "Common";
         static string playersDir = @"d:\Q4Vid\Players\";
         static string pl1Subdir = @"Images\Player1\";
         static string pl2Subdir = @"Images\Player2\";
@@ -84,6 +84,7 @@ namespace EmguTestApp
         {
 #if SHOWREPREDICTRESULT
             predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml", ModelTypes.KnModel);
+            //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml", ModelTypes.SvmModel);
 #endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
@@ -92,7 +93,9 @@ namespace EmguTestApp
             //Test Players Choose
 #if CHOOSEPLAYER
             #region Player Choose
+            //FileToPlay = @"d:\Q4Vid\RamonChoose.mp4";
             FileToPlay = @"d:\Q4Vid\ChoosePlayers.mp4";
+            playersDir = @"d:\Q4Vid\ChoosePlayers\";
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
             {
@@ -119,10 +122,10 @@ namespace EmguTestApp
             //Test Figth
 #elif FIGHT
             #region Fight Test
-            FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
+            //FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
             //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
             //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
-            //FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
+            FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
             //FileToPlay = playersDir + CurrentName + fileVideoExtension;
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
@@ -207,14 +210,15 @@ namespace EmguTestApp
 
 #endif
 #if CHOOSEPLAYER
+            
             ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
-                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2);
+                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
             ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
+                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
             ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
-                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2);
+                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
             ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1475, 895, 410, 25))
-                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2);
+                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
 
 #endif
 #if TITLE
@@ -254,7 +258,7 @@ namespace EmguTestApp
                 CvInvoke.Imshow(kvRes.Key, kvRes.Value);
             }
 
-#if FIGHT
+#if (FIGHT||CHOOSEPLAYER)
 #if SAVEREQUIRED
 
             string p1DirFullPath = playersDir + pl1Subdir + CurrentName;

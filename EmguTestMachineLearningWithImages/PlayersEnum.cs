@@ -83,7 +83,7 @@ namespace EmguTestMachineLearningWithImages
             public float Scale { get; set; }
         }
 
-        public static Dictionary<ImageKind, ImageFormatDef> Players = new Dictionary<ImageKind, ImageFormatDef>()
+        public static Dictionary<ImageKind, ImageFormatDef> ImageSizeDic = new Dictionary<ImageKind, ImageFormatDef>()
         {
             { ImageKind.Ingame_PlayerName,          new ImageFormatDef { Width=125,     Height=15,      Scale=1} },
             { ImageKind.ChoosePlayer_PlayerName,    new ImageFormatDef { Width=410,     Height=25,      Scale=0.5f} },
