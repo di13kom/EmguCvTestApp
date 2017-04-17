@@ -163,6 +163,10 @@ namespace EmguTestMachineLearningWithImages
                 {
                     case ModelType.SvnModel:
                         PredictModel = new SVM();
+                        ((SVM)PredictModel).TermCriteria = new MCvTermCriteria(1000, 0.00001);
+                        ((SVM)PredictModel).C = 1;
+                        ((SVM)PredictModel).SetKernel(SVM.SvmKernelType.Linear);
+                        ((SVM)PredictModel).Type = SVM.SvmType.CSvc;
                         break;
 
                     case ModelType.KnModel:
@@ -241,7 +245,10 @@ namespace EmguTestMachineLearningWithImages
                         break;
                     default:
                         predictModel = new SVM();
-                        ((SVM)predictModel).SetKernel(SVM.SvmKernelType.Sigmoid);
+                        ((SVM)predictModel).TermCriteria = new MCvTermCriteria(1000, 0.00001);
+                        ((SVM)predictModel).C = 1;
+                        ((SVM)predictModel).SetKernel(SVM.SvmKernelType.Linear);
+                        ((SVM)predictModel).Type = SVM.SvmType.CSvc;
                         fileNameSaveLearnedData = "SVM_mlp_model.xml";
                         break;
                 }

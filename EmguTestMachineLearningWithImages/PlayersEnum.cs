@@ -72,4 +72,22 @@ namespace EmguTestMachineLearningWithImages
             {"Zarina",      new PlayerDef() {LongName="Zarina",                 ClassNum = 50 } },
         };
     }
+
+    public static class ImageFormat
+    {
+        public enum ImageKind { Ingame_PlayerName, ChoosePlayer_PlayerName, TitleMenu }
+        public class ImageFormatDef
+        {
+            public int Width { get; set; }
+            public int Height { get; set; }
+            public float Scale { get; set; }
+        }
+
+        public static Dictionary<ImageKind, ImageFormatDef> Players = new Dictionary<ImageKind, ImageFormatDef>()
+        {
+            { ImageKind.Ingame_PlayerName,          new ImageFormatDef { Width=125,     Height=15,      Scale=1} },
+            { ImageKind.ChoosePlayer_PlayerName,    new ImageFormatDef { Width=410,     Height=25,      Scale=0.5f} },
+            { ImageKind.TitleMenu,                  new ImageFormatDef { Width=550,     Height=50,      Scale=0.5f} }
+        };
+    }
 }
