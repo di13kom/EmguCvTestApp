@@ -132,13 +132,13 @@ namespace EmguTestMachineLearningWithImages
             },
 
             {
-                ImageKind.TitleMenu,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Titles\",
+                ImageKind.TitleMenu,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Titles",
                 ColorLowerThreshold = new Bgr(5, 150, 215),     ColorHigherThreshold = new Bgr(90, 200, 246),
                 XPos = 100,      YPos =  30,        Width = 550,    Height = 50,    Scale = 0.5f}
             },
 
             {
-                ImageKind.KoGoMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\KoGoMessage\",
+                ImageKind.KoGoMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\KoGoMessage",
                 ColorLowerThreshold = new Bgr(140, 230, 240),   ColorHigherThreshold = new Bgr(/*205*/190, 255, 255),
                 XPos = 515,      YPos =  435,        Width = 885,    Height = 210,    Scale = 0.5f}
             },
