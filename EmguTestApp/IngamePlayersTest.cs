@@ -1,8 +1,10 @@
 ﻿using Emgu.CV;
 using Emgu.CV.ML;
 using Emgu.CV.Structure;
+using EmguTestMachineLearningWithImages;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,9 +19,17 @@ namespace EmguTestApp
         IStatModel p1PredictModel;
         IStatModel p2PredictModel;
 
+        ImageKind P1ImageKind;
+        ImageKind P2ImageKind;
 
-        public IngamePlayersTest(string pathPlayer1SvmModel, string pathPlayer2SvmModel, ModelTypes modelType)
+        string ModelSavedFile;
+
+        public IngamePlayersTest(ImageKind p1ImageKind, ImageKind p2ImageKind, ModelTypes modelType)
         {
+            P1ImageKind = p1ImageKind;
+            P2ImageKind = p2ImageKind;
+
+
             switch (modelType)
             {
                 case ModelTypes.KnModel:
@@ -27,6 +37,8 @@ namespace EmguTestApp
                     ((KNearest)p1PredictModel).DefaultK = 3;
                     p2PredictModel = new KNearest();
                     ((KNearest)p2PredictModel).DefaultK = 3;
+
+                    ModelSavedFile = "KN_mlp_model.xml";
                     break;
 
                 case ModelTypes.SvmModel:
@@ -40,18 +52,20 @@ namespace EmguTestApp
                     ((SVM)p2PredictModel).C = 1;
                     ((SVM)p2PredictModel).SetKernel(SVM.SvmKernelType.Linear);
                     ((SVM)p2PredictModel).Type = SVM.SvmType.CSvc;
+
+                    ModelSavedFile = "SVM_mlp_model.xml";
                     break;
             }
 
             //player1 model load from file
-            FileStorage fs1 = new FileStorage(pathPlayer1SvmModel, FileStorage.Mode.Read);
+            FileStorage fs1 = new FileStorage(Path.Combine(ImageFormat.ImageParam[P1ImageKind].AimPath,ModelSavedFile), FileStorage.Mode.Read);
 
             p1PredictModel.Read(fs1.GetRoot());
             fs1.ReleaseAndGetString();
             //
 
             //player2 model load from file
-            FileStorage fs2 = new FileStorage(pathPlayer2SvmModel, FileStorage.Mode.Read);
+            FileStorage fs2 = new FileStorage(Path.Combine(ImageFormat.ImageParam[P2ImageKind].AimPath, ModelSavedFile), FileStorage.Mode.Read);
 
             p2PredictModel.Read(fs2.GetRoot());
             fs2.ReleaseAndGetString();

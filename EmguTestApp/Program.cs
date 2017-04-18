@@ -1,5 +1,5 @@
-﻿#define FIGHT
-//#define CHOOSEPLAYER
+﻿//#define FIGHT
+#define CHOOSEPLAYER
 //#define RESULT
 //#define KOMESSAGE
 //#define TITLE
@@ -83,7 +83,8 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 #if SHOWREPREDICTRESULT
-            predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml", ModelTypes.KnModel);
+            predictClass = new IngamePlayersTest(ImageKind.OnSelect_Player1Name, ImageKind.OnSelect_Player2Name, ModelTypes.SvmModel);
+            //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml", ModelTypes.KnModel);
             //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml", ModelTypes.SvmModel);
 #endif
 
@@ -94,7 +95,9 @@ namespace EmguTestApp
 #if CHOOSEPLAYER
             #region Player Choose
             //FileToPlay = @"d:\Q4Vid\RamonChoose.mp4";
-            FileToPlay = @"d:\Q4Vid\ChoosePlayers.mp4";
+            //FileToPlay = @"d:\Q4Vid\ChoosePlayers.mp4";
+            //FileToPlay = @"d:\Q4Vid\ChoosePlayersLong.mp4";
+            FileToPlay = @"d:\Q4Vid\ChoosePlayerRandom.mp4";
             playersDir = @"d:\Q4Vid\ChoosePlayers\";
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
@@ -111,10 +114,11 @@ namespace EmguTestApp
             //Test main menu
             #region Title Test
             FileToPlay = @"d:\Q4Vid\Menus.mp4";
+            playersDir = @"d:\Q4Vid\Menus\";
 
             ResultDict = new Dictionary<string, Image<Gray, byte>>
             {
-                { "TitleColor",null },
+                { "Title",null },
                 { "TitleGray",null },
             };
             #endregion
@@ -193,10 +197,27 @@ namespace EmguTestApp
 
             cp.Retrieve(imgFrame);
 #if FIGHT
-            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15))
-                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2);
-            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15))
-                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2);
+            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].XPos,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].YPos,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Width,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].XPos,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].YPos,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Width,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+
             ResultDict["RoundReadyMessage"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(480, 505, 800, 70))
                 .InRange(ColorsThresHolds.RoundReadyColors.Item1, ColorsThresHolds.RoundReadyColors.Item2);
             ResultDict["p1Lives"] = imgFrame.GetSubRect(new Rectangle(116, 77, 770, 15))
@@ -211,19 +232,54 @@ namespace EmguTestApp
 #endif
 #if CHOOSEPLAYER
             
-            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
-                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
+            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].XPos,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].YPos,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Width,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+
             ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
-            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(25, 895, 410, 25))
-                .InRange(ColorsThresHolds.p1Colors.Item1, ColorsThresHolds.p1Colors.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
-            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1475, 895, 410, 25))
-                .InRange(ColorsThresHolds.p2Colors.Item1, ColorsThresHolds.p2Colors.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
+
+
+            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].XPos,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].YPos,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Width,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+
+
+            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].XPos,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].YPos,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Width,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
 #endif
 #if TITLE
-            ResultDict["TitleColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
-                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2);
+            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].XPos,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].YPos,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Width,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
             ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
@@ -278,6 +334,7 @@ namespace EmguTestApp
 #endif
 #if SHOWREPREDICTRESULT
             float[] predVal = predictClass.PredictImage(ResultDict["Player1NameColor"], ResultDict["Player2NameColor"]);
+            Console.Clear();
             Console.WriteLine("player1: {0}, player2: {1}"
                 , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal[0]).FirstOrDefault().Key
                 , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal[1]).FirstOrDefault().Key);

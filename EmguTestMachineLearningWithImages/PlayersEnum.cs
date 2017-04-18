@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Emgu.CV.Structure;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,6 +20,7 @@ namespace EmguTestMachineLearningWithImages
         {
             {"_BlackFull",  new PlayerDef() {LongName="_BlackFull",             ClassNum = -1 } },
             {"_WhiteFull",  new PlayerDef() {LongName="_WhiteFull",             ClassNum = -2 } },
+            {"_Random",     new PlayerDef() {LongName="_Random",                ClassNum = -3 } },
 
             {"Alice",       new PlayerDef() {LongName="Alice",                  ClassNum = 1 } },
             {"Andy",        new PlayerDef() {LongName="Andy Bogard",            ClassNum = 2 } },
@@ -73,21 +75,67 @@ namespace EmguTestMachineLearningWithImages
         };
     }
 
+    public enum ImageKind { Ingame_Player1Name, Ingame_Player2Name, OnSelect_Player1Name, OnSelect_Player2Name, TitleMenu }
     public static class ImageFormat
     {
-        public enum ImageKind { Ingame_PlayerName, ChoosePlayer_PlayerName, TitleMenu }
-        public class ImageFormatDef
+
+        //public class ImageCommonParams
+        //{
+        //    public int Width { get; set; }
+        //    public int Height { get; set; }
+        //    public float Scale { get; set; }
+        //}
+
+        public class ImageParamsDef
         {
+            public string AimPath { get; set; }
+            public Bgr ColorLowerThreshold { get; set; }
+            public Bgr ColorHigherThreshold { get; set; }
+            public int XPos { get; set; }
+            public int YPos { get; set; }
             public int Width { get; set; }
             public int Height { get; set; }
             public float Scale { get; set; }
         }
 
-        public static Dictionary<ImageKind, ImageFormatDef> ImageSizeDic = new Dictionary<ImageKind, ImageFormatDef>()
+        //public static Dictionary<ImageKind, ImageCommonParams> ImageSizeDic = new Dictionary<ImageKind, ImageCommonParams>()
+        //{
+        //    { ImageKind.Ingame_PlayerName,          new ImageCommonParams { Width=125,     Height=15,      Scale=1} },
+        //    { ImageKind.ChoosePlayer_PlayerName,    new ImageCommonParams { Width=410,     Height=25,      Scale=0.5f} },
+        //    { ImageKind.TitleMenu,                  new ImageCommonParams { Width=550,     Height=50,      Scale=0.5f} }
+        //};
+
+        public static Dictionary<ImageKind, ImageParamsDef> ImageParam = new Dictionary<ImageKind, ImageParamsDef>
         {
-            { ImageKind.Ingame_PlayerName,          new ImageFormatDef { Width=125,     Height=15,      Scale=1} },
-            { ImageKind.ChoosePlayer_PlayerName,    new ImageFormatDef { Width=410,     Height=25,      Scale=0.5f} },
-            { ImageKind.TitleMenu,                  new ImageFormatDef { Width=550,     Height=50,      Scale=0.5f} }
+            {
+                ImageKind.Ingame_Player1Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player1\",
+                ColorLowerThreshold = new Bgr(170, 160, 0),     ColorHigherThreshold =  new Bgr(230, 225, 100),
+                XPos = 35,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f}
+            },
+
+            {
+                ImageKind.Ingame_Player2Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player2\",
+                ColorLowerThreshold = new Bgr(0, 190, 95),     ColorHigherThreshold =  new Bgr(95, 250, 150),
+                XPos = 1760,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f}
+            },
+
+            {
+                ImageKind.OnSelect_Player1Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player1",
+                ColorLowerThreshold = new Bgr(170, 160, 0),     ColorHigherThreshold =  new Bgr(230, 225, 100),
+                XPos = 25,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f}
+            },
+
+            {
+                ImageKind.OnSelect_Player2Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player2",
+                ColorLowerThreshold = new Bgr(0, 190, 95),     ColorHigherThreshold =  new Bgr(95, 250, 150),
+                XPos = 1475,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f}
+            },
+
+            {
+                ImageKind.TitleMenu,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Titles\",
+                ColorLowerThreshold = new Bgr(5, 150, 215),     ColorHigherThreshold = new Bgr(90, 200, 246),
+                XPos = 100,      YPos =  30,        Width = 550,    Height = 50,    Scale = 0.5f}
+            },
         };
     }
 }

@@ -24,14 +24,18 @@ namespace EmguTestMachineLearningWithImages
         IStatModel PredictModel;
         ModelType PredictModelType;
 
+        ImageKind AimImage;
+
         int LastMatrixIndex = 0;
         Matrix<float> TrainingData;/* = new Matrix<float>(0,0)*///fail
 
         Matrix<int> TrainingClasses;/* = new Matrix<int>(0,0)*/
 
-        public SvmModelTrain(ModelType modelType)
+        public SvmModelTrain(ModelType modelType, ImageKind imageKind)
         {
             //svmModel = new SVM();
+            AimImage = imageKind;
+
             PredictModelType = modelType;
             switch (PredictModelType)
             {
@@ -55,7 +59,10 @@ namespace EmguTestMachineLearningWithImages
                 numSamples += Directory.EnumerateFiles(x, "*.bmp").Count();
             });
 
-            TrainingData = new Matrix<float>(numSamples, 15 * 125);//
+            int width = Convert.ToInt32(ImageFormat.ImageParam[AimImage].Height * ImageFormat.ImageParam[AimImage].Scale);
+            int height = Convert.ToInt32(ImageFormat.ImageParam[AimImage].Width * ImageFormat.ImageParam[AimImage].Scale);
+
+            TrainingData = new Matrix<float>(numSamples, width * height);//
             TrainingClasses = new Matrix<int>(numSamples, 1);
             //TrainingClasses = new Matrix<int>(numSamples, numClasses);
 
@@ -90,8 +97,9 @@ namespace EmguTestMachineLearningWithImages
 
         }
 
-        public void LoadFromDirectory(string dir)
+        public void LoadFromDirectory(/*string dir*/)
         {
+            string dir = ImageFormat.ImageParam[AimImage].AimPath;
             CreateClassesData(dir);
 
             foreach (string dr in Directory.EnumerateDirectories(dir))
@@ -212,7 +220,7 @@ namespace EmguTestMachineLearningWithImages
 
         public static float LoadPredictData(string lFile, string pathToLearnData, ModelType modelType)
         {
-            
+
             IStatModel predictModel;
 
             Image<Gray, byte> pic = new Image<Gray, byte>(lFile);

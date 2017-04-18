@@ -1,6 +1,6 @@
-﻿//#define LearningRequired
-//#define SvmType
-#define KnType
+﻿#define LearningRequired
+#define SvmType
+//#define KnType
 
 using System;
 using System.Collections.Generic;
@@ -31,12 +31,12 @@ namespace EmguTestMachineLearningWithImages
             //mod.LoadFromDirectory(@"d:\Q4Vid\Players\Images\Player1");
 
             //Kn
-            SvmModelTrain mod2 = new SvmModelTrain(type);
-            mod2.LoadFromDirectory(@"d:\Q4Vid\Players\Images\Player2");
+            SvmModelTrain mod2 = new SvmModelTrain(type, ImageKind.OnSelect_Player1Name);
+            mod2.LoadFromDirectory();
 
 
-            SvmModelTrain mod = new SvmModelTrain(type);
-            mod.LoadFromDirectory(@"d:\Q4Vid\Players\Images\Player1");
+            SvmModelTrain mod = new SvmModelTrain(type,ImageKind.OnSelect_Player2Name);
+            mod.LoadFromDirectory();
 #else
             //orig
             SvmModelTrain.LoadPredictData(@"d:\Q4Vid\Players\Images\Player1\Alice\Alice_20170411_1215141381.bmp", @"d:\Q4Vid\Players\Images\Player1", type);
