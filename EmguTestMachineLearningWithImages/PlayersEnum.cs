@@ -75,7 +75,15 @@ namespace EmguTestMachineLearningWithImages
         };
     }
 
-    public enum ImageKind { Ingame_Player1Name, Ingame_Player2Name, OnSelect_Player1Name, OnSelect_Player2Name, TitleMenu, KoGoMessage, Result_Player1, Result_Player2 }
+    public enum ImageKind { Ingame_Player1Name,
+                            Ingame_Player2Name,
+                            OnSelect_Player1Name,
+                            OnSelect_Player2Name,
+                            TitleMenu, KoGoMessage,
+                            Result_Player1,
+                            Result_Player2,
+                            PlayerWins,
+                            RoundReadyMessage }
     public static class ImageFormat
     {
 
@@ -153,6 +161,18 @@ namespace EmguTestMachineLearningWithImages
                 ImageKind.Result_Player2,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player2",
                 ColorLowerThreshold = new Bgr(0, 0, 0),         ColorHigherThreshold = new Bgr(60, 45, 35),
                 XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f}
+            },
+
+            {
+                ImageKind.PlayerWins,                           new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\PlayerWins",
+                ColorLowerThreshold = new Bgr(40, 220, 255),    ColorHigherThreshold =  new Bgr(200, 255, 255),
+                XPos = 240,      YPos =  505,        Width = 1450,    Height = 70,    Scale = 0.5f}
+            },
+
+            {
+                ImageKind.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\RoundReady",
+                ColorLowerThreshold = new Bgr(246, 222, 46),     ColorHigherThreshold =  new Bgr(255, 255, 210),
+                XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
             },
         };
     }

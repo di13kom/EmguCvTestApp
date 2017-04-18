@@ -1,11 +1,11 @@
-﻿//#define FIGHT
+﻿#define FIGHT
 //#define CHOOSEPLAYER
-#define RESULT
+//#define RESULT
 //#define KOMESSAGE
 //#define TITLE
 
-//#define SAVEREQUIRED
-#define SHOWREPREDICTRESULT
+//////#define SAVEREQUIRED
+//#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -32,7 +32,7 @@ namespace EmguTestApp
         //static public Tuple<Bgr, Bgr> TitleColors = Tuple.Create(new Bgr(5, 150, 215), new Bgr(90, 200, 246));
         static public Tuple<Gray, Gray> TitleGray = Tuple.Create(new Gray(157), new Gray(255));
 
-        static public Tuple<Bgr, Bgr> RoundReadyColors = Tuple.Create(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
+        //static public Tuple<Bgr, Bgr> RoundReadyColors = Tuple.Create(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
         static public Tuple<Bgr, Bgr> GoMessageColors = Tuple.Create(new Bgr(100, 240, 240), new Bgr(180, 255, 255));
 
         //static public Tuple<Bgr, Bgr> KoMessageColors = Tuple.Create(new Bgr(140, 230, 240), new Bgr(/*205*/190, 255, 255));
@@ -66,6 +66,7 @@ namespace EmguTestApp
         static string svDir = @"d:\Q4Vid\Tst\";
         static Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(1920, 1080);
         static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
+        
 
         static double TotalFrames;
         //static double currentFrame;
@@ -92,12 +93,13 @@ namespace EmguTestApp
             TimerCallback tk = new TimerCallback(TimerCallback);
             tmr = new Timer(tk, null, 1000, 1000);
 
-#if TITLE
-
             //Test main menu
+#if TITLE
             #region Title Test
-            FileToPlay = @"d:\Q4Vid\Menus.mp4";
-            playersDir = @"d:\Q4Vid\Menus\";
+            //FileToPlay = @"d:\Q4Vid\Menus.mp4";
+            //FileToPlay = @"d:\Q4Vid\ResultWinLose.mp4";
+            FileToPlay = @"d:\Q4Vid\ResultWithChoi.mp4";
+            //playersDir = @"d:\Q4Vid\Menus\";
 
 
             ResultDict.Add("Title", null);
@@ -126,17 +128,21 @@ namespace EmguTestApp
 #if FIGHT
             #region Fight Test
             //FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
-            //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
+            //FileToPlay = @"d:\Q4Vid\Round1Message.mp4";
             //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
-            FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
+            //FileToPlay = @"d:\Q4Vid\ReadyMessage.mp4";
+            FileToPlay = @"d:\Q4Vid\RoundFinalMessage.mp4";
+            //FileToPlay = @"d:\Q4Vid\Round2_0.mp4";
+            //FileToPlay = @"d:\Q4Vid\Player1Wins_0.mp4";
             //FileToPlay = playersDir + CurrentName + fileVideoExtension;
 
 
             ResultDict.Add("Player1NameColor", null);
             ResultDict.Add("Player2NameColor", null);
             ResultDict.Add("RoundReadyMessage", null);
-            ResultDict.Add("Player1NameGray", null);
-            ResultDict.Add("Player2NameGray", null);
+            ResultDict.Add("PlayerWins", null);
+            //ResultDict.Add("Player1NameGray", null);
+            //ResultDict.Add("Player2NameGray", null);
             ResultDict.Add("Time", null);
             ResultDict.Add("p1Lives", null);
 
@@ -145,12 +151,14 @@ namespace EmguTestApp
             //WinLose
 #if RESULT
             #region WinLose After Match
-            FileToPlay = @"d:\Q4Vid\PerfectGame.mp4";
+            //FileToPlay = @"d:\Q4Vid\PerfectGame.mp4";
+            //FileToPlay = @"d:\Q4Vid\ResultLoseWin.mp4";
+            FileToPlay = @"d:\Q4Vid\ResultWinLose.mp4";
 
             ResultDict.Add("Result1Color", null);
             ResultDict.Add("Result2Color", null);
-            ResultDict.Add("Result1Gray", null);
-            ResultDict.Add("Result2Gray", null);
+            //ResultDict.Add("Result1Gray", null);
+            //ResultDict.Add("Result2Gray", null);
 
 
             #endregion
@@ -213,17 +221,44 @@ namespace EmguTestApp
                 .Resize(
                     ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
+            ResultDict["PlayerWins"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].XPos,
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].YPos,
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].Width,
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].ColorHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.PlayerWins].Scale, Emgu.CV.CvEnum.Inter.Linear);
+            
 
-            ResultDict["RoundReadyMessage"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(480, 505, 800, 70))
-                .InRange(ColorsThresHolds.RoundReadyColors.Item1, ColorsThresHolds.RoundReadyColors.Item2);
+
+            ResultDict["RoundReadyMessage"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].XPos,
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].YPos,
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].Width,
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].ColorHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
             ResultDict["p1Lives"] = imgFrame.GetSubRect(new Rectangle(116, 77, 770, 15))
                 .InRange(ColorsThresHolds.p1Lives.Item1, ColorsThresHolds.p1Lives.Item2);
-            ResultDict["Player1NameGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2);
-            ResultDict["Player2NameGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2);
-            ResultDict["Time"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
+            //ResultDict["Player1NameGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
+            //    .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2);
+            //ResultDict["Player2NameGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray, byte>()
+            //    .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2);
+
+
+            var Image = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2);
+            var mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80))
+                .InRange(ColorsThresHolds.TimeColor.Item1, ColorsThresHolds.TimeColor.Item2);
+            ResultDict["Time"] = Image.Or(mask);
+            //var xx =  imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Hsv, byte>();
 
 #endif
 #if CHOOSEPLAYER
@@ -294,10 +329,10 @@ namespace EmguTestApp
                     ImageFormat.ImageParam[ImageKind.Result_Player2].Scale, Emgu.CV.CvEnum.Inter.Linear);//ResultP2Color
 
 
-            ResultDict["Result1Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65)).Convert<Gray, byte>()
-                .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
-            ResultDict["Result2Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
-                .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
+            //ResultDict["Result1Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65)).Convert<Gray, byte>()
+            //    .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
+            //ResultDict["Result2Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
+            //    .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
 #endif
 
             var GoMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(580, 435, 750, 200))
@@ -352,6 +387,18 @@ namespace EmguTestApp
                 , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal1).FirstOrDefault().Key
                 , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal2).FirstOrDefault().Key);
 #endif
+#endif
+
+#if (TITLE && SAVEREQUIRED)
+            string saveDirPath = ImageFormat.ImageParam[ImageKind.TitleMenu].AimPath;
+
+            if (Directory.Exists(saveDirPath) == false)
+                Directory.CreateDirectory(saveDirPath);
+
+            string FileFullNameP1 = Path.Combine(saveDirPath , CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff") + fileImageExtension);
+
+            ResultDict["Title"].ToBitmap().Save(FileFullNameP1);
+
 #endif
             //ImagesGrayTransformationList.Clear();
             //ImagesColorTransformationList.Clear();
