@@ -77,13 +77,16 @@ namespace EmguTestApp
         static Dictionary<string, Image<Gray, byte>> ResultDict = null;
 
 #if SHOWREPREDICTRESULT
-        static IngamePlayersTest predictClass;
+        static IngamePlayersTest predictClass1;
+        static IngamePlayersTest predictClass2;
 #endif
 
         static void Main(string[] args)
         {
 #if SHOWREPREDICTRESULT
-            predictClass = new IngamePlayersTest(ImageKind.OnSelect_Player1Name, ImageKind.OnSelect_Player2Name, ModelTypes.SvmModel);
+            predictClass1 = new IngamePlayersTest(ImageKind.OnSelect_Player1Name, ModelTypes.SvmModel);
+            predictClass2 = new IngamePlayersTest(ImageKind.OnSelect_Player2Name, ModelTypes.SvmModel);
+                
             //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml", ModelTypes.KnModel);
             //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml", ModelTypes.SvmModel);
 #endif
@@ -333,11 +336,12 @@ namespace EmguTestApp
 
 #endif
 #if SHOWREPREDICTRESULT
-            float[] predVal = predictClass.PredictImage(ResultDict["Player1NameColor"], ResultDict["Player2NameColor"]);
+            float predVal1 = predictClass1.PredictImage(ResultDict["Player1NameColor"]);
+            float predVal2 = predictClass2.PredictImage(ResultDict["Player2NameColor"]);
             Console.Clear();
             Console.WriteLine("player1: {0}, player2: {1}"
-                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal[0]).FirstOrDefault().Key
-                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal[1]).FirstOrDefault().Key);
+                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal1).FirstOrDefault().Key
+                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal2).FirstOrDefault().Key);
 #endif
 #endif
             //ImagesGrayTransformationList.Clear();
