@@ -1,11 +1,11 @@
 ﻿//#define FIGHT
 //#define CHOOSEPLAYER
-//#define RESULT
-#define KOMESSAGE
+#define RESULT
+//#define KOMESSAGE
 //#define TITLE
 
 //#define SAVEREQUIRED
-//#define SHOWREPREDICTRESULT
+#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -35,19 +35,19 @@ namespace EmguTestApp
         static public Tuple<Bgr, Bgr> RoundReadyColors = Tuple.Create(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
         static public Tuple<Bgr, Bgr> GoMessageColors = Tuple.Create(new Bgr(100, 240, 240), new Bgr(180, 255, 255));
 
-        static public Tuple<Bgr, Bgr> KoMessageColors = Tuple.Create(new Bgr(140, 230, 240), new Bgr(/*205*/190, 255, 255));
+        //static public Tuple<Bgr, Bgr> KoMessageColors = Tuple.Create(new Bgr(140, 230, 240), new Bgr(/*205*/190, 255, 255));
         static public Tuple<Gray, Gray> KoMessageGray = Tuple.Create(new Gray(240), new Gray(255));
 
 
         //static public Tuple<Bgr, Bgr> WinLoseAfterMatch = Tuple.Create(new Bgr(200, 192, 188), new Bgr(255, 255, 255));
-        static public Tuple<Bgr, Bgr> WinLoseAfterMatchColor = Tuple.Create(new Bgr(0, 0, 0), new Bgr(60, 45, 35));
+        //static public Tuple<Bgr, Bgr> WinLoseAfterMatchColor = Tuple.Create(new Bgr(0, 0, 0), new Bgr(60, 45, 35));
         static public Tuple<Gray, Gray> WinLoseAfterMatchGray = Tuple.Create(new Gray(160), new Gray(255));
 
         static public Tuple<Bgr, Bgr> TimeColor = Tuple.Create(new Bgr(180, 160, 149), new Bgr(230, 230, 190));
         static public Tuple<Gray, Gray> TimeGray = Tuple.Create(new Gray(190), new Gray(255));
 
-        //static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 110, 0), new Bgr(156, 244, 145));//Green only
-        static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 60, 180), new Bgr(156, 246, 255));//Orange only
+        static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 110, 0), new Bgr(156, 244, 145));//Green only
+        //static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 60, 180), new Bgr(156, 246, 255));//Orange only
     }
 
     class Program
@@ -84,8 +84,8 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 #if SHOWREPREDICTRESULT
-            predictClass1 = new IngamePlayersTest(ImageKind.Ingame_Player1Name, ModelTypes.SvmModel);
-            predictClass2 = new IngamePlayersTest(ImageKind.Ingame_Player2Name, ModelTypes.SvmModel);
+            predictClass1 = new IngamePlayersTest(ImageKind.OnSelect_Player1Name, ModelTypes.SvmModel);
+            predictClass2 = new IngamePlayersTest(ImageKind.OnSelect_Player2Name, ModelTypes.SvmModel);
                 
 #endif
 
@@ -199,7 +199,8 @@ namespace EmguTestApp
                 .InRange(
                     ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].ColorLowerThreshold,
                     ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
             ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
                     ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].XPos,
@@ -209,7 +210,8 @@ namespace EmguTestApp
                 .InRange(
                     ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].ColorLowerThreshold,
                     ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
 
             ResultDict["RoundReadyMessage"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(480, 505, 800, 70))
@@ -234,7 +236,8 @@ namespace EmguTestApp
                 .InRange(
                     ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].ColorLowerThreshold,
                     ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
 
 
@@ -246,7 +249,8 @@ namespace EmguTestApp
                 .InRange(
                     ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].ColorLowerThreshold,
                     ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
 #endif
 #if TITLE
@@ -258,28 +262,38 @@ namespace EmguTestApp
                 .InRange(
                     ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
                     ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
             ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
 #endif
 
 #if RESULT
-            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].XPos,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].YPos,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Width,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Height))
+
+            ResultDict["Result1Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].XPos,
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].YPos,
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].Width,
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].Height))
                 .InRange(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].ColorHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.Result_Player1].Scale, Emgu.CV.CvEnum.Inter.Linear);//ResultP1Color
+
+            ResultDict["Result2Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].XPos,
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].YPos,
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].Width,
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].ColorHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.Result_Player2].Scale, Emgu.CV.CvEnum.Inter.Linear);//ResultP2Color
 
 
-            ResultDict["Result1Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65))
-                .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2);//ResultP1Color
-            ResultDict["Result2Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65))
-                .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2);//ResultP2Color
             ResultDict["Result1Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65)).Convert<Gray, byte>()
                 .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
             ResultDict["Result2Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
@@ -289,8 +303,18 @@ namespace EmguTestApp
             var GoMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(580, 435, 750, 200))
                 .InRange(ColorsThresHolds.GoMessageColors.Item1, ColorsThresHolds.GoMessageColors.Item2);
 #if KOMESSAGE
-            ResultDict["Ko Message Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210))
-                .InRange(ColorsThresHolds.KoMessageColors.Item1, ColorsThresHolds.KoMessageColors.Item2);
+            ResultDict["Ko Message Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].XPos,
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].YPos,
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].Width,
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].ColorHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[ImageKind.KoGoMessage].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+
             ResultDict["Ko Message Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210)).Convert<Gray, byte>()
                 .ThresholdBinary(ColorsThresHolds.KoMessageGray.Item1, ColorsThresHolds.KoMessageGray.Item2);
 #endif
@@ -336,6 +360,7 @@ namespace EmguTestApp
             {
                 kvRes.Value.Dispose();
             }
+            //imgFrame.Dispose();
         }
 
         public static void TimerCallback(object obj)
