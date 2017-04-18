@@ -1,11 +1,11 @@
 ﻿//#define FIGHT
-#define CHOOSEPLAYER
+//#define CHOOSEPLAYER
 //#define RESULT
-//#define KOMESSAGE
+#define KOMESSAGE
 //#define TITLE
 
 //#define SAVEREQUIRED
-#define SHOWREPREDICTRESULT
+//#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -23,13 +23,13 @@ namespace EmguTestApp
 {
     static class ColorsThresHolds
     {
-        static public Tuple<Bgr, Bgr> p1Colors = Tuple.Create(new Bgr(170, 160, 0), new Bgr(230, 225, 100));
+        //static public Tuple<Bgr, Bgr> p1Colors = Tuple.Create(new Bgr(170, 160, 0), new Bgr(230, 225, 100));
         static public Tuple<Gray, Gray> p1Gray = Tuple.Create(new Gray(110), new Gray(255));
 
-        static public Tuple<Bgr, Bgr> p2Colors = Tuple.Create(new Bgr(0, 190, 95), new Bgr(95, 250, 150));
+        //static public Tuple<Bgr, Bgr> p2Colors = Tuple.Create(new Bgr(0, 190, 95), new Bgr(95, 250, 150));
         static public Tuple<Gray, Gray> p2Gray = Tuple.Create(new Gray(110), new Gray(255));
 
-        static public Tuple<Bgr, Bgr> TitleColors = Tuple.Create(new Bgr(5, 150, 215), new Bgr(90, 200, 246));
+        //static public Tuple<Bgr, Bgr> TitleColors = Tuple.Create(new Bgr(5, 150, 215), new Bgr(90, 200, 246));
         static public Tuple<Gray, Gray> TitleGray = Tuple.Create(new Gray(157), new Gray(255));
 
         static public Tuple<Bgr, Bgr> RoundReadyColors = Tuple.Create(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
@@ -74,7 +74,7 @@ namespace EmguTestApp
         static Timer tmr;
         static Capture capture;
 
-        static Dictionary<string, Image<Gray, byte>> ResultDict = null;
+        static Dictionary<string, Image<Gray, byte>> ResultDict = new Dictionary<string, Image<Gray, byte>>();
 
 #if SHOWREPREDICTRESULT
         static IngamePlayersTest predictClass1;
@@ -84,16 +84,28 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 #if SHOWREPREDICTRESULT
-            predictClass1 = new IngamePlayersTest(ImageKind.OnSelect_Player1Name, ModelTypes.SvmModel);
-            predictClass2 = new IngamePlayersTest(ImageKind.OnSelect_Player2Name, ModelTypes.SvmModel);
+            predictClass1 = new IngamePlayersTest(ImageKind.Ingame_Player1Name, ModelTypes.SvmModel);
+            predictClass2 = new IngamePlayersTest(ImageKind.Ingame_Player2Name, ModelTypes.SvmModel);
                 
-            //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\KN_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\KN_mlp_model.xml", ModelTypes.KnModel);
-            //predictClass = new IngamePlayersTest(@"d:\Q4Vid\Players\Images\Player1\SVM_mlp_model.xml", @"d:\Q4Vid\Players\Images\Player2\SVM_mlp_model.xml", ModelTypes.SvmModel);
 #endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
             tmr = new Timer(tk, null, 1000, 1000);
 
+#if TITLE
+
+            //Test main menu
+            #region Title Test
+            FileToPlay = @"d:\Q4Vid\Menus.mp4";
+            playersDir = @"d:\Q4Vid\Menus\";
+
+
+            ResultDict.Add("Title", null);
+            ResultDict.Add("TitleGray", null);
+
+            #endregion
+
+#endif
             //Test Players Choose
 #if CHOOSEPLAYER
             #region Player Choose
@@ -103,31 +115,15 @@ namespace EmguTestApp
             FileToPlay = @"d:\Q4Vid\ChoosePlayerRandom.mp4";
             playersDir = @"d:\Q4Vid\ChoosePlayers\";
 
-            ResultDict = new Dictionary<string, Image<Gray, byte>>
-            {
-                { "Title",null },
-                {"Player1NameColor",null },
-                {"Player2NameColor",null },
-                {"TitleGray",null },
-            };
+            //ResultDict.Add("Title", null);
+            ResultDict.Add("Player1NameColor", null);
+            ResultDict.Add("Player2NameColor", null);
+            //ResultDict.Add("TitleGray", null);
 
             #endregion
-#elif TITLE
-
-            //Test main menu
-            #region Title Test
-            FileToPlay = @"d:\Q4Vid\Menus.mp4";
-            playersDir = @"d:\Q4Vid\Menus\";
-
-            ResultDict = new Dictionary<string, Image<Gray, byte>>
-            {
-                { "Title",null },
-                { "TitleGray",null },
-            };
-            #endregion
-
+#endif
             //Test Figth
-#elif FIGHT
+#if FIGHT
             #region Fight Test
             //FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
             //FileToPlay = @"d:\Q4Vid\RoundReadyMessage.mp4";
@@ -135,41 +131,36 @@ namespace EmguTestApp
             FileToPlay = @"d:\Q4Vid\20170331153923.mp4";
             //FileToPlay = playersDir + CurrentName + fileVideoExtension;
 
-            ResultDict = new Dictionary<string, Image<Gray, byte>>
-            {
-                { "Player1NameColor",null },
-                {"Player2NameColor",null },
-                {"RoundReadyMessage",null },
-                {"Player1NameGray",null },
-                {"Player2NameGray",null },
-                {"Time",null },
-                {"p1Lives",null },
-            };
+
+            ResultDict.Add("Player1NameColor", null);
+            ResultDict.Add("Player2NameColor", null);
+            ResultDict.Add("RoundReadyMessage", null);
+            ResultDict.Add("Player1NameGray", null);
+            ResultDict.Add("Player2NameGray", null);
+            ResultDict.Add("Time", null);
+            ResultDict.Add("p1Lives", null);
 
             #endregion
+#endif
             //WinLose
-#elif RESULT
+#if RESULT
             #region WinLose After Match
             FileToPlay = @"d:\Q4Vid\PerfectGame.mp4";
 
-            ResultDict = new Dictionary<string, Image<Gray, byte>>
-            {
-                {"Title",null },
-                {"Result1Color",null },
-                {"Result2Color",null },
-                {"Result1Gray",null },
-                {"Result2Gray",null },
-            };
+            ResultDict.Add("Result1Color", null);
+            ResultDict.Add("Result2Color", null);
+            ResultDict.Add("Result1Gray", null);
+            ResultDict.Add("Result2Gray", null);
+
 
             #endregion
-#elif KOMESSAGE
-            FileToPlay = @"d:\Q4Vid\Players\10sec\Mai.mp4";
+#endif
+#if KOMESSAGE
+            FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Mai.mp4";
 
-            ResultDict = new Dictionary<string, Image<Gray, byte>>
-            {
-                { "Ko Message Color",null },
-                { "Ko Message Gray",null },
-            };
+            ResultDict.Add("Ko Message Color", null);
+            ResultDict.Add("Ko Message Gray", null);
+
 #endif
 
             foreach (string key in ResultDict.Keys)
@@ -235,21 +226,6 @@ namespace EmguTestApp
 #endif
 #if CHOOSEPLAYER
             
-            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].XPos,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].YPos,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Width,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
-                .Resize(ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-
-            ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2).Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
-
-
             ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
                     ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].XPos,
                     ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].YPos,
@@ -289,8 +265,17 @@ namespace EmguTestApp
 #endif
 
 #if RESULT
-            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50))
-                .InRange(ColorsThresHolds.TitleColors.Item1, ColorsThresHolds.TitleColors.Item2);
+            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].XPos,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].YPos,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Width,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].Height))
+                .InRange(
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
+                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
+                .Resize(ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+
             ResultDict["Result1Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65))
                 .InRange(ColorsThresHolds.WinLoseAfterMatchColor.Item1, ColorsThresHolds.WinLoseAfterMatchColor.Item2);//ResultP1Color
             ResultDict["Result2Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65))
@@ -347,6 +332,10 @@ namespace EmguTestApp
             //ImagesGrayTransformationList.Clear();
             //ImagesColorTransformationList.Clear();
             //Console.WriteLine($"current frame:{currentFrame++}");
+            foreach (KeyValuePair<string, Image<Gray, byte>> kvRes in ResultDict)
+            {
+                kvRes.Value.Dispose();
+            }
         }
 
         public static void TimerCallback(object obj)
