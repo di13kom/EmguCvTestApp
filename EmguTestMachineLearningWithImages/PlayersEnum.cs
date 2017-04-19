@@ -97,6 +97,7 @@ namespace EmguTestMachineLearningWithImages
         public class ImageParamsDef
         {
             public string AimPath { get; set; }
+            public IReadOnlyDictionary<string, PlayersEnum.PlayerDef> Dict { get; set; } 
             public Bgr ColorLowerThreshold { get; set; }
             public Bgr ColorHigherThreshold { get; set; }
             public int XPos { get; set; }
@@ -118,25 +119,25 @@ namespace EmguTestMachineLearningWithImages
             {
                 ImageKind.Ingame_Player1Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player1\",
                 ColorLowerThreshold = new Bgr(170, 160, 0),     ColorHigherThreshold =  new Bgr(230, 225, 100),
-                XPos = 35,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f}
+                XPos = 35,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.Ingame_Player2Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player2\",
                 ColorLowerThreshold = new Bgr(0, 190, 95),     ColorHigherThreshold =  new Bgr(95, 250, 150),
-                XPos = 1760,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f}
+                XPos = 1760,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.OnSelect_Player1Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player1",
                 ColorLowerThreshold = new Bgr(170, 160, 0),     ColorHigherThreshold =  new Bgr(230, 225, 100),
-                XPos = 25,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f}
+                XPos = 25,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.OnSelect_Player2Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player2",
                 ColorLowerThreshold = new Bgr(0, 190, 95),     ColorHigherThreshold =  new Bgr(95, 250, 150),
-                XPos = 1475,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f}
+                XPos = 1475,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f,      Dict=PlayersEnum.Players }
             },
 
             {
