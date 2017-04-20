@@ -117,7 +117,8 @@ namespace EmguTestMachineLearningWithImages
         Result_Player1,
         Result_Player2,
         PlayerWins,
-        RoundReadyMessage
+        RoundReadyMessage,
+        CurrentTime
     }
     public static class ImageFormat
     {
@@ -215,6 +216,13 @@ namespace EmguTestMachineLearningWithImages
                 MaskLowerThreshold =    new Bgr(246, 222, 46),  MaskHigherThreshold =       new Bgr(255, 255, 210),
                 XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
             },
-        };
+
+            {
+                ImageKind.CurrentTime,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Time",
+                ColorLowerThreshold =   new Bgr(180, 160, 149),  ColorHigherThreshold =      new Bgr(230, 230, 210),
+                MaskLowerThreshold =    new Bgr(210, 210, 210),  MaskHigherThreshold =       new Bgr(255, 255, 255),
+                XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 1.0f}
+            },
+    };
     }
 }

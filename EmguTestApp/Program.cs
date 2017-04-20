@@ -84,7 +84,7 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\Player2Wins.mp4"
+            ProcessVideo(@"d:\Q4Vid\CpuCpuFullMatch.mp4"
                 , ImageKind.Ingame_Player1Name
                 , ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
@@ -95,6 +95,7 @@ namespace EmguTestApp
                 //, ImageKind.TitleMenu
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2
+                , ImageKind.CurrentTime
                 );
         }
 
