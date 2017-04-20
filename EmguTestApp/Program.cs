@@ -1,11 +1,11 @@
-﻿#define FIGHT
+﻿//#define FIGHT
 //#define CHOOSEPLAYER
 //#define RESULT
 //#define KOMESSAGE
 //#define TITLE
 
-//////#define SAVEREQUIRED
-//#define SHOWREPREDICTRESULT
+//#define SAVEREQUIRED
+#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -66,7 +66,7 @@ namespace EmguTestApp
         static string svDir = @"d:\Q4Vid\Tst\";
         static Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(1920, 1080);
         static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
-        
+
 
         static double TotalFrames;
         //static double currentFrame;
@@ -75,23 +75,42 @@ namespace EmguTestApp
         static Timer tmr;
         static Capture capture;
 
-        static Dictionary<string, Image<Gray, byte>> ResultDict = new Dictionary<string, Image<Gray, byte>>();
+        static Dictionary<ImageKind, Image<Gray, byte>> ResultDict = new Dictionary<ImageKind, Image<Gray, byte>>();
 
 #if SHOWREPREDICTRESULT
-        static IngamePlayersTest predictClass1;
-        static IngamePlayersTest predictClass2;
+        static List<IngamePlayersTest> PredictList = new List<IngamePlayersTest>();
 #endif
 
         static void Main(string[] args)
         {
+
+            ProcessVideo(@"d:\Q4Vid\ResultWithYuri.mp4"
+                //, ImageKind.OnSelect_Player1Name
+                //, ImageKind.OnSelect_Player2Name
+                //, ImageKind.RoundReadyMessage
+                //, ImageKind.PlayerWins
+                //, ImageKind.KoGoMessage
+                , ImageKind.TitleMenu
+                , ImageKind.Result_Player1
+                , ImageKind.Result_Player2
+                );
+        }
+
+        static void ProcessVideo(string videoName, params ImageKind[] ImageProps)
+        {
 #if SHOWREPREDICTRESULT
-            predictClass1 = new IngamePlayersTest(ImageKind.OnSelect_Player1Name, ModelTypes.SvmModel);
-            predictClass2 = new IngamePlayersTest(ImageKind.OnSelect_Player2Name, ModelTypes.SvmModel);
-                
+            foreach(var ing in ImageProps)
+            {
+                PredictList.Add(new IngamePlayersTest(ing, ModelTypes.SvmModel));
+            }              
 #endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
             tmr = new Timer(tk, null, 1000, 1000);
+
+            FileToPlay = videoName;
+
+            CurrentName = Path.GetFileNameWithoutExtension(videoName);
 
             //Test main menu
 #if TITLE
@@ -99,12 +118,6 @@ namespace EmguTestApp
             //FileToPlay = @"d:\Q4Vid\Menus.mp4";
             //FileToPlay = @"d:\Q4Vid\ResultWinLose.mp4";
             FileToPlay = @"d:\Q4Vid\ResultWithChoi.mp4";
-            //playersDir = @"d:\Q4Vid\Menus\";
-
-
-            ResultDict.Add("Title", null);
-            ResultDict.Add("TitleGray", null);
-
             #endregion
 
 #endif
@@ -115,13 +128,6 @@ namespace EmguTestApp
             //FileToPlay = @"d:\Q4Vid\ChoosePlayers.mp4";
             //FileToPlay = @"d:\Q4Vid\ChoosePlayersLong.mp4";
             FileToPlay = @"d:\Q4Vid\ChoosePlayerRandom.mp4";
-            playersDir = @"d:\Q4Vid\ChoosePlayers\";
-
-            //ResultDict.Add("Title", null);
-            ResultDict.Add("Player1NameColor", null);
-            ResultDict.Add("Player2NameColor", null);
-            //ResultDict.Add("TitleGray", null);
-
             #endregion
 #endif
             //Test Figth
@@ -135,17 +141,6 @@ namespace EmguTestApp
             //FileToPlay = @"d:\Q4Vid\Round2_0.mp4";
             //FileToPlay = @"d:\Q4Vid\Player1Wins_0.mp4";
             //FileToPlay = playersDir + CurrentName + fileVideoExtension;
-
-
-            ResultDict.Add("Player1NameColor", null);
-            ResultDict.Add("Player2NameColor", null);
-            ResultDict.Add("RoundReadyMessage", null);
-            ResultDict.Add("PlayerWins", null);
-            //ResultDict.Add("Player1NameGray", null);
-            //ResultDict.Add("Player2NameGray", null);
-            ResultDict.Add("Time", null);
-            ResultDict.Add("p1Lives", null);
-
             #endregion
 #endif
             //WinLose
@@ -154,26 +149,20 @@ namespace EmguTestApp
             //FileToPlay = @"d:\Q4Vid\PerfectGame.mp4";
             //FileToPlay = @"d:\Q4Vid\ResultLoseWin.mp4";
             FileToPlay = @"d:\Q4Vid\ResultWinLose.mp4";
-
-            ResultDict.Add("Result1Color", null);
-            ResultDict.Add("Result2Color", null);
-            //ResultDict.Add("Result1Gray", null);
-            //ResultDict.Add("Result2Gray", null);
-
-
             #endregion
 #endif
 #if KOMESSAGE
             FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Mai.mp4";
-
-            ResultDict.Add("Ko Message Color", null);
-            ResultDict.Add("Ko Message Gray", null);
-
 #endif
-
-            foreach (string key in ResultDict.Keys)
+            foreach (ImageKind img in ImageProps)
             {
-                CvInvoke.NamedWindow(key);
+                ResultDict.Add(img, null);
+            }
+
+
+            foreach (ImageKind key in ResultDict.Keys)
+            {
+                CvInvoke.NamedWindow(key.ToString());
             }
             //
             capture = new Capture(FileToPlay);
@@ -198,212 +187,67 @@ namespace EmguTestApp
             Capture cp = sender as Capture;
 
             cp.Retrieve(imgFrame);
+            #region Definitions
 #if FIGHT
-            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].XPos,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].YPos,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Width,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].XPos,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].YPos,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Width,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.Ingame_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-            ResultDict["PlayerWins"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].XPos,
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].YPos,
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].Width,
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.PlayerWins].Scale, Emgu.CV.CvEnum.Inter.Linear);
-            
-
-
-            ResultDict["RoundReadyMessage"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].XPos,
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].YPos,
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].Width,
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.RoundReadyMessage].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-            ResultDict["p1Lives"] = imgFrame.GetSubRect(new Rectangle(116, 77, 770, 15))
-                .InRange(ColorsThresHolds.p1Lives.Item1, ColorsThresHolds.p1Lives.Item2);
-            //ResultDict["Player1NameGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(35, 110, 125, 15)).Convert<Gray, byte>()
-            //    .ThresholdBinary(ColorsThresHolds.p1Gray.Item1, ColorsThresHolds.p1Gray.Item2);
-            //ResultDict["Player2NameGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1760, 110, 125, 15)).Convert<Gray, byte>()
-            //    .ThresholdBinary(ColorsThresHolds.p2Gray.Item1, ColorsThresHolds.p2Gray.Item2);
-
-
-            var Image = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.TimeGray.Item1, ColorsThresHolds.TimeGray.Item2);
-            var mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80))
-                .InRange(ColorsThresHolds.TimeColor.Item1, ColorsThresHolds.TimeColor.Item2);
-            ResultDict["Time"] = Image.Or(mask);
-            //var xx =  imgFrame.GetSubRect(new System.Drawing.Rectangle(870, 50, 180, 80)).Convert<Hsv, byte>();
-
 #endif
 #if CHOOSEPLAYER
-            
-            ResultDict["Player1NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].XPos,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].YPos,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Width,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player1Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-
-
-            ResultDict["Player2NameColor"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].XPos,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].YPos,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Width,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.OnSelect_Player2Name].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
 #endif
 #if TITLE
-            ResultDict["Title"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].XPos,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].YPos,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Width,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.TitleMenu].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-            ResultDict["TitleGray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(100, 30, 550, 50)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.TitleGray.Item1, ColorsThresHolds.TitleGray.Item2);
 #endif
-
 #if RESULT
-
-            ResultDict["Result1Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].XPos,
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].YPos,
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].Width,
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.Result_Player1].Scale, Emgu.CV.CvEnum.Inter.Linear);//ResultP1Color
-
-            ResultDict["Result2Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].XPos,
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].YPos,
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].Width,
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.Result_Player2].Scale, Emgu.CV.CvEnum.Inter.Linear);//ResultP2Color
-
-
-            //ResultDict["Result1Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(15, 760, 415, 65)).Convert<Gray, byte>()
-            //    .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
-            //ResultDict["Result2Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(1445, 760, 415, 65)).Convert<Gray, byte>()
-            //    .InRange(ColorsThresHolds.WinLoseAfterMatchGray.Item1, ColorsThresHolds.WinLoseAfterMatchGray.Item2);
 #endif
-
-            var GoMessage = imgFrame.GetSubRect(new System.Drawing.Rectangle(580, 435, 750, 200))
-                .InRange(ColorsThresHolds.GoMessageColors.Item1, ColorsThresHolds.GoMessageColors.Item2);
 #if KOMESSAGE
-            ResultDict["Ko Message Color"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].XPos,
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].YPos,
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].Width,
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].Height))
-                .InRange(
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].ColorLowerThreshold,
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].ColorHigherThreshold)
-                .Resize(
-                    ImageFormat.ImageParam[ImageKind.KoGoMessage].Scale, Emgu.CV.CvEnum.Inter.Linear);
-
-
-            ResultDict["Ko Message Gray"] = imgFrame.GetSubRect(new System.Drawing.Rectangle(515, 435, 885, 210)).Convert<Gray, byte>()
-                .ThresholdBinary(ColorsThresHolds.KoMessageGray.Item1, ColorsThresHolds.KoMessageGray.Item2);
 #endif
+            #endregion
 
+            foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvRes in ResultDict.ToList())
+            {
+                ResultDict[kvRes.Key] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[kvRes.Key].XPos,
+                    ImageFormat.ImageParam[kvRes.Key].YPos,
+                    ImageFormat.ImageParam[kvRes.Key].Width,
+                    ImageFormat.ImageParam[kvRes.Key].Height))
+                .InRange(
+                    ImageFormat.ImageParam[kvRes.Key].ColorLowerThreshold,
+                    ImageFormat.ImageParam[kvRes.Key].ColorHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+            }
             //Windows Show
 
-            foreach (KeyValuePair<string, Image<Gray, byte>> kvRes in ResultDict)
+            foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvRes in ResultDict)
             {
-                CvInvoke.Imshow(kvRes.Key, kvRes.Value);
+                CvInvoke.Imshow(kvRes.Key.ToString(), kvRes.Value);
             }
 
-#if (FIGHT||CHOOSEPLAYER)
-#if SAVEREQUIRED
-
-            string p1DirFullPath = playersDir + pl1Subdir + CurrentName;
-            string p2DirFullPath = playersDir + pl2Subdir + CurrentName;
-
-            if (Directory.Exists(p1DirFullPath) == false)
-                Directory.CreateDirectory(p1DirFullPath);
-            if (Directory.Exists(p2DirFullPath) == false)
-                Directory.CreateDirectory(p2DirFullPath);
-
-            string FileFullNameP1 = p1DirFullPath + "\\" + CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff") + fileImageExtension;
-            string FileFullNameP2 = p2DirFullPath + "\\" + CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff") + fileImageExtension;
-
-            ResultDict["Player1NameColor"].ToBitmap().Save(FileFullNameP1);
-            ResultDict["Player2NameColor"].ToBitmap().Save(FileFullNameP2);
-
-#endif
 #if SHOWREPREDICTRESULT
-            float predVal1 = predictClass1.PredictImage(ResultDict["Player1NameColor"]);
-            float predVal2 = predictClass2.PredictImage(ResultDict["Player2NameColor"]);
+
+            //Console.WriteLine();
             Console.Clear();
-            Console.WriteLine("player1: {0}, player2: {1}"
-                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal1).FirstOrDefault().Key
-                , PlayersEnum.Players.Where(x => x.Value.ClassNum == predVal2).FirstOrDefault().Key);
+            int ind = 0;
+            foreach(KeyValuePair<ImageKind,Image<Gray,byte>> kvpair in ResultDict)
+            {
+                //Console.WriteLine($"{kvpair.Key.ToString()} : {PredictList[ind].PredictImage(kvpair.Value)}");
+                Console.WriteLine($"{kvpair.Key.ToString()} :{ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum ==  PredictList[ind].PredictImage(kvpair.Value)).FirstOrDefault().Key}");
+                ind++;
+            }
 #endif
+
+#if SAVEREQUIRED
+            foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvpair in ResultDict)
+            {
+                string saveDirPath = Path.Combine(ImageFormat.ImageParam[kvpair.Key].AimPath,kvpair.Key.ToString());
+
+                if (Directory.Exists(saveDirPath) == false)
+                    Directory.CreateDirectory(saveDirPath);
+
+                string saveFileFullName = Path.Combine(saveDirPath, CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff") + fileImageExtension);
+
+                kvpair.Value.ToBitmap().Save(saveFileFullName);
+            }
 #endif
 
-#if (TITLE && SAVEREQUIRED)
-            string saveDirPath = ImageFormat.ImageParam[ImageKind.TitleMenu].AimPath;
-
-            if (Directory.Exists(saveDirPath) == false)
-                Directory.CreateDirectory(saveDirPath);
-
-            string FileFullNameP1 = Path.Combine(saveDirPath , CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff") + fileImageExtension);
-
-            ResultDict["Title"].ToBitmap().Save(FileFullNameP1);
-
-#endif
-            //ImagesGrayTransformationList.Clear();
-            //ImagesColorTransformationList.Clear();
-            //Console.WriteLine($"current frame:{currentFrame++}");
-            foreach (KeyValuePair<string, Image<Gray, byte>> kvRes in ResultDict)
+            foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvRes in ResultDict)
             {
                 kvRes.Value.Dispose();
             }

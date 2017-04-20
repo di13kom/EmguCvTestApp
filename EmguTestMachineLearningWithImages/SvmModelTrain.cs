@@ -59,8 +59,8 @@ namespace EmguTestMachineLearningWithImages
                 numSamples += Directory.EnumerateFiles(x, "*.bmp").Count();
             });
 
-            int width = Convert.ToInt32(ImageFormat.ImageParam[AimImage].Height * ImageFormat.ImageParam[AimImage].Scale);
-            int height = Convert.ToInt32(ImageFormat.ImageParam[AimImage].Width * ImageFormat.ImageParam[AimImage].Scale);
+            int width = Convert.ToInt32(Math.Truncate(ImageFormat.ImageParam[AimImage].Height * ImageFormat.ImageParam[AimImage].Scale));
+            int height = Convert.ToInt32(Math.Truncate(ImageFormat.ImageParam[AimImage].Width * ImageFormat.ImageParam[AimImage].Scale));
 
             TrainingData = new Matrix<float>(numSamples, width * height);//
             TrainingClasses = new Matrix<int>(numSamples, 1);
@@ -130,7 +130,8 @@ namespace EmguTestMachineLearningWithImages
                     }
                 }
 
-                TrainingClasses[ind, 0] = PlayersEnum.Players[className].ClassNum;
+                //TrainingClasses[ind, 0] = PlayersEnum.Players[className].ClassNum;
+                TrainingClasses[ind, 0] = ImageFormat.ImageParam[AimImage].Dict[className].ClassNum;
             }
             catch (Exception ex)
             {

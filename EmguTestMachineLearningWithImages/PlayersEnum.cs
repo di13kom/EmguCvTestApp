@@ -73,31 +73,59 @@ namespace EmguTestMachineLearningWithImages
             {"Yuri",        new PlayerDef() {LongName="Yuri Sakazaki",          ClassNum = 49 } },
             {"Zarina",      new PlayerDef() {LongName="Zarina",                 ClassNum = 50 } },
         };
+
+        public static Dictionary<string, PlayerDef> Titles = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+
+            {"MainMenu",                            new PlayerDef() {LongName="MainMenu",                                       ClassNum = 1 } },
+            {"Gallery",                             new PlayerDef() {LongName="Gallery",                                        ClassNum = 2 } },
+            {"Mission",                             new PlayerDef() {LongName="Mission",                                        ClassNum = 3 } },
+            {"Options",                             new PlayerDef() {LongName="Options",                                        ClassNum = 4 } },
+            {"PlayerData",                          new PlayerDef() {LongName="PlayerData",                                     ClassNum = 5 } },
+            {"Result_VersusSingle",                 new PlayerDef() {LongName="Result_VersusSingle",                            ClassNum = 6 } },
+            {"Tutorial",                            new PlayerDef() {LongName="Tutorial",                                       ClassNum = 7 } },
+            {"Versus",                              new PlayerDef() {LongName="Versus",                                         ClassNum = 8 } },
+            {"ControllerSelect_VersusSingle",       new PlayerDef() {LongName="ControllerSelect_VersusSingle",                  ClassNum = 9 } },
+            {"ControllerSelect_VersusTeam",         new PlayerDef() {LongName="ControllerSelect_VersusTeam",                    ClassNum = 10 } },
+            {"MemberSelect_Story",                  new PlayerDef() {LongName="MemberSelect_Story",                             ClassNum = 11 } },
+            {"MemberSelect_Training",               new PlayerDef() {LongName="MemberSelect_Training",                          ClassNum = 12 } },
+            {"MemberSelect_VersusSingle",           new PlayerDef() {LongName="MemberSelect_VersusSingle",                      ClassNum = 13 } },
+            {"MemberSelect_VersusTeam",             new PlayerDef() {LongName="MemberSelect_VersusTeam",                        ClassNum = 14 } },
+            {"StageSelect_VersusSingle",            new PlayerDef() {LongName="StageSelect_VersusSingle",                       ClassNum = 15 } },
+        };
+
+        public static Dictionary<string, PlayerDef> ResultMatch = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+            {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+
+            {"Player1Win",                          new PlayerDef() {LongName="Player1Win",                                     ClassNum = 1 } },
+            {"Player1Lose",                         new PlayerDef() {LongName="Player1Lose",                                    ClassNum = 2 } },
+            {"Player2Win",                          new PlayerDef() {LongName="Player2Win",                                     ClassNum = 3 } },
+            {"Player2Lose",                         new PlayerDef() {LongName="Player2Lose",                                    ClassNum = 4 } },
+        };
     }
 
-    public enum ImageKind { Ingame_Player1Name,
-                            Ingame_Player2Name,
-                            OnSelect_Player1Name,
-                            OnSelect_Player2Name,
-                            TitleMenu, KoGoMessage,
-                            Result_Player1,
-                            Result_Player2,
-                            PlayerWins,
-                            RoundReadyMessage }
+    public enum ImageKind
+    {
+        Ingame_Player1Name,
+        Ingame_Player2Name,
+        OnSelect_Player1Name,
+        OnSelect_Player2Name,
+        TitleMenu, KoGoMessage,
+        Result_Player1,
+        Result_Player2,
+        PlayerWins,
+        RoundReadyMessage
+    }
     public static class ImageFormat
     {
-
-        //public class ImageCommonParams
-        //{
-        //    public int Width { get; set; }
-        //    public int Height { get; set; }
-        //    public float Scale { get; set; }
-        //}
 
         public class ImageParamsDef
         {
             public string AimPath { get; set; }
-            public IReadOnlyDictionary<string, PlayersEnum.PlayerDef> Dict { get; set; } 
+            public IReadOnlyDictionary<string, PlayersEnum.PlayerDef> Dict { get; set; }
             public Bgr ColorLowerThreshold { get; set; }
             public Bgr ColorHigherThreshold { get; set; }
             public int XPos { get; set; }
@@ -143,7 +171,7 @@ namespace EmguTestMachineLearningWithImages
             {
                 ImageKind.TitleMenu,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Titles",
                 ColorLowerThreshold = new Bgr(5, 150, 215),     ColorHigherThreshold = new Bgr(90, 200, 246),
-                XPos = 100,      YPos =  30,        Width = 550,    Height = 50,    Scale = 0.5f}
+                XPos = 100,      YPos =  30,        Width = 550,    Height = 50,    Scale = 0.5f,       Dict=PlayersEnum.Titles}
             },
 
             {
@@ -155,13 +183,13 @@ namespace EmguTestMachineLearningWithImages
             {
                 ImageKind.Result_Player1,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player1",
                 ColorLowerThreshold = new Bgr(0, 0, 0),         ColorHigherThreshold = new Bgr(60, 45, 35),
-                XPos = 15,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f}
+                XPos = 15,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,       Dict=PlayersEnum.ResultMatch}
             },
 
             {
                 ImageKind.Result_Player2,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player2",
                 ColorLowerThreshold = new Bgr(0, 0, 0),         ColorHigherThreshold = new Bgr(60, 45, 35),
-                XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f}
+                XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,       Dict=PlayersEnum.ResultMatch}
             },
 
             {
