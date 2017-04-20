@@ -105,6 +105,78 @@ namespace EmguTestMachineLearningWithImages
             {"Player2Win",                          new PlayerDef() {LongName="Player2Win",                                     ClassNum = 3 } },
             {"Player2Lose",                         new PlayerDef() {LongName="Player2Lose",                                    ClassNum = 4 } },
         };
+
+        public static Dictionary<string, PlayerDef> CurrentTime = new Dictionary<string, PlayerDef>
+        {
+              {"_BlackFull",                        new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+              {"_WhiteFull",                        new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+
+              {"00",                                new PlayerDef() {LongName="00",                                             ClassNum = 00 } },
+              {"01",                                new PlayerDef() {LongName="01",                                             ClassNum = 01 } },
+              {"02",                                new PlayerDef() {LongName="02",                                             ClassNum = 02 } },
+              {"03",                                new PlayerDef() {LongName="03",                                             ClassNum = 03 } },
+              {"04",                                new PlayerDef() {LongName="04",                                             ClassNum = 04 } },
+              {"05",                                new PlayerDef() {LongName="05",                                             ClassNum = 05 } },
+              {"06",                                new PlayerDef() {LongName="06",                                             ClassNum = 06 } },
+              {"07",                                new PlayerDef() {LongName="07",                                             ClassNum = 07 } },
+              {"08",                                new PlayerDef() {LongName="08",                                             ClassNum = 08 } },
+              {"09",                                new PlayerDef() {LongName="09",                                             ClassNum = 09 } },
+
+              {"10",                                new PlayerDef() {LongName="10",                                             ClassNum = 10 } },
+              {"11",                                new PlayerDef() {LongName="11",                                             ClassNum = 11 } },
+              {"12",                                new PlayerDef() {LongName="12",                                             ClassNum = 12 } },
+              {"13",                                new PlayerDef() {LongName="13",                                             ClassNum = 13 } },
+              {"14",                                new PlayerDef() {LongName="14",                                             ClassNum = 14 } },
+              {"15",                                new PlayerDef() {LongName="15",                                             ClassNum = 15 } },
+              {"16",                                new PlayerDef() {LongName="16",                                             ClassNum = 16 } },
+              {"17",                                new PlayerDef() {LongName="17",                                             ClassNum = 17 } },
+              {"18",                                new PlayerDef() {LongName="18",                                             ClassNum = 18 } },
+              {"19",                                new PlayerDef() {LongName="19",                                             ClassNum = 19 } },
+
+              {"20",                                new PlayerDef() {LongName="20",                                             ClassNum = 20 } },
+              {"21",                                new PlayerDef() {LongName="21",                                             ClassNum = 21 } },
+              {"22",                                new PlayerDef() {LongName="22",                                             ClassNum = 22 } },
+              {"23",                                new PlayerDef() {LongName="23",                                             ClassNum = 23 } },
+              {"24",                                new PlayerDef() {LongName="24",                                             ClassNum = 24 } },
+              {"25",                                new PlayerDef() {LongName="25",                                             ClassNum = 25 } },
+              {"26",                                new PlayerDef() {LongName="26",                                             ClassNum = 26 } },
+              {"27",                                new PlayerDef() {LongName="27",                                             ClassNum = 27 } },
+              {"28",                                new PlayerDef() {LongName="28",                                             ClassNum = 28 } },
+              {"29",                                new PlayerDef() {LongName="29",                                             ClassNum = 29 } },
+
+              {"30",                                new PlayerDef() {LongName="30",                                             ClassNum = 30 } },
+              {"31",                                new PlayerDef() {LongName="31",                                             ClassNum = 31 } },
+              {"32",                                new PlayerDef() {LongName="32",                                             ClassNum = 32 } },
+              {"33",                                new PlayerDef() {LongName="33",                                             ClassNum = 33 } },
+              {"34",                                new PlayerDef() {LongName="34",                                             ClassNum = 34 } },
+              {"35",                                new PlayerDef() {LongName="35",                                             ClassNum = 35 } },
+              {"36",                                new PlayerDef() {LongName="36",                                             ClassNum = 36 } },
+              {"37",                                new PlayerDef() {LongName="37",                                             ClassNum = 37 } },
+              {"38",                                new PlayerDef() {LongName="38",                                             ClassNum = 38 } },
+              {"39",                                new PlayerDef() {LongName="39",                                             ClassNum = 39 } },
+
+              {"40",                                new PlayerDef() {LongName="40",                                             ClassNum = 40 } },
+              {"41",                                new PlayerDef() {LongName="41",                                             ClassNum = 41 } },
+              {"42",                                new PlayerDef() {LongName="42",                                             ClassNum = 42 } },
+              {"43",                                new PlayerDef() {LongName="43",                                             ClassNum = 43 } },
+              {"44",                                new PlayerDef() {LongName="44",                                             ClassNum = 44 } },
+              {"45",                                new PlayerDef() {LongName="45",                                             ClassNum = 45 } },
+              {"46",                                new PlayerDef() {LongName="46",                                             ClassNum = 46 } },
+              {"47",                                new PlayerDef() {LongName="47",                                             ClassNum = 47 } },
+              {"48",                                new PlayerDef() {LongName="48",                                             ClassNum = 48 } },
+              {"49",                                new PlayerDef() {LongName="49",                                             ClassNum = 49 } },
+
+              {"50",                                new PlayerDef() {LongName="50",                                             ClassNum = 50 } },
+              {"51",                                new PlayerDef() {LongName="51",                                             ClassNum = 51 } },
+              {"52",                                new PlayerDef() {LongName="52",                                             ClassNum = 52 } },
+              {"53",                                new PlayerDef() {LongName="53",                                             ClassNum = 53 } },
+              {"54",                                new PlayerDef() {LongName="54",                                             ClassNum = 54 } },
+              {"55",                                new PlayerDef() {LongName="55",                                             ClassNum = 55 } },
+              {"56",                                new PlayerDef() {LongName="56",                                             ClassNum = 56 } },
+              {"57",                                new PlayerDef() {LongName="57",                                             ClassNum = 57 } },
+              {"58",                                new PlayerDef() {LongName="58",                                             ClassNum = 58 } },
+              {"59",                                new PlayerDef() {LongName="59",                                             ClassNum = 59 } },
+        };
     }
 
     public enum ImageKind
@@ -206,22 +278,22 @@ namespace EmguTestMachineLearningWithImages
             {
                 ImageKind.PlayerWins,                           new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\PlayerWins",
                 ColorLowerThreshold =   new Bgr(40, 220, 255),  ColorHigherThreshold =      new Bgr(200, 255, 255),
-                MaskLowerThreshold =    new Bgr(0, 20, 80),  MaskHigherThreshold =       new Bgr(10, 100, 160),
+                MaskLowerThreshold =    new Bgr(0, 30, 80),     MaskHigherThreshold =       new Bgr(10, 100, 160),
                 XPos = 240,      YPos =  505,        Width = 1450,    Height = 70,    Scale = 0.5f}
             },
 
             {
                 ImageKind.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\RoundReady",
                 ColorLowerThreshold =   new Bgr(246, 222, 46),  ColorHigherThreshold =      new Bgr(255, 255, 210),
-                MaskLowerThreshold =    new Bgr(246, 222, 46),  MaskHigherThreshold =       new Bgr(255, 255, 210),
+                MaskLowerThreshold =    new Bgr(105, 10, 0),    MaskHigherThreshold =       new Bgr(160, 100, 30),
                 XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
             },
 
             {
                 ImageKind.CurrentTime,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Time",
-                ColorLowerThreshold =   new Bgr(180, 160, 149),  ColorHigherThreshold =      new Bgr(230, 230, 210),
+                ColorLowerThreshold =   new Bgr(180, 160, 140),  ColorHigherThreshold =      new Bgr(230, 230, 210),
                 MaskLowerThreshold =    new Bgr(210, 210, 210),  MaskHigherThreshold =       new Bgr(255, 255, 255),
-                XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 1.0f}
+                XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 1.0f,       Dict=PlayersEnum.CurrentTime}
             },
     };
     }
