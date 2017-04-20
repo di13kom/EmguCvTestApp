@@ -5,7 +5,7 @@
 //#define TITLE
 
 //#define SAVEREQUIRED
-#define SHOWREPREDICTRESULT
+//#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -84,15 +84,17 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\ResultWithYuri.mp4"
+            ProcessVideo(@"d:\Q4Vid\Player2Wins.mp4"
+                , ImageKind.Ingame_Player1Name
+                , ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
                 //, ImageKind.OnSelect_Player2Name
                 //, ImageKind.RoundReadyMessage
-                //, ImageKind.PlayerWins
+                , ImageKind.PlayerWins
                 //, ImageKind.KoGoMessage
-                , ImageKind.TitleMenu
-                , ImageKind.Result_Player1
-                , ImageKind.Result_Player2
+                //, ImageKind.TitleMenu
+                //, ImageKind.Result_Player1
+                //, ImageKind.Result_Player2
                 );
         }
 
@@ -202,7 +204,8 @@ namespace EmguTestApp
 
             foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvRes in ResultDict.ToList())
             {
-                ResultDict[kvRes.Key] = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                //grab Image
+                Image<Gray,byte> image = imgFrame.GetSubRect(new System.Drawing.Rectangle(
                     ImageFormat.ImageParam[kvRes.Key].XPos,
                     ImageFormat.ImageParam[kvRes.Key].YPos,
                     ImageFormat.ImageParam[kvRes.Key].Width,
@@ -212,6 +215,21 @@ namespace EmguTestApp
                     ImageFormat.ImageParam[kvRes.Key].ColorHigherThreshold)
                 .Resize(
                     ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+                //grab Mask
+                Image<Gray, byte> mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                    ImageFormat.ImageParam[kvRes.Key].XPos,
+                    ImageFormat.ImageParam[kvRes.Key].YPos,
+                    ImageFormat.ImageParam[kvRes.Key].Width,
+                    ImageFormat.ImageParam[kvRes.Key].Height))
+                .InRange(
+                    ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold,
+                    ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold)
+                .Resize(
+                    ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+                //save it together
+                ResultDict[kvRes.Key] = image.Or(mask);
             }
             //Windows Show
 

@@ -128,6 +128,8 @@ namespace EmguTestMachineLearningWithImages
             public IReadOnlyDictionary<string, PlayersEnum.PlayerDef> Dict { get; set; }
             public Bgr ColorLowerThreshold { get; set; }
             public Bgr ColorHigherThreshold { get; set; }
+            public Bgr MaskLowerThreshold { get; set; }
+            public Bgr MaskHigherThreshold { get; set; }
             public int XPos { get; set; }
             public int YPos { get; set; }
             public int Width { get; set; }
@@ -146,61 +148,71 @@ namespace EmguTestMachineLearningWithImages
         {
             {
                 ImageKind.Ingame_Player1Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player1\",
-                ColorLowerThreshold = new Bgr(170, 160, 0),     ColorHigherThreshold =  new Bgr(230, 225, 100),
+                ColorLowerThreshold =   new Bgr(170, 160, 0),     ColorHigherThreshold =    new Bgr(230, 225, 100),
+                MaskLowerThreshold =    new Bgr(170, 160, 0),     MaskHigherThreshold =     new Bgr(230, 225, 100),
                 XPos = 35,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.Ingame_Player2Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player2\",
-                ColorLowerThreshold = new Bgr(0, 190, 95),     ColorHigherThreshold =  new Bgr(95, 250, 150),
+                ColorLowerThreshold =   new Bgr(0, 190, 95),     ColorHigherThreshold =     new Bgr(95, 250, 150),
+                MaskLowerThreshold =    new Bgr(0, 190, 95),     MaskHigherThreshold =      new Bgr(95, 250, 150),
                 XPos = 1760,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.OnSelect_Player1Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player1",
-                ColorLowerThreshold = new Bgr(170, 160, 0),     ColorHigherThreshold =  new Bgr(230, 225, 100),
+                ColorLowerThreshold =   new Bgr(170, 160, 0),   ColorHigherThreshold =      new Bgr(230, 225, 100),
+                MaskLowerThreshold =    new Bgr(170, 160, 0),   MaskHigherThreshold =       new Bgr(230, 225, 100),
                 XPos = 25,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.OnSelect_Player2Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player2",
-                ColorLowerThreshold = new Bgr(0, 190, 95),     ColorHigherThreshold =  new Bgr(95, 250, 150),
+                ColorLowerThreshold =   new Bgr(0, 190, 95),     ColorHigherThreshold =     new Bgr(95, 250, 150),
+                MaskLowerThreshold =    new Bgr(0, 190, 95),     MaskHigherThreshold =      new Bgr(95, 250, 150),
                 XPos = 1475,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f,      Dict=PlayersEnum.Players }
             },
 
             {
                 ImageKind.TitleMenu,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Titles",
-                ColorLowerThreshold = new Bgr(5, 150, 215),     ColorHigherThreshold = new Bgr(90, 200, 246),
+                ColorLowerThreshold =   new Bgr(5, 150, 215),   ColorHigherThreshold =      new Bgr(90, 200, 246),
+                MaskLowerThreshold =    new Bgr(5, 150, 215),   MaskHigherThreshold =       new Bgr(90, 200, 246),
                 XPos = 100,      YPos =  30,        Width = 550,    Height = 50,    Scale = 0.5f,       Dict=PlayersEnum.Titles}
             },
 
             {
                 ImageKind.KoGoMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\KoGoMessage",
-                ColorLowerThreshold = new Bgr(140, 230, 240),   ColorHigherThreshold = new Bgr(/*205*/190, 255, 255),
+                ColorLowerThreshold =   new Bgr(140, 240, 240), ColorHigherThreshold =      new Bgr(/*205*/190, 255, 255),
+                MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
                 XPos = 515,      YPos =  435,        Width = 885,    Height = 210,    Scale = 0.5f}
             },
             //
             {
                 ImageKind.Result_Player1,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player1",
-                ColorLowerThreshold = new Bgr(0, 0, 0),         ColorHigherThreshold = new Bgr(60, 45, 35),
+                ColorLowerThreshold =   new Bgr(0, 0, 0),       ColorHigherThreshold =      new Bgr(60, 45, 35),
+                MaskLowerThreshold =    new Bgr(0, 0, 0),       MaskHigherThreshold =       new Bgr(60, 45, 35),
                 XPos = 15,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,       Dict=PlayersEnum.ResultMatch}
             },
 
             {
                 ImageKind.Result_Player2,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player2",
-                ColorLowerThreshold = new Bgr(0, 0, 0),         ColorHigherThreshold = new Bgr(60, 45, 35),
+                ColorLowerThreshold =   new Bgr(0, 0, 0),       ColorHigherThreshold =      new Bgr(60, 45, 35),
+                MaskLowerThreshold =    new Bgr(0, 0, 0),       MaskHigherThreshold =       new Bgr(60, 45, 35),
                 XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,       Dict=PlayersEnum.ResultMatch}
             },
 
             {
                 ImageKind.PlayerWins,                           new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\PlayerWins",
-                ColorLowerThreshold = new Bgr(40, 220, 255),    ColorHigherThreshold =  new Bgr(200, 255, 255),
+                ColorLowerThreshold =   new Bgr(40, 220, 255),  ColorHigherThreshold =      new Bgr(200, 255, 255),
+                MaskLowerThreshold =    new Bgr(0, 20, 80),  MaskHigherThreshold =       new Bgr(10, 100, 160),
                 XPos = 240,      YPos =  505,        Width = 1450,    Height = 70,    Scale = 0.5f}
             },
 
             {
                 ImageKind.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\RoundReady",
-                ColorLowerThreshold = new Bgr(246, 222, 46),     ColorHigherThreshold =  new Bgr(255, 255, 210),
+                ColorLowerThreshold =   new Bgr(246, 222, 46),  ColorHigherThreshold =      new Bgr(255, 255, 210),
+                MaskLowerThreshold =    new Bgr(246, 222, 46),  MaskHigherThreshold =       new Bgr(255, 255, 210),
                 XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
             },
         };

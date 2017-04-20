@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguTestApp", "EmguTestApp\EmguTestApp.csproj", "{CFF51093-70BF-4B25-A687-16106ED706D1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4F179582-A7C6-4AC6-B2B4-5071B54F5137} = {4F179582-A7C6-4AC6-B2B4-5071B54F5137}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguNeuralTest", "..\EmguNeuralTest\EmguNeuralTest\EmguNeuralTest.csproj", "{1A7BCD72-E76B-4B3D-80F4-50EB5F21A140}"
 EndProject
