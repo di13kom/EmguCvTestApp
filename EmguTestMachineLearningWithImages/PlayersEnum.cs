@@ -176,6 +176,8 @@ namespace EmguTestMachineLearningWithImages
               {"57",                                new PlayerDef() {LongName="57",                                             ClassNum = 57 } },
               {"58",                                new PlayerDef() {LongName="58",                                             ClassNum = 58 } },
               {"59",                                new PlayerDef() {LongName="59",                                             ClassNum = 59 } },
+
+              {"60",                                new PlayerDef() {LongName="60",                                             ClassNum = 60 } },
         };
     }
 
@@ -290,10 +292,10 @@ namespace EmguTestMachineLearningWithImages
             },
 
             {
-                ImageKind.CurrentTime,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Time",
+                ImageKind.CurrentTime,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\CurrentTime",
                 ColorLowerThreshold =   new Bgr(180, 160, 140),  ColorHigherThreshold =      new Bgr(230, 230, 210),
                 MaskLowerThreshold =    new Bgr(210, 210, 210),  MaskHigherThreshold =       new Bgr(255, 255, 255),
-                XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 1.0f,       Dict=PlayersEnum.CurrentTime}
+                XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 0.5f,       Dict=PlayersEnum.CurrentTime}
             },
     };
     }
