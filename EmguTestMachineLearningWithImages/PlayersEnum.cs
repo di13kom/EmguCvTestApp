@@ -178,6 +178,48 @@ namespace EmguTestMachineLearningWithImages
               {"59",                                new PlayerDef() {LongName="59",                                             ClassNum = 59 } },
 
               {"60",                                new PlayerDef() {LongName="60",                                             ClassNum = 60 } },
+              {"61",                                new PlayerDef() {LongName="61",                                             ClassNum = 61 } },
+              {"62",                                new PlayerDef() {LongName="62",                                             ClassNum = 62 } },
+              {"63",                                new PlayerDef() {LongName="63",                                             ClassNum = 63 } },
+              {"64",                                new PlayerDef() {LongName="64",                                             ClassNum = 64 } },
+              {"65",                                new PlayerDef() {LongName="65",                                             ClassNum = 65 } },
+              {"66",                                new PlayerDef() {LongName="66",                                             ClassNum = 66 } },
+              {"67",                                new PlayerDef() {LongName="67",                                             ClassNum = 67 } },
+              {"68",                                new PlayerDef() {LongName="68",                                             ClassNum = 68 } },
+              {"69",                                new PlayerDef() {LongName="69",                                             ClassNum = 69 } },
+
+              {"70",                                new PlayerDef() {LongName="70",                                             ClassNum = 70 } },
+              {"71",                                new PlayerDef() {LongName="71",                                             ClassNum = 71 } },
+              {"72",                                new PlayerDef() {LongName="72",                                             ClassNum = 72 } },
+              {"73",                                new PlayerDef() {LongName="73",                                             ClassNum = 73 } },
+              {"74",                                new PlayerDef() {LongName="74",                                             ClassNum = 74 } },
+              {"75",                                new PlayerDef() {LongName="75",                                             ClassNum = 75 } },
+              {"76",                                new PlayerDef() {LongName="76",                                             ClassNum = 76 } },
+              {"77",                                new PlayerDef() {LongName="77",                                             ClassNum = 77 } },
+              {"78",                                new PlayerDef() {LongName="78",                                             ClassNum = 78 } },
+              {"79",                                new PlayerDef() {LongName="79",                                             ClassNum = 79 } },
+
+              {"80",                                new PlayerDef() {LongName="80",                                             ClassNum = 80 } },
+              {"81",                                new PlayerDef() {LongName="81",                                             ClassNum = 81 } },
+              {"82",                                new PlayerDef() {LongName="82",                                             ClassNum = 82 } },
+              {"83",                                new PlayerDef() {LongName="83",                                             ClassNum = 83 } },
+              {"84",                                new PlayerDef() {LongName="84",                                             ClassNum = 84 } },
+              {"85",                                new PlayerDef() {LongName="85",                                             ClassNum = 85 } },
+              {"86",                                new PlayerDef() {LongName="86",                                             ClassNum = 86 } },
+              {"87",                                new PlayerDef() {LongName="87",                                             ClassNum = 87 } },
+              {"88",                                new PlayerDef() {LongName="88",                                             ClassNum = 88 } },
+              {"89",                                new PlayerDef() {LongName="89",                                             ClassNum = 89 } },
+
+              {"90",                                new PlayerDef() {LongName="90",                                             ClassNum = 90 } },
+              {"91",                                new PlayerDef() {LongName="91",                                             ClassNum = 91 } },
+              {"92",                                new PlayerDef() {LongName="92",                                             ClassNum = 92 } },
+              {"93",                                new PlayerDef() {LongName="93",                                             ClassNum = 93 } },
+              {"94",                                new PlayerDef() {LongName="94",                                             ClassNum = 94 } },
+              {"95",                                new PlayerDef() {LongName="95",                                             ClassNum = 95 } },
+              {"96",                                new PlayerDef() {LongName="96",                                             ClassNum = 96 } },
+              {"97",                                new PlayerDef() {LongName="97",                                             ClassNum = 97 } },
+              {"98",                                new PlayerDef() {LongName="98",                                             ClassNum = 98 } },
+              {"99",                                new PlayerDef() {LongName="99",                                             ClassNum = 99 } },
         };
     }
 
@@ -258,8 +300,9 @@ namespace EmguTestMachineLearningWithImages
 
             {
                 ImageKind.KoGoMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\KoGoMessage",
-                ColorLowerThreshold =   new Bgr(140, 240, 240), ColorHigherThreshold =      new Bgr(/*205*/190, 255, 255),
-                MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
+                ColorLowerThreshold =   new Bgr(140, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
+                //MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
+                MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(30, 140, 255),
                 XPos = 515,      YPos =  435,        Width = 885,    Height = 210,    Scale = 0.5f}
             },
             //
@@ -274,20 +317,23 @@ namespace EmguTestMachineLearningWithImages
                 ImageKind.Result_Player2,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player2",
                 ColorLowerThreshold =   new Bgr(0, 0, 0),       ColorHigherThreshold =      new Bgr(60, 45, 35),
                 MaskLowerThreshold =    new Bgr(0, 0, 0),       MaskHigherThreshold =       new Bgr(60, 45, 35),
-                XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,       Dict=PlayersEnum.ResultMatch}
+                XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,     Dict=PlayersEnum.ResultMatch}
             },
 
             {
-                ImageKind.PlayerWins,                           new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\PlayerWins",
-                ColorLowerThreshold =   new Bgr(40, 220, 255),  ColorHigherThreshold =      new Bgr(200, 255, 255),
-                MaskLowerThreshold =    new Bgr(0, 30, 80),     MaskHigherThreshold =       new Bgr(10, 100, 160),
+                ImageKind.PlayerWins,                           new ImageParamsDef { AimPath = @"D:\Q4Vid\PlayerWins",
+                ColorLowerThreshold =   new Bgr(40, 220, 255),  ColorHigherThreshold =      new Bgr(170, 255, 255),
+                //MaskLowerThreshold =   new Bgr(40, 220, 255),  MaskHigherThreshold =      new Bgr(170, 255, 255),
+                //ColorLowerThreshold =    new Bgr(0, 10, 60),     ColorHigherThreshold =       new Bgr(20, 120, 164),
+                MaskLowerThreshold =    new Bgr(0, 0, 40),     MaskHigherThreshold =       new Bgr(20, 113, 255),
                 XPos = 240,      YPos =  505,        Width = 1450,    Height = 70,    Scale = 0.5f}
             },
 
             {
-                ImageKind.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\RoundReady",
+                ImageKind.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\RoundReady",
                 ColorLowerThreshold =   new Bgr(246, 222, 46),  ColorHigherThreshold =      new Bgr(255, 255, 210),
-                MaskLowerThreshold =    new Bgr(105, 10, 0),    MaskHigherThreshold =       new Bgr(160, 100, 30),
+                //MaskLowerThreshold =   new Bgr(246, 222, 46),  MaskHigherThreshold =      new Bgr(255, 255, 210),
+                MaskLowerThreshold =    new Bgr(100, 0, 0),    MaskHigherThreshold =       new Bgr(200, 100, 30),
                 XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
             },
 
@@ -295,6 +341,8 @@ namespace EmguTestMachineLearningWithImages
                 ImageKind.CurrentTime,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\CurrentTime",
                 ColorLowerThreshold =   new Bgr(180, 160, 140),  ColorHigherThreshold =      new Bgr(230, 230, 210),
                 MaskLowerThreshold =    new Bgr(210, 210, 210),  MaskHigherThreshold =       new Bgr(255, 255, 255),
+                //ColorLowerThreshold =    new Bgr(0, 50, 100),  ColorHigherThreshold =       new Bgr(80, 160, 250),
+                //MaskLowerThreshold =   new Bgr(0, 0, 0),  MaskHigherThreshold =      new Bgr(60, 50, 80),
                 XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 0.5f,       Dict=PlayersEnum.CurrentTime}
             },
     };
