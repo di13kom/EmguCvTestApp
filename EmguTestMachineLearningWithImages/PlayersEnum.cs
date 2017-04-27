@@ -16,6 +16,7 @@ namespace EmguTestMachineLearningWithImages
             public int ClassNum { get; set; }
         }
 
+        #region Players
         public static Dictionary<string, PlayerDef> Players = new Dictionary<string, PlayerDef>()
         {
             {"_BlackFull",  new PlayerDef() {LongName="_BlackFull",             ClassNum = -1 } },
@@ -73,7 +74,9 @@ namespace EmguTestMachineLearningWithImages
             {"Yuri",        new PlayerDef() {LongName="Yuri Sakazaki",          ClassNum = 49 } },
             {"Zarina",      new PlayerDef() {LongName="Zarina",                 ClassNum = 50 } },
         };
+        #endregion
 
+        #region Titles
         public static Dictionary<string, PlayerDef> Titles = new Dictionary<string, PlayerDef>
         {
             {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
@@ -94,7 +97,9 @@ namespace EmguTestMachineLearningWithImages
             {"MemberSelect_VersusTeam",             new PlayerDef() {LongName="MemberSelect_VersusTeam",                        ClassNum = 14 } },
             {"StageSelect_VersusSingle",            new PlayerDef() {LongName="StageSelect_VersusSingle",                       ClassNum = 15 } },
         };
+        #endregion
 
+        #region ResultMatch
         public static Dictionary<string, PlayerDef> ResultMatch = new Dictionary<string, PlayerDef>
         {
             {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
@@ -105,7 +110,9 @@ namespace EmguTestMachineLearningWithImages
             {"Player2Win",                          new PlayerDef() {LongName="Player2Win",                                     ClassNum = 3 } },
             {"Player2Lose",                         new PlayerDef() {LongName="Player2Lose",                                    ClassNum = 4 } },
         };
+        #endregion
 
+        #region CurrentTime
         public static Dictionary<string, PlayerDef> CurrentTime = new Dictionary<string, PlayerDef>
         {
               {"_BlackFull",                        new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
@@ -221,6 +228,7 @@ namespace EmguTestMachineLearningWithImages
               {"98",                                new PlayerDef() {LongName="98",                                             ClassNum = 98 } },
               {"99",                                new PlayerDef() {LongName="99",                                             ClassNum = 99 } },
         };
+        #endregion
     }
 
     public enum ImageKind
@@ -300,8 +308,9 @@ namespace EmguTestMachineLearningWithImages
 
             {
                 ImageKind.KoGoMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\KoGoMessage",
-                ColorLowerThreshold =   new Bgr(140, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
-                //MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
+                //ColorLowerThreshold =   new Bgr(140, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
+                ColorLowerThreshold =    new Bgr(0, 0, 40),      ColorHigherThreshold =       new Bgr(30, 140, 255),
+                    //MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
                 MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(30, 140, 255),
                 XPos = 515,      YPos =  435,        Width = 885,    Height = 210,    Scale = 0.5f}
             },
@@ -333,7 +342,8 @@ namespace EmguTestMachineLearningWithImages
                 ImageKind.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\RoundReady",
                 ColorLowerThreshold =   new Bgr(246, 222, 46),  ColorHigherThreshold =      new Bgr(255, 255, 210),
                 //MaskLowerThreshold =   new Bgr(246, 222, 46),  MaskHigherThreshold =      new Bgr(255, 255, 210),
-                MaskLowerThreshold =    new Bgr(100, 0, 0),    MaskHigherThreshold =       new Bgr(200, 100, 30),
+                //ColorLowerThreshold =    new Bgr(90, 0, 0),    ColorHigherThreshold =       new Bgr(200, 100, 30),
+                MaskLowerThreshold =    new Bgr(90, 0, 0),    MaskHigherThreshold =       new Bgr(200, 100, 30),
                 XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
             },
 

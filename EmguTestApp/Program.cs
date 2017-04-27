@@ -4,7 +4,7 @@
 //#define KOMESSAGE
 //#define TITLE
 
-//#define SAVEREQUIRED
+#define SAVEREQUIRED
 //#define SHOWREPREDICTRESULT
 
 using System;
@@ -84,9 +84,9 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\CpuCpuFullMatch.mp4"
-                , ImageKind.Ingame_Player1Name
-                , ImageKind.Ingame_Player2Name
+            ProcessVideo(@"d:\Q4Vid\Message_Player2Wins.mp4"
+                //, ImageKind.Ingame_Player1Name
+                //, ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
                 //, ImageKind.OnSelect_Player2Name
                 //, ImageKind.RoundReadyMessage
@@ -95,7 +95,7 @@ namespace EmguTestApp
                 //, ImageKind.TitleMenu
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2
-                , ImageKind.CurrentTime
+                //, ImageKind.CurrentTime
                 );
         }
 
@@ -104,7 +104,7 @@ namespace EmguTestApp
 #if SHOWREPREDICTRESULT
             foreach(var ing in ImageProps)
             {
-                PredictList.Add(new IngamePlayersTest(ing, ModelTypes.SvmModel));
+                PredictList.Add(new IngamePlayersTest(ing, ModelTypes.KnModel));
             }              
 #endif
 
@@ -241,8 +241,8 @@ namespace EmguTestApp
 
 #if SHOWREPREDICTRESULT
 
-            //Console.WriteLine();
-            Console.Clear();
+            Console.WriteLine();
+            //Console.Clear();
             int ind = 0;
             foreach(KeyValuePair<ImageKind,Image<Gray,byte>> kvpair in ResultDict)
             {
