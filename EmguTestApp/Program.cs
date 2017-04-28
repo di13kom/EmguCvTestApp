@@ -4,8 +4,8 @@
 //#define KOMESSAGE
 //#define TITLE
 
-//#define SAVEREQUIRED
-#define SHOWREPREDICTRESULT
+#define SAVEREQUIRED
+//#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -90,8 +90,8 @@ namespace EmguTestApp
                 //, ImageKind.OnSelect_Player1Name
                 //, ImageKind.OnSelect_Player2Name
                 //, ImageKind.RoundReadyMessage
-                , ImageKind.PlayerWins
-                //, ImageKind.KoGoMessage
+                //, ImageKind.PlayerWins
+                , ImageKind.KoGoMessage
                 //, ImageKind.TitleMenu
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2

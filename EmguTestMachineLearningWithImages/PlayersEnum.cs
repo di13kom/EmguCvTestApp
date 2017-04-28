@@ -250,7 +250,8 @@ namespace EmguTestMachineLearningWithImages
         Ingame_Player2Name,
         OnSelect_Player1Name,
         OnSelect_Player2Name,
-        TitleMenu, KoGoMessage,
+        TitleMenu,
+        KoGoMessage,
         Result_Player1,
         Result_Player2,
         PlayerWins,
@@ -275,12 +276,6 @@ namespace EmguTestMachineLearningWithImages
             public float Scale { get; set; }
         }
 
-        //public static Dictionary<ImageKind, ImageCommonParams> ImageSizeDic = new Dictionary<ImageKind, ImageCommonParams>()
-        //{
-        //    { ImageKind.Ingame_PlayerName,          new ImageCommonParams { Width=125,     Height=15,      Scale=1} },
-        //    { ImageKind.ChoosePlayer_PlayerName,    new ImageCommonParams { Width=410,     Height=25,      Scale=0.5f} },
-        //    { ImageKind.TitleMenu,                  new ImageCommonParams { Width=550,     Height=50,      Scale=0.5f} }
-        //};
 
         public static Dictionary<ImageKind, ImageParamsDef> ImageParam = new Dictionary<ImageKind, ImageParamsDef>
         {
