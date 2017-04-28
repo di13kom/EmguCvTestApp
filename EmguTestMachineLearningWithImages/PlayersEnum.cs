@@ -242,6 +242,18 @@ namespace EmguTestMachineLearningWithImages
             {"PerfectGame",                         new PlayerDef() {LongName="PerfectGame",                                    ClassNum = 3 } },
         };
         #endregion
+
+        #region KoGoMessage
+        public static Dictionary<string, PlayerDef> StartEndMessage = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+            {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+            {"_Dirty",                              new PlayerDef() {LongName="_Dirty",                                         ClassNum = -3 } },
+
+            {"KoMessage",                           new PlayerDef() {LongName="KoMessage",                                      ClassNum = 1 } },
+            {"GoMessage",                           new PlayerDef() {LongName="GoMessage",                                      ClassNum = 2 } },
+        };
+        #endregion
     }
 
     public enum ImageKind
@@ -320,7 +332,7 @@ namespace EmguTestMachineLearningWithImages
                 ColorLowerThreshold =    new Bgr(0, 0, 40),      ColorHigherThreshold =       new Bgr(30, 140, 255),
                     //MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
                 MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(30, 140, 255),
-                XPos = 515,      YPos =  435,        Width = 885,    Height = 210,    Scale = 0.5f}
+                XPos = 515,      YPos =  435,        Width = 885,    Height = 210,    Scale = 0.2f,     Dict=PlayersEnum.StartEndMessage}
             },
             //
             {

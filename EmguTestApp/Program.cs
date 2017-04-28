@@ -4,8 +4,8 @@
 //#define KOMESSAGE
 //#define TITLE
 
-#define SAVEREQUIRED
-//#define SHOWREPREDICTRESULT
+//#define SAVEREQUIRED
+#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
