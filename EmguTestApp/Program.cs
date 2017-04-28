@@ -79,19 +79,20 @@ namespace EmguTestApp
 
 #if SHOWREPREDICTRESULT
         static List<PredictModel> PredictList = new List<PredictModel>();
+        static List<Tuple<string, string, bool>> PredictedValues = new List<Tuple<string, string, bool>>();
 #endif
 
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170322141454.mp4"
-                //, ImageKind.Ingame_Player1Name
-                //, ImageKind.Ingame_Player2Name
+            ProcessVideo(@"d:\Q4Vid\20170403164915.mp4"
+                , ImageKind.Ingame_Player1Name
+                , ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
                 //, ImageKind.OnSelect_Player2Name
                 //, ImageKind.RoundReadyMessage
-                //, ImageKind.PlayerWins
-                //, ImageKind.KoGoMessage
+                , ImageKind.PlayerWins
+                , ImageKind.KoGoMessage
                 //, ImageKind.TitleMenu
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2
@@ -102,10 +103,11 @@ namespace EmguTestApp
         static void ProcessVideo(string videoName, params ImageKind[] ImageProps)
         {
 #if SHOWREPREDICTRESULT
-            foreach(var ing in ImageProps)
+            foreach (var ing in ImageProps)
             {
                 PredictList.Add(new PredictModel(ing, ModelType.SvmModel));
-            }              
+                PredictedValues.Add(new Tuple<string, string, bool>(string.Empty, string.Empty, true));
+            }
 #endif
 
             TimerCallback tk = new TimerCallback(TimerCallback);
@@ -206,7 +208,7 @@ namespace EmguTestApp
             foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvRes in ResultDict.ToList())
             {
                 //grab Image
-                Image<Gray,byte> image = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                Image<Gray, byte> image = imgFrame.GetSubRect(new System.Drawing.Rectangle(
                     ImageFormat.ImageParam[kvRes.Key].XPos,
                     ImageFormat.ImageParam[kvRes.Key].YPos,
                     ImageFormat.ImageParam[kvRes.Key].Width,
@@ -241,14 +243,27 @@ namespace EmguTestApp
 
 #if SHOWREPREDICTRESULT
 
-            Console.WriteLine();
-            //Console.Clear();
+            //Console.WriteLine();
             int ind = 0;
-            foreach(KeyValuePair<ImageKind,Image<Gray,byte>> kvpair in ResultDict)
+
+            foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvpair in ResultDict)
             {
                 //Console.WriteLine($"{kvpair.Key.ToString()} : {PredictList[ind].PredictImage(kvpair.Value)}");
-                Console.WriteLine($"{kvpair.Key.ToString()} :{ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum ==  PredictList[ind].PredictImage(kvpair.Value)).FirstOrDefault().Key}");
+                string val = ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum == PredictList[ind].PredictImage(kvpair.Value)).FirstOrDefault().Key;
+                if (PredictedValues[ind].Item2 != val)
+                    PredictedValues[ind] = new Tuple<string, string, bool>(kvpair.Key.ToString(),val, true);
+                else
+                    PredictedValues[ind] = new Tuple<string,string, bool>(kvpair.Key.ToString(),val, false);
+                //Console.WriteLine($"{kvpair.Key.ToString()} :{val}");
                 ind++;
+            }
+            if (PredictedValues.Any(x => x.Item3 == true))
+            {
+                Console.Clear();
+                for (int l = 0; l < PredictedValues.Count; l++)
+                {
+                    Console.WriteLine($"{PredictedValues[l].Item1} : {PredictedValues[l].Item2}");
+                }
             }
 #endif
 
