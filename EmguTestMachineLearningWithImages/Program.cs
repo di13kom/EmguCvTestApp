@@ -38,7 +38,7 @@ namespace EmguTestMachineLearningWithImages
             //SvmModelTrain mod = new SvmModelTrain(type,ImageKind.OnSelect_Player2Name);
             //mod.LoadFromDirectory();
 
-            SvmModelTrain modTitles = new SvmModelTrain(type, ImageKind.KoGoMessage);
+            TrainModel modTitles = new TrainModel(type, ImageKind.KoGoMessage);
             modTitles.LoadFromDirectory();
 
 #else

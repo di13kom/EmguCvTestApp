@@ -78,7 +78,7 @@ namespace EmguTestApp
         static Dictionary<ImageKind, Image<Gray, byte>> ResultDict = new Dictionary<ImageKind, Image<Gray, byte>>();
 
 #if SHOWREPREDICTRESULT
-        static List<IngamePlayersTest> PredictList = new List<IngamePlayersTest>();
+        static List<PredictModel> PredictList = new List<PredictModel>();
 #endif
 
         static void Main(string[] args)
@@ -91,11 +91,11 @@ namespace EmguTestApp
                 //, ImageKind.OnSelect_Player2Name
                 //, ImageKind.RoundReadyMessage
                 //, ImageKind.PlayerWins
-                , ImageKind.KoGoMessage
+                //, ImageKind.KoGoMessage
                 //, ImageKind.TitleMenu
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2
-                //, ImageKind.CurrentTime
+                , ImageKind.CurrentTime
                 );
         }
 
@@ -104,7 +104,7 @@ namespace EmguTestApp
 #if SHOWREPREDICTRESULT
             foreach(var ing in ImageProps)
             {
-                PredictList.Add(new IngamePlayersTest(ing, ModelTypes.KnModel));
+                PredictList.Add(new PredictModel(ing, ModelType.SvmModel));
             }              
 #endif
 
