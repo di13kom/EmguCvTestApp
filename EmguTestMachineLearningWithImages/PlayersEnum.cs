@@ -229,6 +229,19 @@ namespace EmguTestMachineLearningWithImages
               {"99",                                new PlayerDef() {LongName="99",                                             ClassNum = 99 } },
         };
         #endregion
+
+        #region PlayerRoundWins
+        public static Dictionary<string, PlayerDef> PlayerRoundWins = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+            {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+            {"_Dirty",                              new PlayerDef() {LongName="_Dirty",                                         ClassNum = -3 } },
+
+            {"Player1Win",                          new PlayerDef() {LongName="Player1Win",                                     ClassNum = 1 } },
+            {"Player2Win",                          new PlayerDef() {LongName="Player2Win",                                     ClassNum = 2 } },
+            {"PerfectGame",                         new PlayerDef() {LongName="PerfectGame",                                    ClassNum = 3 } },
+        };
+        #endregion
     }
 
     public enum ImageKind
@@ -335,7 +348,7 @@ namespace EmguTestMachineLearningWithImages
                 //MaskLowerThreshold =   new Bgr(40, 220, 255),  MaskHigherThreshold =      new Bgr(170, 255, 255),
                 //ColorLowerThreshold =    new Bgr(0, 10, 60),     ColorHigherThreshold =       new Bgr(20, 120, 164),
                 MaskLowerThreshold =    new Bgr(0, 0, 40),     MaskHigherThreshold =       new Bgr(20, 113, 255),
-                XPos = 240,      YPos =  505,        Width = 1450,    Height = 70,    Scale = 0.5f}
+                XPos = 240,      YPos =  505,        Width = 1450,    Height = 70,    Scale = 0.25f,     Dict=PlayersEnum.PlayerRoundWins}
             },
 
             {

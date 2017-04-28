@@ -4,8 +4,8 @@
 //#define KOMESSAGE
 //#define TITLE
 
-#define SAVEREQUIRED
-//#define SHOWREPREDICTRESULT
+//#define SAVEREQUIRED
+#define SHOWREPREDICTRESULT
 
 using System;
 using System.Collections.Generic;
@@ -84,7 +84,7 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\Message_Player2Wins.mp4"
+            ProcessVideo(@"d:\Q4Vid\20170322141454.mp4"
                 //, ImageKind.Ingame_Player1Name
                 //, ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
