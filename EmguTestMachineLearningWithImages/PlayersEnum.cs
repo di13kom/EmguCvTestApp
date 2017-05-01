@@ -22,6 +22,7 @@ namespace EmguTestMachineLearningWithImages
             {"_BlackFull",  new PlayerDef() {LongName="_BlackFull",             ClassNum = -1 } },
             {"_WhiteFull",  new PlayerDef() {LongName="_WhiteFull",             ClassNum = -2 } },
             {"_Random",     new PlayerDef() {LongName="_Random",                ClassNum = -3 } },
+            {"_Dirty",      new PlayerDef() {LongName="_Dirty",                 ClassNum = -4 } },
 
             {"Alice",       new PlayerDef() {LongName="Alice",                  ClassNum = 1 } },
             {"Andy",        new PlayerDef() {LongName="Andy Bogard",            ClassNum = 2 } },
@@ -117,6 +118,7 @@ namespace EmguTestMachineLearningWithImages
         {
               {"_BlackFull",                        new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
               {"_WhiteFull",                        new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+              {"_Dirty",                            new PlayerDef() {LongName="_Dirty",                                         ClassNum = -3 } },
 
               {"00",                                new PlayerDef() {LongName="00",                                             ClassNum = 00 } },
               {"01",                                new PlayerDef() {LongName="01",                                             ClassNum = 01 } },

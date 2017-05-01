@@ -57,15 +57,13 @@ namespace EmguTestApp
         //static string FileToPlay = @"d:\Q4Vid\20170404162850.mp4";
 
         static string CurrentName = "Common";
-        static string playersDir = @"d:\Q4Vid\Players\";
-        static string pl1Subdir = @"Images\Player1\";
-        static string pl2Subdir = @"Images\Player2\";
+        
         static string fileVideoExtension = ".mp4";
         static string fileImageExtension = ".bmp";
 
-        static string svDir = @"d:\Q4Vid\Tst\";
+        
         static Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(1920, 1080);
-        static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
+        //static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
 
 
         static double TotalFrames;
@@ -85,7 +83,7 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170403164915.mp4"
+            ProcessVideo(@"d:\Q4Vid\20170501104655.mp4"
                 , ImageKind.Ingame_Player1Name
                 , ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
@@ -246,14 +244,32 @@ namespace EmguTestApp
             //Console.WriteLine();
             int ind = 0;
 
+            Task<float>[] taskList = new Task<float>[ResultDict.Count];
+
+
             foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvpair in ResultDict)
             {
-                //Console.WriteLine($"{kvpair.Key.ToString()} : {PredictList[ind].PredictImage(kvpair.Value)}");
-                string val = ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum == PredictList[ind].PredictImage(kvpair.Value)).FirstOrDefault().Key;
+
+                int i = ind;
+                taskList[i] = Task<float>.Factory.StartNew(() =>
+                {
+                    return PredictList[i].PredictImage(kvpair.Value);
+                }
+                    );
+                ind++;
+            }
+            Task.WaitAll(taskList);
+
+            ind = 0;
+            foreach (KeyValuePair<ImageKind, Image<Gray, byte>> kvpair in ResultDict)
+            {
+                float fl = taskList[ind].Result;
+
+                string val = ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum == fl).FirstOrDefault().Key;
                 if (PredictedValues[ind].Item2 != val)
-                    PredictedValues[ind] = new Tuple<string, string, bool>(kvpair.Key.ToString(),val, true);
+                    PredictedValues[ind] = new Tuple<string, string, bool>(kvpair.Key.ToString(), val, true);
                 else
-                    PredictedValues[ind] = new Tuple<string,string, bool>(kvpair.Key.ToString(),val, false);
+                    PredictedValues[ind] = new Tuple<string, string, bool>(kvpair.Key.ToString(), val, false);
                 //Console.WriteLine($"{kvpair.Key.ToString()} :{val}");
                 ind++;
             }

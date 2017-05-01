@@ -1,6 +1,6 @@
 ﻿#define LearningRequired
-//#define SvmType
-#define KnType
+#define SvmType
+//#define KnType
 
 using System;
 using System.Collections.Generic;
@@ -17,28 +17,14 @@ namespace EmguTestMachineLearningWithImages
         {
             ModelType type;
 #if SvmType
-            type = ModelType.SvnModel;
+            type = ModelType.SvmModel;
 #elif KnType
             type = ModelType.KnModel;
 #endif
 
 #if LearningRequired
-            //SvmModelTrain mod2 = new SvmModelTrain(type);
-            //mod2.LoadFromDirectory(@"d:\Q4Vid\Players\Images\Player2");
-
-
-            //SvmModelTrain mod = new SvmModelTrain(type);
-            //mod.LoadFromDirectory(@"d:\Q4Vid\Players\Images\Player1");
-
-            //Kn
-            //SvmModelTrain mod2 = new SvmModelTrain(type, ImageKind.OnSelect_Player1Name);
-            //mod2.LoadFromDirectory();
-
-
-            //SvmModelTrain mod = new SvmModelTrain(type,ImageKind.OnSelect_Player2Name);
-            //mod.LoadFromDirectory();
-
-            TrainModel modTitles = new TrainModel(type, ImageKind.KoGoMessage);
+            
+            TrainModel modTitles = new TrainModel(type, ImageKind.Ingame_Player2Name);
             modTitles.LoadFromDirectory();
 
 #else
