@@ -77,13 +77,13 @@ namespace EmguTestApp
 
 #if SHOWREPREDICTRESULT
         static List<PredictModel> PredictList = new List<PredictModel>();
-        static List<Tuple<string, string, bool>> PredictedValues = new List<Tuple<string, string, bool>>();
+        static Dictionary<ImageKind, Tuple<string, bool>> PredictedValues = new Dictionary<ImageKind, Tuple<string, bool>>();
 #endif
 
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170501104655.mp4"
+            ProcessVideo(@"d:\Q4Vid\20170501114443.mp4"
                 , ImageKind.Ingame_Player1Name
                 , ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
@@ -104,7 +104,8 @@ namespace EmguTestApp
             foreach (var ing in ImageProps)
             {
                 PredictList.Add(new PredictModel(ing, ModelType.SvmModel));
-                PredictedValues.Add(new Tuple<string, string, bool>(string.Empty, string.Empty, true));
+                //PredictedValues.Add(new Tuple<string, string, bool>(string.Empty, string.Empty, true));
+                PredictedValues.Add(ing, new Tuple<string, bool>(string.Empty, true));
             }
 #endif
 
@@ -266,19 +267,21 @@ namespace EmguTestApp
                 float fl = taskList[ind].Result;
 
                 string val = ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum == fl).FirstOrDefault().Key;
-                if (PredictedValues[ind].Item2 != val)
-                    PredictedValues[ind] = new Tuple<string, string, bool>(kvpair.Key.ToString(), val, true);
+
+                if (PredictedValues[kvpair.Key].Item1 != val)
+                    PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, true);
                 else
-                    PredictedValues[ind] = new Tuple<string, string, bool>(kvpair.Key.ToString(), val, false);
+                    PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, false);
                 //Console.WriteLine($"{kvpair.Key.ToString()} :{val}");
                 ind++;
             }
-            if (PredictedValues.Any(x => x.Item3 == true))
+            if (PredictedValues.Any(x => x.Value.Item2 == true))
             {
                 Console.Clear();
-                for (int l = 0; l < PredictedValues.Count; l++)
+
+                foreach(KeyValuePair<ImageKind, Tuple<string,bool>> kvpair in PredictedValues)
                 {
-                    Console.WriteLine($"{PredictedValues[l].Item1} : {PredictedValues[l].Item2}");
+                    Console.WriteLine($"{kvpair.Key.ToString()} : {PredictedValues[kvpair.Key].Item1}");
                 }
             }
 #endif
