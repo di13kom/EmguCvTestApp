@@ -83,14 +83,14 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170501114443.mp4"
-                , ImageKind.Ingame_Player1Name
-                , ImageKind.Ingame_Player2Name
+            ProcessVideo(@"d:\Q4Vid\PerfectGame.mp4"
+                //, ImageKind.Ingame_Player1Name
+                //, ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
                 //, ImageKind.OnSelect_Player2Name
                 //, ImageKind.RoundReadyMessage
                 , ImageKind.PlayerWins
-                , ImageKind.KoGoMessage
+                //, ImageKind.KoGoMessage
                 //, ImageKind.TitleMenu
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2

@@ -256,6 +256,24 @@ namespace EmguTestMachineLearningWithImages
             {"GoMessage",                           new PlayerDef() {LongName="GoMessage",                                      ClassNum = 2 } },
         };
         #endregion
+
+        #region RoundReadyMessage
+        public static Dictionary<string, PlayerDef> RoundNumReady = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+            {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+            {"_Dirty",                              new PlayerDef() {LongName="_Dirty",                                         ClassNum = -3 } },
+
+            {"Round1",                              new PlayerDef() {LongName="Round1",                                         ClassNum = 01 } },
+            {"Round2",                              new PlayerDef() {LongName="Round2",                                         ClassNum = 02 } },
+            {"Round3",                              new PlayerDef() {LongName="Round3",                                         ClassNum = 03 } },
+            {"Round4",                              new PlayerDef() {LongName="Round4",                                         ClassNum = 04 } },
+            {"Round5",                              new PlayerDef() {LongName="Round5",                                         ClassNum = 05 } },
+            {"RoundFinal",                          new PlayerDef() {LongName="RoundFinal",                                     ClassNum = 06 } },
+            {"RoundExtra",                          new PlayerDef() {LongName="RoundExtra",                                     ClassNum = 10 } },
+            {"RoundReady",                          new PlayerDef() {LongName="RoundReady",                                     ClassNum = 11 } },
+        };
+        #endregion
     }
 
     public enum ImageKind
@@ -366,7 +384,7 @@ namespace EmguTestMachineLearningWithImages
                 //MaskLowerThreshold =   new Bgr(246, 222, 46),  MaskHigherThreshold =      new Bgr(255, 255, 210),
                 //ColorLowerThreshold =    new Bgr(90, 0, 0),    ColorHigherThreshold =       new Bgr(200, 100, 30),
                 MaskLowerThreshold =    new Bgr(90, 0, 0),    MaskHigherThreshold =       new Bgr(200, 100, 30),
-                XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f}
+                XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.25f,     Dict=PlayersEnum.RoundNumReady}
             },
 
             {

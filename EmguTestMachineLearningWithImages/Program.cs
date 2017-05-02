@@ -1,6 +1,6 @@
 ﻿#define LearningRequired
-#define SvmType
-//#define KnType
+//#define SvmType
+#define KnType
 
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace EmguTestMachineLearningWithImages
 
 #if LearningRequired
             
-            TrainModel modTitles = new TrainModel(type, ImageKind.Ingame_Player2Name);
+            TrainModel modTitles = new TrainModel(type, ImageKind.RoundReadyMessage);
             modTitles.LoadFromDirectory();
 
 #else
