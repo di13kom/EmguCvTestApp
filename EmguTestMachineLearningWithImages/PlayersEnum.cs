@@ -384,7 +384,7 @@ namespace EmguTestMachineLearningWithImages
                 //MaskLowerThreshold =   new Bgr(246, 222, 46),  MaskHigherThreshold =      new Bgr(255, 255, 210),
                 //ColorLowerThreshold =    new Bgr(90, 0, 0),    ColorHigherThreshold =       new Bgr(200, 100, 30),
                 MaskLowerThreshold =    new Bgr(90, 0, 0),    MaskHigherThreshold =       new Bgr(200, 100, 30),
-                XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.25f,     Dict=PlayersEnum.RoundNumReady}
+                XPos = 350,      YPos =  505,        Width = 1215,    Height = 70,    Scale = 0.5f,     Dict=PlayersEnum.RoundNumReady}
             },
 
             {
