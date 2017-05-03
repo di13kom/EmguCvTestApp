@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguTestApp", "EmguTestApp\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguNeuralTest", "..\EmguNeuralTest\EmguNeuralTest\EmguNeuralTest.csproj", "{1A7BCD72-E76B-4B3D-80F4-50EB5F21A140}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguLearnPredict", "EmguTestMachineLearningWithImages\EmguLearnPredict.csproj", "{4F179582-A7C6-4AC6-B2B4-5071B54F5137}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguLearnPredict", "EmguLearnPredict\EmguLearnPredict.csproj", "{4F179582-A7C6-4AC6-B2B4-5071B54F5137}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

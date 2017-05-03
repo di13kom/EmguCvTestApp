@@ -81,7 +81,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmguTestMachineLearningWithImages\EmguLearnPredict.csproj">
+    <ProjectReference Include="..\EmguLearnPredict\EmguLearnPredict.csproj">
       <Project>{4f179582-a7c6-4ac6-b2b4-5071b54f5137}</Project>
       <Name>EmguLearnPredict</Name>
     </ProjectReference>
