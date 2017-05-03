@@ -288,7 +288,8 @@ namespace EmguTestMachineLearningWithImages
         Result_Player2,
         PlayerWins,
         RoundReadyMessage,
-        CurrentTime
+        CurrentTime,
+        TimeUpMessage
     }
     public static class ImageFormat
     {
@@ -394,6 +395,14 @@ namespace EmguTestMachineLearningWithImages
                 //ColorLowerThreshold =    new Bgr(0, 50, 100),  ColorHigherThreshold =       new Bgr(80, 160, 250),
                 //MaskLowerThreshold =   new Bgr(0, 0, 0),  MaskHigherThreshold =      new Bgr(60, 50, 80),
                 XPos = 875,      YPos =  55,        Width = 170,    Height = 75,    Scale = 0.5f,       Dict=PlayersEnum.CurrentTime}
+            },
+
+            {
+                ImageKind.TimeUpMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\TimeUpMessage",
+                //ColorLowerThreshold =   new Bgr(170, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
+                ColorLowerThreshold =    new Bgr(35, 30, 0),      ColorHigherThreshold =       new Bgr(145, 140, 55),
+                MaskLowerThreshold =    new Bgr(35, 30, 0),      MaskHigherThreshold =       new Bgr(145, 140, 55),
+                XPos = 605,      YPos =  505,        Width = 730,    Height = 70,    Scale = 0.2f,}
             },
     };
     }

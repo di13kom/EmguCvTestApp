@@ -83,7 +83,7 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170501125110Rounds5.mp4"
+            ProcessVideo(@"d:\Q4Vid\2017050309313870Rounds4.mp4"
                 , ImageKind.Ingame_Player1Name
                 , ImageKind.Ingame_Player2Name
                 //, ImageKind.OnSelect_Player1Name
@@ -95,6 +95,7 @@ namespace EmguTestApp
                 //, ImageKind.Result_Player1
                 //, ImageKind.Result_Player2
                 , ImageKind.CurrentTime
+                //, ImageKind.TimeUpMessage
                 );
         }
 
