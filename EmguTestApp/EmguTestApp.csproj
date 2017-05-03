@@ -81,9 +81,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EmguTestMachineLearningWithImages\EmguTestLearnWithImages.csproj">
+    <ProjectReference Include="..\EmguTestMachineLearningWithImages\EmguLearnPredict.csproj">
       <Project>{4f179582-a7c6-4ac6-b2b4-5071b54f5137}</Project>
-      <Name>EmguTestLearnWithImages</Name>
+      <Name>EmguLearnPredict</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
