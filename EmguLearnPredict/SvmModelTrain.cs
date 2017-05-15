@@ -24,14 +24,14 @@ namespace EmguLearnPredict
         IStatModel PredictModel;
         ModelType PredictModelType;
 
-        ImageKind AimImage;
+        ImageType AimImage;
 
         int LastMatrixIndex = 0;
         Matrix<float> TrainingData;/* = new Matrix<float>(0,0)*///fail
 
         Matrix<int> TrainingClasses;/* = new Matrix<int>(0,0)*/
 
-        public TrainModel(ModelType modelType, ImageKind imageKind)
+        public TrainModel(ModelType modelType, ImageType imageKind)
         {
             //svmModel = new SVM();
             AimImage = imageKind;
@@ -300,11 +300,11 @@ namespace EmguLearnPredict
 
         IStatModel p1PredictModel;
 
-        ImageKind P1ImageKind;
+        ImageType P1ImageKind;
 
         string ModelSavedFile;
 
-        public PredictModel(ImageKind p1ImageKind, ModelType modelType)
+        public PredictModel(ImageType p1ImageKind, ModelType modelType)
         {
             P1ImageKind = p1ImageKind;
 
