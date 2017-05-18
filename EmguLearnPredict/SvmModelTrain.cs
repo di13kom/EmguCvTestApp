@@ -328,12 +328,20 @@ namespace EmguLearnPredict
                     break;
             }
 
-            //player1 model load from file
-            FileStorage fs1 = new FileStorage(Path.Combine(ImageFormat.ImageParam[P1ImageKind].AimPath, ModelSavedFile), FileStorage.Mode.Read);
+            try
+            {
+                //player1 model load from file
+                FileStorage fs1 = new FileStorage(Path.Combine(ImageFormat.ImageParam[P1ImageKind].AimPath, ModelSavedFile), FileStorage.Mode.Read);
 
-            p1PredictModel.Read(fs1.GetRoot());
-            fs1.ReleaseAndGetString();
-            //
+                p1PredictModel.Read(fs1.GetRoot());
+                fs1.ReleaseAndGetString();
+                fs1.Dispose();
+                //
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
         }
 
