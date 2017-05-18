@@ -1,6 +1,6 @@
 ﻿#define LearningRequired
-#define SvmType
-//#define KnType
+//#define SvmType
+#define KnType
 
 using System;
 using System.Collections.Generic;
@@ -24,7 +24,7 @@ namespace EmguLearnPredict
 
 #if LearningRequired
             
-            TrainModel modTitles = new TrainModel(type, ImageType.KoGoMessage);
+            TrainModel modTitles = new TrainModel(type, ImageType.TimeUpMessage);
             modTitles.LoadFromDirectory();
 
 #else

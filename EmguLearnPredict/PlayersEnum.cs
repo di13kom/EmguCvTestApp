@@ -275,6 +275,17 @@ namespace EmguLearnPredict
             {"RoundReady",                          new PlayerDef() {LongName="RoundReady",                                     ClassNum = 11 } },
         };
         #endregion
+
+        #region TimeUpMessage
+        public static Dictionary<string, PlayerDef> TimeUpStr = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+            {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+            {"_Dirty",                              new PlayerDef() {LongName="_Dirty",                                         ClassNum = -3 } },
+
+            {"TimeUp",                              new PlayerDef() {LongName="TimeUp",                                         ClassNum = 01 } },
+        };
+        #endregion
     }
 
     public enum ImageType
@@ -291,6 +302,7 @@ namespace EmguLearnPredict
         RoundReadyMessage,
         CurrentTime,
         TimeUpMessage,
+        DrawGame,
         LoadingSign
     }
     public static class ImageFormat
@@ -402,16 +414,23 @@ namespace EmguLearnPredict
             {
                 ImageType.TimeUpMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\TimeUpMessage",
                 //ColorLowerThreshold =   new Bgr(170, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
-                ColorLowerThreshold =    new Bgr(35, 30, 0),      ColorHigherThreshold =       new Bgr(145, 140, 55),
+                ColorLowerThreshold =   new Bgr(35, 30, 0),      ColorHigherThreshold =      new Bgr(145, 140, 55),
                 MaskLowerThreshold =    new Bgr(35, 30, 0),      MaskHigherThreshold =       new Bgr(145, 140, 55),
-                XPos = 605,      YPos =  505,        Width = 730,    Height = 70,    Scale = 0.2f,}
+                XPos = 605,      YPos =  505,        Width = 730,    Height = 70,    Scale = 0.2f,      Dict=PlayersEnum.TimeUpStr}
             },
 
             {
-                ImageType.LoadingSign,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\LoadingSign",
-                ColorLowerThreshold =    new Bgr(60, 150, 140),      ColorHigherThreshold =       new Bgr(190, 250, 240),
-                MaskLowerThreshold =    new Bgr(190, 80, 0),      MaskHigherThreshold =       new Bgr(250, 230, 150),
+                ImageType.LoadingSign,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\LoadingSign",
+                ColorLowerThreshold =   new Bgr(60, 150, 140),  ColorHigherThreshold =      new Bgr(190, 250, 240),
+                MaskLowerThreshold =    new Bgr(190, 80, 0),    MaskHigherThreshold =       new Bgr(250, 230, 150),
                 XPos = 1705,      YPos =  870,        Width = 105,    Height = 100,    Scale = 0.5f,}
+            },
+
+            {
+                ImageType.DrawGame,                             new ImageParamsDef { AimPath = @"D:\Q4Vid\DrawGame",
+                ColorLowerThreshold =   new Bgr(0, 40, 0),      ColorHigherThreshold =      new Bgr(60, 120, 30),
+                MaskLowerThreshold =    new Bgr(0, 40, 0),      MaskHigherThreshold =       new Bgr(60, 120, 30),
+                XPos = 430,      YPos =  510,        Width = 1055,    Height = 65,    Scale = 0.5f,}
             },
     };
     }
