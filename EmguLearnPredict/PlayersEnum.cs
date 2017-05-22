@@ -286,6 +286,16 @@ namespace EmguLearnPredict
             {"TimeUp",                              new PlayerDef() {LongName="TimeUp",                                         ClassNum = 01 } },
         };
         #endregion
+
+        #region DrawGameMessage
+        public static Dictionary<string, PlayerDef> DrawGameStr = new Dictionary<string, PlayerDef>
+        {
+            {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
+            {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
+            
+            {"DrawGame",                            new PlayerDef() {LongName="DrawGame",                                       ClassNum = 01 } },
+        };
+        #endregion
     }
 
     public enum ImageType
@@ -302,7 +312,7 @@ namespace EmguLearnPredict
         RoundReadyMessage,
         CurrentTime,
         TimeUpMessage,
-        DrawGame,
+        DrawGameMessage,
         LoadingSign
     }
     public static class ImageFormat
@@ -427,10 +437,10 @@ namespace EmguLearnPredict
             },
 
             {
-                ImageType.DrawGame,                             new ImageParamsDef { AimPath = @"D:\Q4Vid\DrawGame",
+                ImageType.DrawGameMessage,                             new ImageParamsDef { AimPath = @"D:\Q4Vid\DrawGameMessage",
                 ColorLowerThreshold =   new Bgr(0, 40, 0),      ColorHigherThreshold =      new Bgr(60, 120, 30),
                 MaskLowerThreshold =    new Bgr(0, 40, 0),      MaskHigherThreshold =       new Bgr(60, 120, 30),
-                XPos = 430,      YPos =  510,        Width = 1055,    Height = 65,    Scale = 0.5f,}
+                XPos = 430,      YPos =  510,        Width = 1055,    Height = 65,    Scale = 0.5f,     Dict=PlayersEnum.DrawGameStr}
             },
     };
     }

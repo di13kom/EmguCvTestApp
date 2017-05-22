@@ -304,9 +304,13 @@ namespace EmguLearnPredict
 
         string ModelSavedFile;
 
+        ModelType myModelType;
+
         public PredictModel(ImageType p1ImageKind, ModelType modelType)
         {
             P1ImageKind = p1ImageKind;
+
+            myModelType = modelType;
 
             switch (modelType)
             {
@@ -338,7 +342,7 @@ namespace EmguLearnPredict
                 fs1.Dispose();
                 //
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
@@ -378,6 +382,27 @@ namespace EmguLearnPredict
                     //Console.WriteLine("index: {0}", ind);
                     mat.Data[0, ind] = img.Data[i, j, 0];
                 }
+            }
+        }
+
+        public void CleanModel()
+        {
+            try
+            {
+                p1PredictModel.Clear();
+                switch (myModelType)
+                {
+                    case ModelType.SvmModel:
+                        ((SVM)p1PredictModel).Dispose();
+                        break;
+                    case ModelType.KnModel:
+                        ((KNearest)p1PredictModel).Dispose();
+                        break;
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

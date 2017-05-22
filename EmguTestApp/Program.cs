@@ -57,11 +57,11 @@ namespace EmguTestApp
         //static string FileToPlay = @"d:\Q4Vid\20170404162850.mp4";
 
         static string CurrentName = "Common";
-        
+
         static string fileVideoExtension = ".mp4";
         static string fileImageExtension = ".bmp";
 
-        
+
         static Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(1920, 1080);
         //static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
 
@@ -84,7 +84,7 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170516204839TimeUpWith_Short.mp4"
+            ProcessVideo(@"d:\Q4Vid\20170517125609_Short.mp4"
                 //, ImageType.Ingame_Player1Name
                 //, ImageType.Ingame_Player2Name
                 //, ImageType.OnSelect_Player1Name
@@ -95,9 +95,9 @@ namespace EmguTestApp
                 //, ImageType.TitleMenu
                 //, ImageType.Result_Player1
                 //, ImageType.Result_Player2
-                //, ImageType.CurrentTime
-                , ImageType.TimeUpMessage
-                //, ImageType.DrawGame
+                , ImageType.CurrentTime
+                //, ImageType.TimeUpMessage
+                //, ImageType.DrawGameMessage
                 );
         }
 
@@ -293,12 +293,12 @@ namespace EmguTestApp
 #if SAVEREQUIRED
             foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
             {
-                string saveDirPath = Path.Combine(ImageFormat.ImageParam[kvpair.Key].AimPath,kvpair.Key.ToString());
+                string saveDirPath = Path.Combine(ImageFormat.ImageParam[kvpair.Key].AimPath, kvpair.Key.ToString());
 
                 if (Directory.Exists(saveDirPath) == false)
                     Directory.CreateDirectory(saveDirPath);
 
-                string saveFileFullName = Path.Combine(saveDirPath, CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff") + fileImageExtension);
+                string saveFileFullName = Path.Combine(saveDirPath, CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff_") + currentFrame + fileImageExtension);
 
                 kvpair.Value.ToBitmap().Save(saveFileFullName);
             }
