@@ -58,7 +58,7 @@ namespace EmguTestApp
 
         static string CurrentName = "Common";
 
-        static string fileVideoExtension = ".mp4";
+        //static string fileVideoExtension = ".mp4";
         static string fileImageExtension = ".bmp";
 
 
@@ -84,13 +84,13 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\20170517125609_Short.mp4"
+            ProcessVideo(@"d:\Q4Vid\EndRoundTimeOnBeach.mp4"
                 //, ImageType.Ingame_Player1Name
                 //, ImageType.Ingame_Player2Name
                 //, ImageType.OnSelect_Player1Name
                 //, ImageType.OnSelect_Player2Name
                 //, ImageType.RoundReadyMessage
-                //, ImageType.PlayerWins
+                , ImageType.PlayerWins
                 //, ImageType.KoGoMessage
                 //, ImageType.TitleMenu
                 //, ImageType.Result_Player1

@@ -337,42 +337,42 @@ namespace EmguLearnPredict
         public static Dictionary<ImageType, ImageParamsDef> ImageParam = new Dictionary<ImageType, ImageParamsDef>
         {
             {
-                ImageType.Ingame_Player1Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player1\",
+                ImageType.Ingame_Player1Name,               new ImageParamsDef { AimPath = @"c:\EmguLearnState\Players\Images\Player1\",
                 ColorLowerThreshold =   new Bgr(170, 160, 0),     ColorHigherThreshold =    new Bgr(230, 225, 100),
                 MaskLowerThreshold =    new Bgr(170, 160, 0),     MaskHigherThreshold =     new Bgr(230, 225, 100),
                 XPos = 35,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f,      Dict=PlayersEnum.Players }
             },
 
             {
-                ImageType.Ingame_Player2Name,               new ImageParamsDef { AimPath = @"d:\Q4Vid\Players\Images\Player2\",
+                ImageType.Ingame_Player2Name,               new ImageParamsDef { AimPath = @"c:\EmguLearnState\Players\Images\Player2\",
                 ColorLowerThreshold =   new Bgr(0, 190, 95),     ColorHigherThreshold =     new Bgr(95, 250, 150),
                 MaskLowerThreshold =    new Bgr(0, 190, 95),     MaskHigherThreshold =      new Bgr(95, 250, 150),
                 XPos = 1760,       YPos = 110,      Width = 125,     Height = 15,      Scale = 1.0f,      Dict=PlayersEnum.Players }
             },
 
             {
-                ImageType.OnSelect_Player1Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player1",
+                ImageType.OnSelect_Player1Name,             new ImageParamsDef { AimPath = @"c:\EmguLearnState\ChoosePlayers\Images\Player1",
                 ColorLowerThreshold =   new Bgr(170, 160, 0),   ColorHigherThreshold =      new Bgr(230, 225, 100),
                 MaskLowerThreshold =    new Bgr(170, 160, 0),   MaskHigherThreshold =       new Bgr(230, 225, 100),
                 XPos = 25,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f,      Dict=PlayersEnum.Players }
             },
 
             {
-                ImageType.OnSelect_Player2Name,             new ImageParamsDef { AimPath = @"D:\Q4Vid\ChoosePlayers\Images\Player2",
+                ImageType.OnSelect_Player2Name,             new ImageParamsDef { AimPath = @"c:\EmguLearnState\ChoosePlayers\Images\Player2",
                 ColorLowerThreshold =   new Bgr(0, 190, 95),     ColorHigherThreshold =     new Bgr(95, 250, 150),
                 MaskLowerThreshold =    new Bgr(0, 190, 95),     MaskHigherThreshold =      new Bgr(95, 250, 150),
                 XPos = 1475,      YPos =  895,        Width = 410,    Height = 25,    Scale = 0.5f,      Dict=PlayersEnum.Players }
             },
 
             {
-                ImageType.TitleMenu,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Titles",
+                ImageType.TitleMenu,                        new ImageParamsDef { AimPath = @"c:\EmguLearnState\Titles",
                 ColorLowerThreshold =   new Bgr(5, 150, 215),   ColorHigherThreshold =      new Bgr(90, 200, 246),
                 MaskLowerThreshold =    new Bgr(5, 150, 215),   MaskHigherThreshold =       new Bgr(90, 200, 246),
                 XPos = 100,      YPos =  30,        Width = 550,    Height = 50,    Scale = 0.5f,       Dict=PlayersEnum.Titles}
             },
 
             {
-                ImageType.KoGoMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\KoGoMessage",
+                ImageType.KoGoMessage,                        new ImageParamsDef { AimPath = @"c:\EmguLearnState\KoGoMessage",
                 //ColorLowerThreshold =   new Bgr(140, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
                 ColorLowerThreshold =    new Bgr(0, 0, 40),      ColorHigherThreshold =       new Bgr(30, 140, 255),
                     //MaskLowerThreshold =    new Bgr(0, 0, 40),      MaskHigherThreshold =       new Bgr(10, 10, 120),
@@ -381,21 +381,21 @@ namespace EmguLearnPredict
             },
             //
             {
-                ImageType.Result_Player1,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player1",
+                ImageType.Result_Player1,                        new ImageParamsDef { AimPath = @"c:\EmguLearnState\Result\Player1",
                 ColorLowerThreshold =   new Bgr(0, 0, 0),       ColorHigherThreshold =      new Bgr(60, 45, 35),
                 MaskLowerThreshold =    new Bgr(0, 0, 0),       MaskHigherThreshold =       new Bgr(60, 45, 35),
                 XPos = 15,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,       Dict=PlayersEnum.ResultMatch}
             },
 
             {
-                ImageType.Result_Player2,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\Result\Player2",
+                ImageType.Result_Player2,                        new ImageParamsDef { AimPath = @"c:\EmguLearnState\Result\Player2",
                 ColorLowerThreshold =   new Bgr(0, 0, 0),       ColorHigherThreshold =      new Bgr(60, 45, 35),
                 MaskLowerThreshold =    new Bgr(0, 0, 0),       MaskHigherThreshold =       new Bgr(60, 45, 35),
                 XPos = 1445,      YPos =  760,        Width = 415,    Height = 65,    Scale = 0.5f,     Dict=PlayersEnum.ResultMatch}
             },
 
             {
-                ImageType.PlayerWins,                           new ImageParamsDef { AimPath = @"D:\Q4Vid\PlayerWins",
+                ImageType.PlayerWins,                           new ImageParamsDef { AimPath = @"c:\EmguLearnState\PlayerWins",
                 ColorLowerThreshold =   new Bgr(40, 220, 255),  ColorHigherThreshold =      new Bgr(170, 255, 255),
                 //MaskLowerThreshold =   new Bgr(40, 220, 255),  MaskHigherThreshold =      new Bgr(170, 255, 255),
                 //ColorLowerThreshold =    new Bgr(0, 10, 60),     ColorHigherThreshold =       new Bgr(20, 120, 164),
@@ -404,7 +404,7 @@ namespace EmguLearnPredict
             },
 
             {
-                ImageType.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"D:\Q4Vid\RoundReady",
+                ImageType.RoundReadyMessage,                    new ImageParamsDef { AimPath = @"c:\EmguLearnState\RoundReady",
                 ColorLowerThreshold =   new Bgr(246, 222, 46),  ColorHigherThreshold =      new Bgr(255, 255, 210),
                 //MaskLowerThreshold =   new Bgr(246, 222, 46),  MaskHigherThreshold =      new Bgr(255, 255, 210),
                 //ColorLowerThreshold =    new Bgr(90, 0, 0),    ColorHigherThreshold =       new Bgr(200, 100, 30),
@@ -413,7 +413,7 @@ namespace EmguLearnPredict
             },
 
             {
-                ImageType.CurrentTime,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\CurrentTime",
+                ImageType.CurrentTime,                          new ImageParamsDef { AimPath = @"c:\EmguLearnState\CurrentTime",
                 ColorLowerThreshold =   new Bgr(180, 160, 140),  ColorHigherThreshold =      new Bgr(230, 230, 210),
                 MaskLowerThreshold =    new Bgr(210, 210, 210),  MaskHigherThreshold =       new Bgr(255, 255, 255),
                 //ColorLowerThreshold =    new Bgr(0, 50, 100),  ColorHigherThreshold =       new Bgr(80, 160, 250),
@@ -422,7 +422,7 @@ namespace EmguLearnPredict
             },
 
             {
-                ImageType.TimeUpMessage,                        new ImageParamsDef { AimPath = @"D:\Q4Vid\TimeUpMessage",
+                ImageType.TimeUpMessage,                        new ImageParamsDef { AimPath = @"c:\EmguLearnState\TimeUpMessage",
                 //ColorLowerThreshold =   new Bgr(170, 240, 240), ColorHigherThreshold =      new Bgr(/*205*//*190*/255, 255, 255),
                 ColorLowerThreshold =   new Bgr(35, 30, 0),      ColorHigherThreshold =      new Bgr(145, 140, 55),
                 MaskLowerThreshold =    new Bgr(35, 30, 0),      MaskHigherThreshold =       new Bgr(145, 140, 55),
@@ -430,14 +430,14 @@ namespace EmguLearnPredict
             },
 
             {
-                ImageType.LoadingSign,                          new ImageParamsDef { AimPath = @"D:\Q4Vid\LoadingSign",
+                ImageType.LoadingSign,                          new ImageParamsDef { AimPath = @"c:\EmguLearnState\LoadingSign",
                 ColorLowerThreshold =   new Bgr(60, 150, 140),  ColorHigherThreshold =      new Bgr(190, 250, 240),
                 MaskLowerThreshold =    new Bgr(190, 80, 0),    MaskHigherThreshold =       new Bgr(250, 230, 150),
                 XPos = 1705,      YPos =  870,        Width = 105,    Height = 100,    Scale = 0.5f,}
             },
 
             {
-                ImageType.DrawGameMessage,                             new ImageParamsDef { AimPath = @"D:\Q4Vid\DrawGameMessage",
+                ImageType.DrawGameMessage,                             new ImageParamsDef { AimPath = @"c:\EmguLearnState\DrawGameMessage",
                 ColorLowerThreshold =   new Bgr(0, 40, 0),      ColorHigherThreshold =      new Bgr(60, 120, 30),
                 MaskLowerThreshold =    new Bgr(0, 40, 0),      MaskHigherThreshold =       new Bgr(60, 120, 30),
                 XPos = 430,      YPos =  510,        Width = 1055,    Height = 65,    Scale = 0.5f,     Dict=PlayersEnum.DrawGameStr}
