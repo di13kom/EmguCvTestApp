@@ -36,7 +36,7 @@ namespace EmguWpfApp
             {
                 OpenFileDialog dlg = new OpenFileDialog();
                 dlg.DefaultExt = "*.bmp";
-                dlg.Filter = "JPEG Files(*.jpeg) | *.jpeg | PNG Files(*.png) | *.png | JPG Files(*.jpg) | *.jpg | GIF Files(*.gif) | *.gif| BMP Files(*.bmp) | *.bmp";
+                dlg.Filter = "BMP Files(*.bmp) | *.bmp|JPEG Files(*.jpeg) | *.jpeg | PNG Files(*.png) | *.png | JPG Files(*.jpg) | *.jpg | GIF Files(*.gif) | *.gif";
                 dlg.Multiselect = false;
                 bool? res = dlg.ShowDialog();
 
@@ -49,7 +49,7 @@ namespace EmguWpfApp
                     ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -69,14 +69,24 @@ namespace EmguWpfApp
                     int colMinG = Convert.ToInt32(ColorMin_green.Value);
                     int colMinB = Convert.ToInt32(ColorMin_blue.Value);
 
-                    Image<Gray, byte> img = new Image<Bgr, byte>(xFileName).InRange( new Bgr(colMinB, colMinG, colMinR), new Bgr(colMaxB, colMaxG, colMaxR));
+                    Image<Gray, byte> img = new Image<Bgr, byte>(xFileName).InRange(new Bgr(colMinB, colMinG, colMinR), new Bgr(colMaxB, colMaxG, colMaxR));
+                    if (ColorMask_Sync.IsChecked == false)
+                    {
+                        int maskMaxR = Convert.ToInt32(MaskMax_red.Value);
+                        int maskMaxG = Convert.ToInt32(MaskMax_green.Value);
+                        int maskMaxB = Convert.ToInt32(MaskMax_blue.Value);
 
+                        int maskMinR = Convert.ToInt32(MaskMin_red.Value);
+                        int maskMinG = Convert.ToInt32(MaskMin_green.Value);
+                        int maskMinB = Convert.ToInt32(MaskMin_blue.Value);
 
-
+                        Image<Gray, byte> mask = new Image<Bgr, byte>(xFileName).InRange(new Bgr(maskMinB, maskMinG, maskMinR), new Bgr(maskMaxB, maskMaxG, maskMaxR));
+                        img = img.Or(mask);
+                    }
                     ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }

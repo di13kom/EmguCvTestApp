@@ -11,6 +11,7 @@
             <RowDefinition MaxHeight="20"></RowDefinition>
             <RowDefinition MaxHeight="100"></RowDefinition>
             <RowDefinition MaxHeight="100"></RowDefinition>
+            <RowDefinition MaxHeight="30"></RowDefinition>
             <RowDefinition MaxHeight="100"></RowDefinition>
             <RowDefinition MaxHeight="100"></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -22,34 +23,34 @@
                 </MenuItem>
             </Menu>
         </DockPanel>
-        <StackPanel x:Name="Panel1" Grid.Row="1" Margin="10,0,10,0">
+        <StackPanel x:Name="Panel1" Grid.Row="1" Margin="10,0,10,0" HorizontalAlignment="Stretch">
             <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>
             <DockPanel>
-                <Label>R</Label>
-                <Slider x:Name="ColorMin_red" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" ValueChanged="Color_ValueChanged"/>
-                <TextBlock Text="{Binding ElementName=ColorMin_red,Path=Value}" Width="20"/>
+                <Label>B</Label>
+                <Slider x:Name="ColorMin_blue" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                <TextBlock Text="{Binding ElementName=ColorMin_blue,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
                 <Label>G</Label>
                 <Slider x:Name="ColorMin_green" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
                 <TextBlock Text="{Binding ElementName=ColorMin_green,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
-                <Label>B</Label>
-                <Slider x:Name="ColorMin_blue" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" ValueChanged="Color_ValueChanged"/>
-                <TextBlock Text="{Binding ElementName=ColorMin_blue,Path=Value}" Width="20"/>
+                <Label>R</Label>
+                <Slider x:Name="ColorMin_red" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                <TextBlock Text="{Binding ElementName=ColorMin_red,Path=Value}" Width="20"/>
             </DockPanel>
         </StackPanel>
         <StackPanel x:Name="Panel2" Grid.Row="2" Margin="10,0,10,0">
             <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMax</Label>
             <DockPanel>
-                <Label>R</Label>
-                <Slider x:Name="ColorMax_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                <Label>B</Label>
+                <Slider x:Name="ColorMax_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
-                <TextBlock Text="{Binding ElementName=ColorMax_red,Path=Value}" Width="20"/>
+                <TextBlock Text="{Binding ElementName=ColorMax_blue,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
                 <Label>G</Label>
@@ -58,49 +59,61 @@
                 <TextBlock Text="{Binding ElementName=ColorMax_green,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
-                <Label>B</Label>
-                <Slider x:Name="ColorMax_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                <Label>R</Label>
+                <Slider x:Name="ColorMax_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
-                <TextBlock Text="{Binding ElementName=ColorMax_blue,Path=Value}" Width="20"/>
+                <TextBlock Text="{Binding ElementName=ColorMax_red,Path=Value}" Width="20"/>
             </DockPanel>
         </StackPanel>
-        <StackPanel x:Name="Panel3" Grid.Row="3" Margin="10,0,10,0">
+        <Border Grid.Row="3" HorizontalAlignment="Stretch" BorderThickness="1" Background="GhostWhite" BorderBrush="Gainsboro">
+        <DockPanel HorizontalAlignment="Center"  VerticalAlignment="Center">
+            <CheckBox x:Name="ColorMask_Sync" IsChecked="True" Margin="5"/>
+            <Label>Synchronize ColorRange and ColorMask?</Label>
+        </DockPanel>
+        </Border>
+        <StackPanel x:Name="Panel3" Grid.Row="4" Margin="10,0,10,0">
             <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMin</Label>
             <DockPanel>
-                <Label>R</Label>
-                <Slider x:Name="MaskMin_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" TickFrequency="1"/>
-                <TextBlock Text="{Binding ElementName=MaskMin_red,Path=Value}" Width="20"/>
+                <Label>B</Label>
+                <Slider x:Name="MaskMin_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                <TextBlock Text="{Binding ElementName=MaskMin_blue,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
                 <Label>G</Label>
-                <Slider x:Name="MaskMin_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" TickFrequency="1"/>
+                <Slider x:Name="MaskMin_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
                 <TextBlock Text="{Binding ElementName=MaskMin_green,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
-                <Label>B</Label>
-                <Slider x:Name="MaskMin_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" TickFrequency="1"/>
-                <TextBlock Text="{Binding ElementName=MaskMin_blue,Path=Value}" Width="20"/>
+                <Label>R</Label>
+                <Slider x:Name="MaskMin_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                <TextBlock Text="{Binding ElementName=MaskMin_red,Path=Value}" Width="20"/>
             </DockPanel>
         </StackPanel>
-        <StackPanel x:Name="Panel4" Grid.Row="4" Margin="10,0,10,0">
+        <StackPanel x:Name="Panel4" Grid.Row="5" Margin="10,0,10,0">
             <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMax</Label>
             <DockPanel>
-                <Label>R</Label>
-                <Slider x:Name="MaskMax_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" TickFrequency="1" Value="255"/>
-                <TextBlock Text="{Binding ElementName=MaskMax_red,Path=Value}" Width="20"/>
+                <Label>B</Label>
+                <Slider x:Name="MaskMax_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
+                <TextBlock Text="{Binding ElementName=MaskMax_blue,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
                 <Label>G</Label>
-                <Slider x:Name="MaskMax_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" TickFrequency="1" Value="255"/>
+                <Slider x:Name="MaskMax_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
                 <TextBlock Text="{Binding ElementName=MaskMax_green,Path=Value}" Width="20"/>
             </DockPanel>
             <DockPanel>
-                <Label>B</Label>
-                <Slider x:Name="MaskMax_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" TickFrequency="1" Value="255"/>
-                <TextBlock Text="{Binding ElementName=MaskMax_blue,Path=Value}" Width="20"/>
+                <Label>R</Label>
+                <Slider x:Name="MaskMax_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
+                <TextBlock Text="{Binding ElementName=MaskMax_red,Path=Value}" Width="20"/>
             </DockPanel>
         </StackPanel>
-        <Border Grid.Row="5" MinHeight="100" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
+        <Border Grid.Row="6" MinHeight="100" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
             <Image x:Name="ImageViewer" />
         </Border>
     </Grid>
