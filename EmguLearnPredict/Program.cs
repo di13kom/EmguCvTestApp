@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmguLearnPredict_Tekken7;
 
 namespace EmguLearnPredict
 {
@@ -24,7 +25,7 @@ namespace EmguLearnPredict
 
 #if LearningRequired
             
-            TrainModel modTitles = new TrainModel(type, ImageType.DrawGameMessage);
+            TrainModel modTitles = new TrainModel(type, ImageType.PlayerPause);
             modTitles.LoadFromDirectory();
 
 #else

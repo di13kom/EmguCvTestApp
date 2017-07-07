@@ -18,6 +18,8 @@ using System.Drawing;
 using System.Threading;
 using System.IO;
 using EmguLearnPredict;
+using EmguLearnPredict_Tekken7;
+
 
 namespace EmguTestApp
 {
@@ -84,20 +86,19 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\Q4Vid\EndRoundTimeOnBeach.mp4"
+            ProcessVideo(@"d:\t7Video\WithPause\Test\2017-07-06_171645014.mp4"
                 //, ImageType.Ingame_Player1Name
                 //, ImageType.Ingame_Player2Name
                 //, ImageType.OnSelect_Player1Name
                 //, ImageType.OnSelect_Player2Name
                 //, ImageType.RoundReadyMessage
-                , ImageType.PlayerWins
+                , ImageType.PlayerPause
                 //, ImageType.KoGoMessage
                 //, ImageType.TitleMenu
                 //, ImageType.Result_Player1
                 //, ImageType.Result_Player2
-                , ImageType.CurrentTime
-                //, ImageType.TimeUpMessage
-                //, ImageType.DrawGameMessage
+                //, ImageType.ResumeGame
+                //, ImageType.p1Wins
                 );
         }
 

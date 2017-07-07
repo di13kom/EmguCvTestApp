@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EmguLearnPredict
+namespace EmguLearnPredict_KOFXIV
 {
     public static class PlayersEnum
     {
@@ -292,7 +292,7 @@ namespace EmguLearnPredict
         {
             {"_BlackFull",                          new PlayerDef() {LongName="_BlackFull",                                     ClassNum = -1 } },
             {"_WhiteFull",                          new PlayerDef() {LongName="_WhiteFull",                                     ClassNum = -2 } },
-            
+
             {"DrawGame",                            new PlayerDef() {LongName="DrawGame",                                       ClassNum = 01 } },
         };
         #endregion
@@ -442,6 +442,6 @@ namespace EmguLearnPredict
                 MaskLowerThreshold =    new Bgr(0, 40, 0),      MaskHigherThreshold =       new Bgr(60, 120, 30),
                 XPos = 430,      YPos =  510,        Width = 1055,    Height = 65,    Scale = 0.5f,     Dict=PlayersEnum.DrawGameStr}
             },
-    };
+        };
     }
 }

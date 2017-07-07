@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EmguLearnPredict_Tekken7;
 
 namespace EmguLearnPredict
 {
@@ -271,7 +272,7 @@ namespace EmguLearnPredict
 
                 var ret = predictModel.Predict(sampleMatr, predictMatr, 300);
                 //Console.WriteLine($"Player is :{PlayersEnum.Players.Values.Where(x => x.ClassNum==predict[0,0]).First().LongName}");
-                Console.WriteLine($"Player is :{PlayersEnum.Players.Where(x => x.Value.ClassNum == predictMatr[0, 0]).FirstOrDefault().Key}");
+                //---Console.WriteLine($"Player is :{PlayersEnum.Players.Where(x => x.Value.ClassNum == predictMatr[0, 0]).FirstOrDefault().Key}");
 
             }
             catch (Exception ex)
