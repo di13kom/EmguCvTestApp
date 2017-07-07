@@ -22,4 +22,23 @@ namespace EmguWpfApp
             throw new NotImplementedException();
         }
     }
+
+    public class ValueConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            //throw new NotImplementedException();
+            return (bool)values[0] == true ? values[1] : values[2];
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            object[] obj = new object[3];
+            obj[0] = (bool)true;
+            obj[1] = (bool)true;
+            obj[2] = (bool)true;
+            return obj;
+            //throw new NotImplementedException();
+        }
+    }
 }
