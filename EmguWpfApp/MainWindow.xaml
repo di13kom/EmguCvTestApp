@@ -6,6 +6,10 @@
         xmlns:local="clr-namespace:EmguWpfApp"
         mc:Ignorable="d"
         Title="MainWindow" Height="650" Width="525">
+    <Window.Resources>
+        <local:SyncConverter x:Key="SyncConverter" />
+    <!--<local:IdConverter x:Key="IdConverter"/>-->
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition MaxHeight="20"></RowDefinition>
@@ -71,7 +75,7 @@
             <Label>Synchronize ColorRange and ColorMask?</Label>
         </DockPanel>
         </Border>
-        <StackPanel x:Name="Panel3" Grid.Row="4" Margin="10,0,10,0">
+        <StackPanel x:Name="Panel3" Grid.Row="4" Margin="10,0,10,0" IsEnabled="{Binding Path=IsChecked, ElementName=ColorMask_Sync,Converter={StaticResource SyncConverter}}">
             <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMin</Label>
             <DockPanel>
                 <Label>B</Label>
@@ -92,7 +96,7 @@
                 <TextBlock Text="{Binding ElementName=MaskMin_red,Path=Value}" Width="20"/>
             </DockPanel>
         </StackPanel>
-        <StackPanel x:Name="Panel4" Grid.Row="5" Margin="10,0,10,0">
+        <StackPanel x:Name="Panel4" Grid.Row="5" Margin="10,0,10,0" IsEnabled="{Binding Path=IsChecked, ElementName=ColorMask_Sync,Converter={StaticResource SyncConverter}}">
             <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMax</Label>
             <DockPanel>
                 <Label>B</Label>

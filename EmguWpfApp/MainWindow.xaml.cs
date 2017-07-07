@@ -82,8 +82,10 @@ namespace EmguWpfApp
 
                         Image<Gray, byte> mask = new Image<Bgr, byte>(xFileName).InRange(new Bgr(maskMinB, maskMinG, maskMinR), new Bgr(maskMaxB, maskMaxG, maskMaxR));
                         img = img.Or(mask);
+                        mask.Dispose();
                     }
                     ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    img.Dispose();
                 }
             }
             catch (Exception ex)
