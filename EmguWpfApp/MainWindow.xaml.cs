@@ -35,8 +35,8 @@ namespace EmguWpfApp
             try
             {
                 OpenFileDialog dlg = new OpenFileDialog();
-                dlg.DefaultExt = "*.bmp";
-                dlg.Filter = "BMP Files(*.bmp) | *.bmp|JPEG Files(*.jpeg) | *.jpeg | PNG Files(*.png) | *.png | JPG Files(*.jpg) | *.jpg | GIF Files(*.gif) | *.gif";
+                dlg.DefaultExt = "*.png";
+                dlg.Filter = "BMP Files(*.bmp) | *.bmp|JPEG Files(*.jpeg) | *.jpeg| PNG Files(*.png) | *.png| JPG Files(*.jpg) | *.jpg| GIF Files(*.gif) | *.gif";
                 dlg.Multiselect = false;
                 bool? res = dlg.ShowDialog();
 
