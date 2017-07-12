@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguLearnPredict", "EmguLea
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmguWpfApp", "EmguWpfApp\EmguWpfApp.csproj", "{418A3E13-0F89-4BEF-A99A-795AB8B6C003}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CameraWpfApp", "CameraWpfApp\CameraWpfApp.csproj", "{1A93E5E0-B34E-4379-B3CA-90E5678D4A1E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{418A3E13-0F89-4BEF-A99A-795AB8B6C003}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{418A3E13-0F89-4BEF-A99A-795AB8B6C003}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{418A3E13-0F89-4BEF-A99A-795AB8B6C003}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A93E5E0-B34E-4379-B3CA-90E5678D4A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A93E5E0-B34E-4379-B3CA-90E5678D4A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A93E5E0-B34E-4379-B3CA-90E5678D4A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A93E5E0-B34E-4379-B3CA-90E5678D4A1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
