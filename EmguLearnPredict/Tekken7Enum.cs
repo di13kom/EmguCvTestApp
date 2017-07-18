@@ -36,12 +36,28 @@ namespace EmguLearnPredict_Tekken7
             {"Player2Pause",                        new StructureDef() {LongName="Player2Pause",                                    ClassNum = 02 } },
         };
         #endregion
+
+        #region GameMessages
+        public static Dictionary<string, StructureDef> GameMessages = new Dictionary<string, StructureDef>
+        {
+            {"_BlackFull",                          new StructureDef() {LongName="_BlackFull",                                      ClassNum = -1 } },
+            {"_WhiteFull",                          new StructureDef() {LongName="_WhiteFull",                                      ClassNum = -2 } },
+            //{"_Dirty",                              new StructureDef() {LongName="_Dirty",                                          ClassNum = -3 } },
+
+            {"ReadyMessage",                        new StructureDef() {LongName="ReadyMessage",                                    ClassNum = 01 } },
+            {"FightMessage",                        new StructureDef() {LongName="FightMessage",                                    ClassNum = 02 } },
+            {"KoMessage",                           new StructureDef() {LongName="KoMessage",                                       ClassNum = 03 } },
+            {"YouWinMessage",                       new StructureDef() {LongName="YouWinMessage",                                   ClassNum = 04 } },
+            {"FinalRoundMessage",                   new StructureDef() {LongName="FinalRoundMessage",                               ClassNum = 05 } },
+        };
+        #endregion
     }
     public enum ImageType
     {
         PlayerPause,
         ResumeGame,
-        p1Wins
+        p1Wins,
+        GameMessages
     }
     public static class ImageFormat
     {
@@ -79,11 +95,10 @@ namespace EmguLearnPredict_Tekken7
             },
 
             {
-                ImageType.p1Wins,              new ImageParamsDef { AimPath = @"c:\EmguLearnState\Tekken7\P1Wins",
-                ColorLowerThreshold =   new Bgr(55, 90, 105),        ColorHigherThreshold =    new Bgr(205, 240, 240),
-                MaskLowerThreshold =    new Bgr(0, 0, 0),           MaskHigherThreshold =     new Bgr(30, 30, 5),
-                //XPos = 164,       YPos = 860,      Width = 255,     Height = 33,      Scale = 1.0f,      Dict=Tekken7Enum.PlayerPause }
-                XPos = 72,       YPos = 860,      Width = 255,     Height = 75,      Scale = 1.0f,      Dict=Tekken7Enum.PlayerPause }
+                ImageType.GameMessages,             new ImageParamsDef { AimPath = @"c:\EmguLearnState\Tekken7\GameMessages",
+                ColorLowerThreshold =   new Bgr(000, 000, 120),     ColorHigherThreshold =      new Bgr(075, 105, 255),
+                MaskLowerThreshold =    new Bgr(000, 000, 120),     MaskHigherThreshold =       new Bgr(075, 105, 255),
+                XPos = 450,       YPos = 480,      Width = 950,     Height = 120,      Scale = 1.0f,      Dict=Tekken7Enum.GameMessages }
             },
         };
     }

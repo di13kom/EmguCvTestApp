@@ -23,35 +23,6 @@ using EmguLearnPredict_Tekken7;
 
 namespace EmguTestApp
 {
-    static class ColorsThresHolds
-    {
-        //static public Tuple<Bgr, Bgr> p1Colors = Tuple.Create(new Bgr(170, 160, 0), new Bgr(230, 225, 100));
-        static public Tuple<Gray, Gray> p1Gray = Tuple.Create(new Gray(110), new Gray(255));
-
-        //static public Tuple<Bgr, Bgr> p2Colors = Tuple.Create(new Bgr(0, 190, 95), new Bgr(95, 250, 150));
-        static public Tuple<Gray, Gray> p2Gray = Tuple.Create(new Gray(110), new Gray(255));
-
-        //static public Tuple<Bgr, Bgr> TitleColors = Tuple.Create(new Bgr(5, 150, 215), new Bgr(90, 200, 246));
-        static public Tuple<Gray, Gray> TitleGray = Tuple.Create(new Gray(157), new Gray(255));
-
-        //static public Tuple<Bgr, Bgr> RoundReadyColors = Tuple.Create(new Bgr(246, 222, 46), new Bgr(255, 255, 210));
-        static public Tuple<Bgr, Bgr> GoMessageColors = Tuple.Create(new Bgr(100, 240, 240), new Bgr(180, 255, 255));
-
-        //static public Tuple<Bgr, Bgr> KoMessageColors = Tuple.Create(new Bgr(140, 230, 240), new Bgr(/*205*/190, 255, 255));
-        static public Tuple<Gray, Gray> KoMessageGray = Tuple.Create(new Gray(240), new Gray(255));
-
-
-        //static public Tuple<Bgr, Bgr> WinLoseAfterMatch = Tuple.Create(new Bgr(200, 192, 188), new Bgr(255, 255, 255));
-        //static public Tuple<Bgr, Bgr> WinLoseAfterMatchColor = Tuple.Create(new Bgr(0, 0, 0), new Bgr(60, 45, 35));
-        static public Tuple<Gray, Gray> WinLoseAfterMatchGray = Tuple.Create(new Gray(160), new Gray(255));
-
-        static public Tuple<Bgr, Bgr> TimeColor = Tuple.Create(new Bgr(180, 160, 149), new Bgr(230, 230, 190));
-        static public Tuple<Gray, Gray> TimeGray = Tuple.Create(new Gray(190), new Gray(255));
-
-        static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 110, 0), new Bgr(156, 244, 145));//Green only
-        //static public Tuple<Bgr, Bgr> p1Lives = Tuple.Create(new Bgr(0, 60, 180), new Bgr(156, 246, 255));//Orange only
-    }
-
     class Program
     {
         static string FileToPlay;
@@ -86,19 +57,19 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\t7Video\WithPause\Test\2017-07-06_171645014.mp4"
+            ProcessVideo(@"d:\t7Video\EncTest\Success\04930b83-2367-4dd8-b1c6-8c24f9872711.mp4"
                 //, ImageType.Ingame_Player1Name
                 //, ImageType.Ingame_Player2Name
                 //, ImageType.OnSelect_Player1Name
                 //, ImageType.OnSelect_Player2Name
                 //, ImageType.RoundReadyMessage
-                , ImageType.PlayerPause
+                //, ImageType.PlayerPause
                 //, ImageType.KoGoMessage
                 //, ImageType.TitleMenu
                 //, ImageType.Result_Player1
                 //, ImageType.Result_Player2
                 //, ImageType.ResumeGame
-                //, ImageType.p1Wins
+                , ImageType.GameMessages
                 );
         }
 

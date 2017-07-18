@@ -25,7 +25,7 @@ namespace EmguLearnPredict
 
 #if LearningRequired
             
-            TrainModel modTitles = new TrainModel(type, ImageType.PlayerPause);
+            TrainModel modTitles = new TrainModel(type, ImageType.GameMessages);
             modTitles.LoadFromDirectory();
 
 #else
