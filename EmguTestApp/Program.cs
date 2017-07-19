@@ -57,7 +57,7 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\t7Video\EncTest\Success\04930b83-2367-4dd8-b1c6-8c24f9872711.mp4"
+            ProcessVideo(@"d:\t7Video\WithPause\Test\3697985c-19e1-4266-b5ef-e6067877d0b7.mp4"
                 //, ImageType.Ingame_Player1Name
                 //, ImageType.Ingame_Player2Name
                 //, ImageType.OnSelect_Player1Name
