@@ -16,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using EmguWpfApp;
+using System.Collections.ObjectModel;
 
 namespace EmguWpfApp
 {
@@ -25,13 +26,27 @@ namespace EmguWpfApp
     public partial class MainWindow : Window
     {
         public string xFileName;
+        private string xFileNameThres;
+        public ObservableCollection<ThresHoldStruct> ThresHoldCollection = new ObservableCollection<ThresHoldStruct>
+        {
+            new ThresHoldStruct("ThresHoldAdaptive"),
+            new ThresHoldStruct("ThresHoldBinaryInv"),
+            new ThresHoldStruct("ThresHoldBinary"),
+            new ThresHoldStruct("ThresHoldToZeroInv"),
+            new ThresHoldStruct("ThresHoldToZero"),
+            new ThresHoldStruct("ThresHoldTrunc"),
+        };
+
         public MainWindow()
         {
             InitializeComponent();
+            ThresHold_Combobox.ItemsSource = ThresHoldCollection;
+            ThresHold_Combobox.DisplayMemberPath = "Name";
         }
 
         private void MenuItemOpen_Click(object sender, RoutedEventArgs e)
         {
+            MenuItem mItem = (MenuItem)sender;
             try
             {
                 OpenFileDialog dlg = new OpenFileDialog();
@@ -43,10 +58,18 @@ namespace EmguWpfApp
                 if (res == true)
                 {
                     //MessageBox.Show($"File chosen:{dlg.FileName}");
-
-                    xFileName = dlg.FileName;
-                    Image<Rgb, byte> img = new Image<Rgb, byte>(xFileName);
-                    ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    if (mItem.Name == "FileOpenHeader_InRangeTab")
+                    {
+                        xFileName = dlg.FileName;
+                        Image<Rgb, byte> img = new Image<Rgb, byte>(xFileName);
+                        ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    }
+                    else if (mItem.Name == "FileOpenHeader_ThresHoldTab")
+                    {
+                        xFileNameThres = dlg.FileName;
+                        Image<Rgb, byte> img = new Image<Rgb, byte>(xFileNameThres);
+                        ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    }
                 }
             }
             catch (Exception ex)
@@ -92,6 +115,119 @@ namespace EmguWpfApp
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //Slider curSlider = (Slider)sender;
+            if (ThresHold_Combobox.SelectedValue != null && string.IsNullOrEmpty(xFileNameThres) == false)
+            {
+                Image<Bgr, byte> img = new Image<Bgr, byte>(xFileNameThres);
+                ThresHoldStruct curStruct = (ThresHoldStruct)ThresHold_Combobox.SelectedItem;
+                //var y = ThresHold_Combobox.SelectedValue;
+                curStruct.ThresHoldBlue = ThresHoldColor_blue.Value;
+                curStruct.ThresHoldGreen = ThresHoldColor_green.Value;
+                curStruct.ThresHoldRed = ThresHoldColor_red.Value;
+
+                curStruct.MaxValueBlue = ThresHoldMaxValue_blue.Value;
+                curStruct.MaxValueGreen = ThresHoldMaxValue_green.Value;
+                curStruct.MaxValueRed = ThresHoldMaxValue_red.Value;
+
+                switch (curStruct.Name)
+                {
+                    case "ThresHoldBinary":
+                        img._ThresholdBinary(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed)
+                            , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreen, curStruct.MaxValueRed));
+                        break;
+                    case "ThresHoldBinaryInv":
+                        img._ThresholdBinaryInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed)
+                            , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreen, curStruct.MaxValueRed));
+                        break;
+                    case "ThresHoldToZeroInv":
+                        img._ThresholdToZeroInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed));
+                        break;
+                    case "ThresHoldToZero":
+                        img._ThresholdToZero(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed));
+                        break;
+                    case "ThresHoldTrunc":
+                        img._ThresholdTrunc(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed));
+                        break;
+                    case "ThresHoldAdaptive":
+
+                        break;
+
+                }
+                ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
+                img.Dispose();
+            }
+        }
+    }
+
+    public class ThresHoldStruct
+    {
+        string _name;
+        double _ThresHoldBlueValue;
+        double _ThresHoldGreenValue;
+        double _ThresHoldRedValue;
+
+        double _MaxValueBlue;
+        double _MaxValueGreen;
+        double _MaxValueRed;
+
+        public string Name
+        {
+            get { return _name; }
+            set { _name = value; }
+        }
+        public double[] GetBGR
+        {
+            get { return new double[3] { _ThresHoldBlueValue, _ThresHoldGreenValue, _ThresHoldRedValue }; }
+        }
+        public double ThresHoldBlue
+        {
+            get { return _ThresHoldBlueValue; }
+            set { _ThresHoldBlueValue = value; }
+        }
+
+        public double ThresHoldRed
+        {
+            get { return _ThresHoldRedValue; }
+            set { _ThresHoldRedValue = value; }
+        }
+
+        public double ThresHoldGreen
+        {
+            get { return _ThresHoldGreenValue; }
+            set { _ThresHoldGreenValue = value; }
+        }
+
+        public double MaxValueBlue
+        {
+            get { return _MaxValueBlue; }
+            set { _MaxValueBlue = value; }
+        }
+
+        public double MaxValueGreen
+        {
+            get { return _MaxValueGreen; }
+            set { _MaxValueGreen = value; }
+        }
+
+        public double MaxValueRed
+        {
+            get { return _MaxValueRed; }
+            set { _MaxValueRed = value; }
+        }
+
+        public ThresHoldStruct(string name)
+        {
+            Name = name;
+            _ThresHoldBlueValue = 0;
+            _ThresHoldGreenValue = 0;
+            _ThresHoldRedValue = 0;
+            _MaxValueBlue = 0;
+            _MaxValueGreen = 0;
+            _MaxValueRed = 0;
         }
     }
 }
