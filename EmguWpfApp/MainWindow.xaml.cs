@@ -57,17 +57,22 @@ namespace EmguWpfApp
 
                 if (res == true)
                 {
+                    IImage img;
                     //MessageBox.Show($"File chosen:{dlg.FileName}");
                     if (mItem.Name == "FileOpenHeader_InRangeTab")
                     {
                         xFileName = dlg.FileName;
-                        Image<Rgb, byte> img = new Image<Rgb, byte>(xFileName);
+                        img = new Image<Rgb, byte>(xFileName);
                         ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
                     }
                     else if (mItem.Name == "FileOpenHeader_ThresHoldTab")
                     {
                         xFileNameThres = dlg.FileName;
-                        Image<Rgb, byte> img = new Image<Rgb, byte>(xFileNameThres);
+                        if (ThresHold_Color_CheckBox.IsChecked == true)
+                            img = new Image<Rgb, byte>(xFileNameThres);
+                        else
+                            img = new Image<Gray, byte>(xFileNameThres);
+
                         ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
                     }
                 }
@@ -122,35 +127,58 @@ namespace EmguWpfApp
             //Slider curSlider = (Slider)sender;
             if (ThresHold_Combobox.SelectedValue != null && string.IsNullOrEmpty(xFileNameThres) == false)
             {
-                Image<Bgr, byte> img = new Image<Bgr, byte>(xFileNameThres);
+                IImage img;
+                if (ThresHold_Color_CheckBox.IsChecked == true)
+                    img = new Image<Bgr, byte>(xFileNameThres);
+                else
+                    img = new Image<Gray, byte>(xFileNameThres);
                 ThresHoldStruct curStruct = (ThresHoldStruct)ThresHold_Combobox.SelectedItem;
                 //var y = ThresHold_Combobox.SelectedValue;
                 curStruct.ThresHoldBlue = ThresHoldColor_blue.Value;
-                curStruct.ThresHoldGreen = ThresHoldColor_green.Value;
+                curStruct.ThresHoldGreenOrGray = ThresHoldColor_green.Value;
                 curStruct.ThresHoldRed = ThresHoldColor_red.Value;
 
                 curStruct.MaxValueBlue = ThresHoldMaxValue_blue.Value;
-                curStruct.MaxValueGreen = ThresHoldMaxValue_green.Value;
+                curStruct.MaxValueGreenOrGray = ThresHoldMaxValue_green.Value;
                 curStruct.MaxValueRed = ThresHoldMaxValue_red.Value;
 
                 switch (curStruct.Name)
                 {
                     case "ThresHoldBinary":
-                        img._ThresholdBinary(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed)
-                            , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreen, curStruct.MaxValueRed));
+                        if (ThresHold_Color_CheckBox.IsChecked == true)
+                        {
+                            ((Image<Bgr, byte>)img)._ThresholdBinary(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed)
+                                , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreenOrGray, curStruct.MaxValueRed));
+                        }
+                        else
+                            ((Image<Gray, byte>)img)._ThresholdBinary(new Gray(curStruct.ThresHoldGreenOrGray), new Gray(curStruct.MaxValueGreenOrGray));
                         break;
                     case "ThresHoldBinaryInv":
-                        img._ThresholdBinaryInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed)
-                            , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreen, curStruct.MaxValueRed));
+                        if (ThresHold_Color_CheckBox.IsChecked == true)
+                        {
+                            ((Image<Bgr, byte>)img)._ThresholdBinaryInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed)
+                            , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreenOrGray, curStruct.MaxValueRed));
+                        }
+                        else
+                            ((Image<Gray, byte>)img)._ThresholdBinaryInv(new Gray(curStruct.ThresHoldGreenOrGray), new Gray(curStruct.MaxValueGreenOrGray));
                         break;
                     case "ThresHoldToZeroInv":
-                        img._ThresholdToZeroInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed));
+                        if (ThresHold_Color_CheckBox.IsChecked == true)
+                            ((Image<Bgr, byte>)img)._ThresholdToZeroInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed));
+                        else
+                            ((Image<Gray, byte>)img)._ThresholdToZeroInv(new Gray(curStruct.ThresHoldGreenOrGray));
                         break;
                     case "ThresHoldToZero":
-                        img._ThresholdToZero(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed));
+                        if (ThresHold_Color_CheckBox.IsChecked == true)
+                            ((Image<Bgr, byte>)img)._ThresholdToZero(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed));
+                        else
+                            ((Image<Gray, byte>)img)._ThresholdToZero(new Gray(curStruct.ThresHoldGreenOrGray));
                         break;
                     case "ThresHoldTrunc":
-                        img._ThresholdTrunc(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreen, curStruct.ThresHoldRed));
+                        if (ThresHold_Color_CheckBox.IsChecked == true)
+                            ((Image<Bgr, byte>)img)._ThresholdTrunc(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed));
+                        else
+                            ((Image<Gray, byte>)img)._ThresholdTrunc(new Gray(curStruct.ThresHoldGreenOrGray));
                         break;
                     case "ThresHoldAdaptive":
 
@@ -167,11 +195,11 @@ namespace EmguWpfApp
     {
         string _name;
         double _ThresHoldBlueValue;
-        double _ThresHoldGreenValue;
+        double _ThresHoldGreenOrGrayValue;
         double _ThresHoldRedValue;
 
         double _MaxValueBlue;
-        double _MaxValueGreen;
+        double _MaxValueGreenOrGray;
         double _MaxValueRed;
 
         public string Name
@@ -181,7 +209,7 @@ namespace EmguWpfApp
         }
         public double[] GetBGR
         {
-            get { return new double[3] { _ThresHoldBlueValue, _ThresHoldGreenValue, _ThresHoldRedValue }; }
+            get { return new double[3] { _ThresHoldBlueValue, _ThresHoldGreenOrGrayValue, _ThresHoldRedValue }; }
         }
         public double ThresHoldBlue
         {
@@ -195,10 +223,10 @@ namespace EmguWpfApp
             set { _ThresHoldRedValue = value; }
         }
 
-        public double ThresHoldGreen
+        public double ThresHoldGreenOrGray
         {
-            get { return _ThresHoldGreenValue; }
-            set { _ThresHoldGreenValue = value; }
+            get { return _ThresHoldGreenOrGrayValue; }
+            set { _ThresHoldGreenOrGrayValue = value; }
         }
 
         public double MaxValueBlue
@@ -207,10 +235,10 @@ namespace EmguWpfApp
             set { _MaxValueBlue = value; }
         }
 
-        public double MaxValueGreen
+        public double MaxValueGreenOrGray
         {
-            get { return _MaxValueGreen; }
-            set { _MaxValueGreen = value; }
+            get { return _MaxValueGreenOrGray; }
+            set { _MaxValueGreenOrGray = value; }
         }
 
         public double MaxValueRed
@@ -223,10 +251,10 @@ namespace EmguWpfApp
         {
             Name = name;
             _ThresHoldBlueValue = 0;
-            _ThresHoldGreenValue = 0;
+            _ThresHoldGreenOrGrayValue = 0;
             _ThresHoldRedValue = 0;
             _MaxValueBlue = 0;
-            _MaxValueGreen = 0;
+            _MaxValueGreenOrGray = 0;
             _MaxValueRed = 0;
         }
     }

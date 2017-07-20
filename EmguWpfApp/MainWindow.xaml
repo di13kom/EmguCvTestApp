@@ -194,8 +194,12 @@
                 </DockPanel>
                 <StackPanel x:Name="Panel1_ThresHoldTab" Grid.Row="2" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <ComboBox x:Name="ThresHold_Combobox"></ComboBox>
+                    <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
+                        <Label>Use Color Threshold?</Label>
+                        <CheckBox x:Name="ThresHold_Color_CheckBox" IsChecked="False" Margin="5"/>
+                    </DockPanel>
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>
-                    <DockPanel>
+                    <DockPanel IsEnabled="{Binding ElementName=ThresHold_Color_CheckBox,Path=IsChecked}">
                         <Label>B</Label>
                         <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldColor_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ThresHoldColor_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
@@ -207,7 +211,7 @@
                         <Slider x:Name="ThresHoldColor_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
                     </DockPanel>
-                    <DockPanel>
+                    <DockPanel IsEnabled="{Binding ElementName=ThresHold_Color_CheckBox,Path=IsChecked}">
                         <Label>R</Label>
                         <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldColor_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                         <Slider x:Name="ThresHoldColor_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
@@ -216,7 +220,7 @@
                 </StackPanel>
                 <StackPanel x:Name="Panel2_ThresHoldTab" Grid.Row="3" Margin="10,0,10,0">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMax</Label>
-                    <DockPanel>
+                    <DockPanel IsEnabled="{Binding ElementName=ThresHold_Color_CheckBox,Path=IsChecked}">
                         <Label>B</Label>
                         <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldMaxValue_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ThresHoldMaxValue_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
@@ -228,14 +232,14 @@
                         <Slider x:Name="ThresHoldMaxValue_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
                     </DockPanel>
-                    <DockPanel>
+                    <DockPanel IsEnabled="{Binding ElementName=ThresHold_Color_CheckBox,Path=IsChecked}">
                         <Label>R</Label>
                         <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldMaxValue_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                         <Slider x:Name="ThresHoldMaxValue_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
                     </DockPanel>
                 </StackPanel>
-                
+
                 <Border Grid.Row="4" MinHeight="100" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
                     <Image x:Name="ImageViewer_ThresHoldTab" />
                 </Border>
