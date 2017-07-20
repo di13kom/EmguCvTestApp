@@ -35,42 +35,42 @@
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <Slider x:Name="ColorMin_blue" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMin_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ColorMin_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ColorMin_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <Slider x:Name="ColorMin_green" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMin_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ColorMin_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ColorMin_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <Slider x:Name="ColorMin_red" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMin_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                        <Slider x:Name="ColorMin_red" Minimum="0" Maximum="255"  IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ColorMin_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                     </DockPanel>
                 </StackPanel>
-                <StackPanel x:Name="Panel2" Grid.Row="3" Margin="10,0,10,0">
+                <StackPanel x:Name="Panel2" Grid.Row="3" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMax</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <Slider x:Name="ColorMax_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMax_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ColorMax_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ColorMax_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <Slider x:Name="ColorMax_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMax_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ColorMax_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ColorMax_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <Slider x:Name="ColorMax_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMax_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ColorMax_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ColorMax_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                 </StackPanel>
                 <Border Grid.Row="4" HorizontalAlignment="Stretch" BorderThickness="1" Background="GhostWhite" BorderBrush="Gainsboro">
@@ -79,11 +79,12 @@
                         <Label>Synchronize ColorRange and ColorMask?</Label>
                     </DockPanel>
                 </Border>
-                <StackPanel x:Name="Panel3" Grid.Row="5" Margin="10,0,10,0" IsEnabled="{Binding Path=IsChecked, ElementName=ColorMask_Sync,Converter={StaticResource SyncConverter}}">
+                <StackPanel x:Name="Panel3" Grid.Row="5" Margin="10,0,10,0" IsEnabled="{Binding Path=IsChecked, ElementName=ColorMask_Sync,Converter={StaticResource SyncConverter}}" HorizontalAlignment="Stretch">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMin</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <Slider x:Name="MaskMin_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMin_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="MaskMin_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" ValueChanged="Color_ValueChanged">
                             <Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
@@ -93,11 +94,11 @@
                                 </MultiBinding>
                             </Slider.Value>
                         </Slider>
-                        <TextBox Text="{Binding ElementName=MaskMin_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <Slider x:Name="MaskMin_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMin_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="MaskMin_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" ValueChanged="Color_ValueChanged">
                             <Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
@@ -107,11 +108,11 @@
                                 </MultiBinding>
                             </Slider.Value>
                         </Slider>
-                        <TextBox Text="{Binding ElementName=MaskMin_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <Slider x:Name="MaskMin_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMin_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="MaskMin_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" ValueChanged="Color_ValueChanged">
                             <Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
@@ -121,14 +122,14 @@
                                 </MultiBinding>
                             </Slider.Value>
                         </Slider>
-                        <TextBox Text="{Binding ElementName=MaskMin_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel x:Name="Panel4" Grid.Row="6" Margin="10,0,10,0" IsEnabled="{Binding Path=IsChecked, ElementName=ColorMask_Sync,Converter={StaticResource SyncConverter}}">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMax</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <Slider x:Name="MaskMax_blue" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMax_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="MaskMax_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" ValueChanged="Color_ValueChanged">
                             <Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
@@ -138,11 +139,11 @@
                                 </MultiBinding>
                             </Slider.Value>
                         </Slider>
-                        <TextBox Text="{Binding ElementName=MaskMax_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <Slider x:Name="MaskMax_green" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMax_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="MaskMax_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" ValueChanged="Color_ValueChanged">
                             <Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
@@ -152,11 +153,11 @@
                                 </MultiBinding>
                             </Slider.Value>
                         </Slider>
-                        <TextBox Text="{Binding ElementName=MaskMax_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <Slider x:Name="MaskMax_red" Minimum="0" Maximum="255" Width="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMax_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="MaskMax_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
                         TickFrequency="1" ValueChanged="Color_ValueChanged">
                             <Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
@@ -166,7 +167,6 @@
                                 </MultiBinding>
                             </Slider.Value>
                         </Slider>
-                        <TextBox Text="{Binding ElementName=MaskMax_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                 </StackPanel>
                 <Border Grid.Row="7" MinHeight="100" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
@@ -180,8 +180,8 @@
                 <Grid.RowDefinitions>
                     <RowDefinition MaxHeight="20"></RowDefinition>
                     <RowDefinition MaxHeight="20"></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                 </Grid.RowDefinitions>
 
@@ -197,79 +197,42 @@
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <Slider x:Name="ThresHoldColor_blue" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldColor_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ThresHoldColor_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldColor_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <Slider x:Name="ThresHoldColor_green" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldColor_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ThresHoldColor_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldColor_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <Slider x:Name="ThresHoldColor_red" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldColor_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                        <Slider x:Name="ThresHoldColor_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldColor_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                     </DockPanel>
-                    <!--<Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>-->
-                    <!--<DockPanel>
-                        <Label Width="120">ThresHoldAdaptive</Label>
-                        <Slider x:Name="ThresHoldAdaptive_ThresHoldTab" Minimum="0" Maximum="255" MinWidth="350" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldAdaptive_ThresHoldTab,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <Label Width="120">ThresHoldBinary</Label>
-                        <Slider x:Name="ThresHoldBinary_ThresHoldTab" Minimum="0" Maximum="255" MinWidth="350" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldBinary_ThresHoldTab,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <Label Width="120">ThresHoldBinaryInv</Label>
-                        <Slider x:Name="ThresHoldBinaryInv_ThresHoldTab" Minimum="0" Maximum="255" MinWidth="350" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldBinaryInv_ThresHoldTab,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
-                    </DockPanel>-->
                 </StackPanel>
                 <StackPanel x:Name="Panel2_ThresHoldTab" Grid.Row="3" Margin="10,0,10,0">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMax</Label>
-                    <!--<DockPanel>
-                        <Label Width="120">ThresHoldToZero</Label>
-                        <Slider x:Name="ThresHoldToZero_ThresHoldTab" Minimum="0" Maximum="255" Width="350" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldToZero_ThresHoldTab,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <Label Width="120">ThresHoldToZeroInv</Label>
-                        <Slider x:Name="ThresHoldToZeroInv_ThresHoldTab" Minimum="0" Maximum="255" Width="350" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldToZeroInv_ThresHoldTab,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
-                    </DockPanel>
-                    <DockPanel>
-                        <Label Width="120">ThresHoldTrunc</Label>
-                        <Slider x:Name="ThresHoldTrunc_ThresHoldTab" Minimum="0" Maximum="255" Width="350" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldTrunc_ThresHoldTab,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
-                    </DockPanel>-->
                     <DockPanel>
                         <Label>B</Label>
-                        <Slider x:Name="ThresHoldMaxValue_blue" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldMaxValue_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ThresHoldMaxValue_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldMaxValue_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <Slider x:Name="ThresHoldMaxValue_green" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldMaxValue_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <Slider x:Name="ThresHoldMaxValue_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldMaxValue_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <Slider x:Name="ThresHoldMaxValue_red" Minimum="0" Maximum="255" MinWidth="450" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
+                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ThresHoldMaxValue_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                        <Slider x:Name="ThresHoldMaxValue_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
                         TickFrequency="1" Value="0" ValueChanged="ThresHold_ValueChanged"/>
-                        <TextBox Text="{Binding ElementName=ThresHoldMaxValue_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                     </DockPanel>
                 </StackPanel>
                 
