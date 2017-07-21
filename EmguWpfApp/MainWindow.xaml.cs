@@ -36,6 +36,7 @@ namespace EmguWpfApp
             new ThresHoldStruct("ThresHoldToZero"),
             new ThresHoldStruct("ThresHoldTrunc"),
         };
+        private string CannyFileName;
 
         public MainWindow()
         {
@@ -74,6 +75,12 @@ namespace EmguWpfApp
                             img = new Image<Gray, byte>(xFileNameThres);
 
                         ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    }
+                    else if (mItem.Name == "FileOpenHeader_CannyTab")
+                    {
+                        CannyFileName = dlg.FileName;
+                        img = new Image<Rgb, byte>(CannyFileName);
+                        CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
                     }
                 }
             }
@@ -187,6 +194,20 @@ namespace EmguWpfApp
                 }
                 ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
                 img.Dispose();
+            }
+        }
+
+        private void Canny_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            try
+            {
+                Image<Gray, byte> img = new Image<Bgr, byte>(CannyFileName).Canny(CannyTab_ThresholdParam.Value, CannyTab_ThresholdLinkingParam.Value, 3, true);
+                CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
+                img.Dispose();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Error);
             }
         }
     }
