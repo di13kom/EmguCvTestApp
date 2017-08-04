@@ -9,15 +9,16 @@
     <Window.Resources>
         <local:SyncConverter x:Key="SyncConverter" />
         <local:ValueConverter x:Key="ValueConverter"/>
+        <local:StrToIntConverter x:Key="StrToIntConverter"/>
     </Window.Resources>
     <TabControl >
-        <TabItem Header="InRange">
+        <TabItem x:Name="InRangeTab" Header="InRange" IsEnabled="{Binding Path=IsEnabled}">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition MaxHeight="20"></RowDefinition>
                     <RowDefinition MaxHeight="100"></RowDefinition>
                     <RowDefinition MaxHeight="100"></RowDefinition>
-                    
+
                     <RowDefinition MaxHeight="30"></RowDefinition>
                     <RowDefinition MaxHeight="100"></RowDefinition>
                     <RowDefinition MaxHeight="100"></RowDefinition>
@@ -25,57 +26,57 @@
                 </Grid.RowDefinitions>
 
                 <DockPanel Grid.Row="0">
-                    <Menu DockPanel.Dock="Top">
+                    <!--<Menu DockPanel.Dock="Top">
                         <MenuItem Header="File">
                             <MenuItem Header="_Open" Click="MenuItemOpen_Click" x:Name="FileOpenHeader_InRangeTab"/>
                         </MenuItem>
-                    </Menu>
+                    </Menu>-->
                 </DockPanel>
                 <StackPanel x:Name="Panel1" Grid.Row="1" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMin_blue,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=ColorMinBlue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ColorMin_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ColorMinBlue, Mode=TwoWay}" ValueChanged="Color_ValueChanged"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMin_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=ColorMinGreen,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ColorMin_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ColorMinGreen,Mode=TwoWay}" ValueChanged="Color_ValueChanged"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMin_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=ColorMinRed,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25" />
                         <Slider x:Name="ColorMin_red" Minimum="0" Maximum="255"  IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ColorMinRed,Mode=TwoWay}" ValueChanged="Color_ValueChanged"/>
                     </DockPanel>
                 </StackPanel>
                 <StackPanel x:Name="Panel2" Grid.Row="2" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMax</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMax_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=ColorMaxBlue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ColorMax_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ColorMaxBlue,Mode=TwoWay}" ValueChanged="Color_ValueChanged"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMax_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=ColorMaxGreen,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ColorMax_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ColorMaxGreen,Mode=TwoWay}" ValueChanged="Color_ValueChanged"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=ColorMax_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=ColorMaxRed,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="ColorMax_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" Value="255" ValueChanged="Color_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ColorMaxRed,Mode=TwoWay}" ValueChanged="Color_ValueChanged"/>
                     </DockPanel>
                 </StackPanel>
                 <Border Grid.Row="3" HorizontalAlignment="Stretch" BorderThickness="1" Background="GhostWhite" BorderBrush="Gainsboro">
                     <DockPanel HorizontalAlignment="Center"  VerticalAlignment="Center">
-                        <CheckBox x:Name="ColorMask_Sync" IsChecked="True" Margin="5"/>
+                        <CheckBox x:Name="ColorMask_Sync" IsChecked="{Binding Path=IsColorMaskSync, Mode=TwoWay}" Margin="5"/>
                         <Label>Synchronize ColorRange and ColorMask?</Label>
                     </DockPanel>
                 </Border>
@@ -185,11 +186,11 @@
                 </Grid.RowDefinitions>
 
                 <DockPanel Grid.Row="0">
-                    <Menu DockPanel.Dock="Top">
+                    <!--<Menu DockPanel.Dock="Top">
                         <MenuItem Header="File" >
                             <MenuItem Header="_Open" Click="MenuItemOpen_Click" x:Name="FileOpenHeader_ThresHoldTab"/>
                         </MenuItem>
-                    </Menu>
+                    </Menu>-->
                 </DockPanel>
                 <StackPanel x:Name="Panel1_ThresHoldTab" Grid.Row="1" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <ComboBox x:Name="ThresHold_Combobox"></ComboBox>
@@ -245,39 +246,100 @@
             </Grid>
 
         </TabItem>
-        <TabItem Header="Canny">
+        <TabItem Header="Canny" x:Name="CannyTab" IsEnabled="{Binding Path=IsEnabled}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition MaxHeight="20"></RowDefinition>
+                    <RowDefinition Height="40"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="*"></RowDefinition>
                 </Grid.RowDefinitions>
 
-                <DockPanel Grid.Row="0">
-                    <Menu DockPanel.Dock="Top">
+                <Border Grid.Row="0" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
+                    <DockPanel Grid.Row="0" HorizontalAlignment="Stretch">
+                        <!--<Menu DockPanel.Dock="Top">
                         <MenuItem Header="File">
                             <MenuItem Header="_Open" Click="MenuItemOpen_Click" x:Name="FileOpenHeader_CannyTab"/>
                         </MenuItem>
-                    </Menu>
-                </DockPanel>
+                    </Menu>-->
+                        <Label>I2Gradient</Label>
+                        <CheckBox x:Name="CannyTab_Checkbox_I2Gradien" IsChecked="{Binding Path=I2Gradient,Mode=TwoWay}" Checked="CannyTab_Checkbox_I2Gradien_Checked" Unchecked="CannyTab_Checkbox_I2Gradien_Checked"></CheckBox>
+                        <Label>Aperture</Label>
+                        <!--<ListBox x:Name="CannyTab_ListBox_Aperture" SelectedValue="{Binding Path=ApertureSize,Mode=TwoWay}" SelectionChanged="CannyTab_ListBox_Aperture_SelectionChanged" SelectionMode="Single"/>-->
+                        <Slider x:Name="CannyTab_Aperture_Slider" Minimum="3" Maximum="7" Value="{Binding Path=ApertureSize,Mode=TwoWay}" TickFrequency="2" 
+                                MinWidth="100" IsSnapToTickEnabled="True" TickPlacement="BottomRight" ValueChanged="CannyTab_Aperture_Slider_ValueChanged"/>
+                        <TextBlock  Text="{Binding Path=ApertureSize}"></TextBlock>
+                    </DockPanel>
+                </Border>
                 <StackPanel x:Name="CannyTab_Panel1" Grid.Row="1" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">Canny Param</Label>
                     <DockPanel>
                         <Label>B</Label>
                         <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=CannyTab_ThresholdParam,Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="CannyTab_ThresholdParam" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="Canny_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ThresholdParam,Mode=TwoWay}" ValueChanged="Canny_ValueChanged"/>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
                         <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=CannyTab_ThresholdLinkingParam,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="CannyTab_ThresholdLinkingParam" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" Value="0" ValueChanged="Canny_ValueChanged"/>
+                        TickFrequency="1" Value="{Binding Path=ThresholdLinkingParam,Mode=TwoWay}" ValueChanged="Canny_ValueChanged"/>
                     </DockPanel>
                 </StackPanel>
                 <Border Grid.Row="2" MinHeight="100" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
                     <Image x:Name="CannyTab_ImageViewer" />
                 </Border>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Canvas">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="20"></RowDefinition>
+                    <!--<RowDefinition MaxHeight="100"></RowDefinition>
+                    <RowDefinition MaxHeight="100"></RowDefinition>-->
+
+                    <RowDefinition MaxHeight="30"></RowDefinition>
+                    <RowDefinition MaxHeight="30"></RowDefinition>
+                    <!--<RowDefinition MaxHeight="100"></RowDefinition>-->
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <DockPanel Grid.Row="0">
+                    <Menu DockPanel.Dock="Top">
+                        <MenuItem Header="File" >
+                            <MenuItem Header="_Open" Click="FileOpenHeader_CanvasTab_Click"  x:Name="FileOpenHeader_CanvasTab"/>
+                        </MenuItem>
+                    </Menu>
+                </DockPanel>
+                <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                    <Button Margin="5" x:Name="PlayButton_CanvasTab" ToolTip="Play" Click="PlayButton_Click_CanvasTab" IsEnabled="False">
+                        <Image Source="..\..\Resources\PlayButton.png"/>
+                    </Button>
+                    <!--<Button Margin="5" ToolTip="Pause" Click="PauseButton_Click_CanvasTab" IsEnabled="False">
+                        <Image Source="..\..\Resources\PauseButton.png"/>
+                    </Button>-->
+                    <Button Margin="5" x:Name="StopButton_CanvasTab" ToolTip="Stop" Click="StopButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
+                        <Image Source="..\..\Resources\StopButton.png"/>
+                    </Button>
+                </WrapPanel>
+                <Border Grid.Row="2" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="Tbox_CanvasTab" VerticalAlignment="Center" Padding="5"></TextBlock>
+                        <Label>InRange</Label>
+                        <CheckBox x:Name="InRangeCheckBox_CanvasTab" IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
+                        <Label>ThresHold</Label>
+                        <CheckBox x:Name="ThresHoldCheckBox_CanvasTab" IsChecked="False"/>
+                        <Label VerticalAlignment="Center">Canny</Label>
+                        <CheckBox x:Name="CannyCheckBox_CanvasTab"  IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
+                    </WrapPanel>
+                </Border>
+                <Canvas Grid.Row="3" x:Name="CanvasElement_CanvasTab" 
+                        MouseLeftButtonDown="CanvasElement_CanvasTab_MouseLeftButtonDown" 
+                        MouseMove="CanvasElement_CanvasTab_MouseMove" 
+                        MouseLeftButtonUp="CanvasElement_CanvasTab_MouseLeftButtonUp"
+                        Background="Transparent">
+                    <!--PreviewMouseLeftButtonUp="CanvasElement_CanvasTab_MouseLeftButtonUp"-->
+                    <Image x:Name="ImageViewer_CanvasTab"/>
+                    <!--<Image x:Name="ImageViewer_CanvasTab" Width="{Binding ElementName=CanvasElement_CanvasTab,Path=ActualWidth}" Height="{Binding ElementName=CanvasElement_CanvasTab, Path=ActualHeight}"/>-->
+                </Canvas>
             </Grid>
         </TabItem>
     </TabControl>
