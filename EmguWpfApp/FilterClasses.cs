@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Emgu.CV;
+using Emgu.CV.Structure;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -136,6 +138,54 @@ namespace EmguWpfApp
         {
             CurrentThresHoldValue = AvailibleThresholdValues[2];
         }
+
+        public IImage ProccessImage(Image<Bgr, byte> inImage)
+        {
+            IImage img = null;
+            switch (CurrentThresHoldValue)
+            {
+                case "ThresHoldBinary":
+                    if (IsColorEnabled == true)
+                    {
+                        img = inImage.ThresholdBinary(new Bgr(ThresHoldBlue, ThresHoldGreenOrGray, ThresHoldRed)
+                             , new Bgr(MaxValueBlue, MaxValueGreenOrGray, MaxValueRed));
+                    }
+                    else
+                        img = inImage.Convert<Gray, byte>().ThresholdBinary(new Gray(ThresHoldGreenOrGray), new Gray(MaxValueGreenOrGray));
+                    break;
+                case "ThresHoldBinaryInv":
+                    if (IsColorEnabled == true)
+                    {
+                        img = inImage.ThresholdBinaryInv(new Bgr(ThresHoldBlue, ThresHoldGreenOrGray, ThresHoldRed)
+                        , new Bgr(MaxValueBlue, MaxValueGreenOrGray, MaxValueRed));
+                    }
+                    else
+                        img = inImage.Convert<Gray, byte>().ThresholdBinaryInv(new Gray(ThresHoldGreenOrGray), new Gray(MaxValueGreenOrGray));
+                    break;
+                case "ThresHoldToZeroInv":
+                    if (IsColorEnabled == true)
+                        img = inImage.ThresholdToZeroInv(new Bgr(ThresHoldBlue, ThresHoldGreenOrGray, ThresHoldRed));
+                    else
+                        img = inImage.Convert<Gray, byte>().ThresholdToZeroInv(new Gray(ThresHoldGreenOrGray));
+                    break;
+                case "ThresHoldToZero":
+                    if (IsColorEnabled == true)
+                        img = inImage.ThresholdToZero(new Bgr(ThresHoldBlue, ThresHoldGreenOrGray, ThresHoldRed));
+                    else
+                        img = inImage.Convert<Gray, byte>().ThresholdToZero(new Gray(ThresHoldGreenOrGray));
+                    break;
+                case "ThresHoldTrunc":
+                    if (IsColorEnabled == true)
+                        img = inImage.ThresholdTrunc(new Bgr(ThresHoldBlue, ThresHoldGreenOrGray, ThresHoldRed));
+                    else
+                        img = inImage.Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHoldGreenOrGray));
+                    break;
+                case "ThresHoldAdaptive":
+
+                    break;
+            }
+            return img;
+        }
     }
 
     public class CannyStruct : INotifyPropertyChanged
@@ -220,6 +270,12 @@ namespace EmguWpfApp
                     NotifyPropertyChanged("i2Gradient");
                 }
             }
+        }
+
+        public Image<Gray, byte> ProccessImage(Image<Bgr, byte> inImage)
+        {
+            Image<Gray, byte> img = inImage.Canny(ThresholdParam, ThresholdLinkingParam, ApertureSize, I2Gradient);
+            return img;
         }
     }
 
@@ -437,6 +493,21 @@ namespace EmguWpfApp
                     NotifyPropertyChanged("MaskMinBlue");
                 }
             }
+        }
+
+        public Image<Gray, byte> ProccessImage(Image<Bgr, byte> inImage)
+        {
+            Image<Gray, byte> img = inImage.InRange(new Bgr(ColorMinBlue, ColorMinGreen, ColorMinRed)
+                        , new Bgr(ColorMaxBlue, ColorMaxGreen, ColorMaxRed));
+            if (IsColorMaskSync == false)
+            {
+                using (Image<Gray, byte> mask = inImage.InRange(new Bgr(MaskMinBlue, MaskMinGreen, MaskMinRed)
+                    , new Bgr(MaskMaxBlue, MaskMaxGreen, MaskMaxRed)))
+                {
+                    img = img.Or(mask);
+                }
+            }
+            return img;
         }
     }
 }

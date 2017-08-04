@@ -83,44 +83,44 @@
                     <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMin</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMin_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=MaskMinBlue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="MaskMin_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" ValueChanged="Color_ValueChanged">
-                            <Slider.Value>
+                        TickFrequency="1" ValueChanged="Color_ValueChanged" Value="{Binding Path=MaskMinBlue,Mode=TwoWay}">
+                            <!--<Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
                                     <Binding Path="IsEnabled" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" ElementName="ColorMin_blue"/>
                                 </MultiBinding>
-                            </Slider.Value>
+                            </Slider.Value>-->
                         </Slider>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMin_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=MaskMinGreen,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="MaskMin_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" ValueChanged="Color_ValueChanged">
-                            <Slider.Value>
+                        TickFrequency="1" ValueChanged="Color_ValueChanged" Value="{Binding Path=MaskMinGreen,Mode=TwoWay}">
+                            <!--<Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
                                     <Binding Path="IsEnabled" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" ElementName="ColorMin_green"/>
                                 </MultiBinding>
-                            </Slider.Value>
+                            </Slider.Value>-->
                         </Slider>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMin_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=MaskMinRed,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="MaskMin_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" ValueChanged="Color_ValueChanged">
-                            <Slider.Value>
+                        TickFrequency="1" ValueChanged="Color_ValueChanged" Value="{Binding Path=MaskMinRed,Mode=TwoWay}">
+                            <!--<Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
                                     <Binding Path="IsEnabled" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" ElementName="ColorMin_red"/>
                                 </MultiBinding>
-                            </Slider.Value>
+                            </Slider.Value>-->
                         </Slider>
                     </DockPanel>
                 </StackPanel>
@@ -128,44 +128,44 @@
                     <Label HorizontalAlignment="Center" FontWeight="Bold">MaskMax</Label>
                     <DockPanel>
                         <Label>B</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMax_blue,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=MaskMaxBlue,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="MaskMax_blue" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" ValueChanged="Color_ValueChanged">
-                            <Slider.Value>
+                        TickFrequency="1" ValueChanged="Color_ValueChanged" Value="{Binding Path=MaskMaxBlue,Mode=TwoWay}">
+                            <!--<Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
                                     <Binding Path="IsEnabled" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" ElementName="ColorMax_blue"/>
                                 </MultiBinding>
-                            </Slider.Value>
+                            </Slider.Value>-->
                         </Slider>
                     </DockPanel>
                     <DockPanel>
                         <Label>G</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMax_green,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=MaskMaxGreen,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="MaskMax_green" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight" 
-                        TickFrequency="1" ValueChanged="Color_ValueChanged">
-                            <Slider.Value>
+                        TickFrequency="1" ValueChanged="Color_ValueChanged" Value="{Binding Path=MaskMaxGreen,Mode=TwoWay}">
+                            <!--<Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
                                     <Binding Path="IsEnabled" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" ElementName="ColorMax_green"/>
                                 </MultiBinding>
-                            </Slider.Value>
+                            </Slider.Value>-->
                         </Slider>
                     </DockPanel>
                     <DockPanel>
                         <Label>R</Label>
-                        <TextBox DockPanel.Dock="Right" Text="{Binding ElementName=MaskMax_red,Path=Value,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+                        <TextBox DockPanel.Dock="Right" Text="{Binding Path=MaskMaxRed,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
                         <Slider x:Name="MaskMax_red" Minimum="0" Maximum="255" IsSnapToTickEnabled="True" TickPlacement="BottomRight"
-                        TickFrequency="1" ValueChanged="Color_ValueChanged">
-                            <Slider.Value>
+                        TickFrequency="1" ValueChanged="Color_ValueChanged" Value="{Binding Path=MaskMaxRed,Mode=TwoWay}">
+                            <!--<Slider.Value>
                                 <MultiBinding Converter="{StaticResource ValueConverter}">
                                     <Binding Path="IsEnabled" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" RelativeSource="{RelativeSource Mode=Self}"/>
                                     <Binding Path="Value" ElementName="ColorMax_red"/>
                                 </MultiBinding>
-                            </Slider.Value>
+                            </Slider.Value>-->
                         </Slider>
                     </DockPanel>
                 </StackPanel>

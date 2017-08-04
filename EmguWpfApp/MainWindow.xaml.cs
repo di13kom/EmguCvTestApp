@@ -123,18 +123,10 @@ namespace EmguWpfApp
             {
                 if (inRange.IsEnabled)
                 {
-                    Image<Gray, byte> img = ImgRegion.InRange(new Bgr(inRange.ColorMinBlue, inRange.ColorMinGreen, inRange.ColorMinRed)
-                        , new Bgr(inRange.ColorMaxBlue, inRange.ColorMaxGreen, inRange.ColorMaxRed));
-                    if (inRange.IsColorMaskSync == false)
+                    using (IImage img = inRange.ProccessImage(ImgRegion))
                     {
-                        Image<Gray, byte> mask = ImgRegion.InRange(new Bgr(inRange.MaskMinBlue, inRange.MaskMinGreen, inRange.MaskMinRed)
-                            , new Bgr(inRange.MaskMaxBlue, inRange.MaskMaxGreen, inRange.MaskMaxRed));
-                        img = img.Or(mask);
-                        mask.Dispose();
-
+                        ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
                     }
-                    ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
-                    img.Dispose();
                 }
             }
             catch (Exception ex)
@@ -145,60 +137,17 @@ namespace EmguWpfApp
 
         private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //Slider curSlider = (Slider)sender;
             try
             {
                 if (ThresHold.IsEnabled == true)
                 {
-                    IImage img = null;
-                    switch (ThresHold.CurrentThresHoldValue)
+                    using (IImage img = ThresHold.ProccessImage(ImgRegion))
                     {
-                        case "ThresHoldBinary":
-                            if (ThresHold.IsColorEnabled == true)
-                            {
-                                img = ImgRegion.ThresholdBinary(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
-                                     , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed));
-                            }
-                            else
-                                img = ImgRegion.Convert<Gray, byte>().ThresholdBinary(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray));
-                            break;
-                        case "ThresHoldBinaryInv":
-                            if (ThresHold.IsColorEnabled == true)
-                            {
-                                img = ImgRegion.ThresholdBinaryInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
-                                , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed));
-                            }
-                            else
-                                img = ImgRegion.Convert<Gray, byte>().ThresholdBinaryInv(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray));
-                            break;
-                        case "ThresHoldToZeroInv":
-                            if (ThresHold.IsColorEnabled == true)
-                                img = ImgRegion.ThresholdToZeroInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed));
-                            else
-                                img = ImgRegion.Convert<Gray, byte>().ThresholdToZeroInv(new Gray(ThresHold.ThresHoldGreenOrGray));
-                            break;
-                        case "ThresHoldToZero":
-                            if (ThresHold.IsColorEnabled == true)
-                                img = ImgRegion.ThresholdToZero(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed));
-                            else
-                                img = ImgRegion.Convert<Gray, byte>().ThresholdToZero(new Gray(ThresHold.ThresHoldGreenOrGray));
-                            break;
-                        case "ThresHoldTrunc":
-                            if (ThresHold.IsColorEnabled == true)
-                                img = ImgRegion.ThresholdTrunc(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed));
-                            else
-                                img = ImgRegion.Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHold.ThresHoldGreenOrGray));
-                            break;
-                        case "ThresHoldAdaptive":
-
-                            break;
-
+                        ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
                     }
-                    ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
-                    img.Dispose();
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
@@ -214,10 +163,11 @@ namespace EmguWpfApp
         {
             try
             {
-                //Image<Gray, byte> img = new Image<Bgr, byte>(CannyFileName).Canny(CannyTab_ThresholdParam.Value, CannyTab_ThresholdLinkingParam.Value, 3, true);
-                Image<Gray, byte> img = ImgRegion.Canny(Canny.ThresholdParam, Canny.ThresholdLinkingParam, Canny.ApertureSize, Canny.I2Gradient);
-                CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
-                img.Dispose();
+
+                using (IImage img = Canny.ProccessImage(ImgRegion))
+                {
+                    CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
+                }
             }
             catch (Exception ex)
             {
@@ -389,94 +339,38 @@ namespace EmguWpfApp
                 xCp.Retrieve(imgX);
                 //CannyTab_ImageViewer.Dispatcher.Invoke(() => {
                 //imgX = imgX.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
-                if (Canny.IsEnabled == true)
+                double startX = 0;
+                double startY = 0;
+                double wdth = 0;
+                double hgth = 0;
+                if (StartPoint != null && EndPoint != null & rct != null)
                 {
-                    double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
-                    double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
-                    double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
-                    double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
-                    imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))
-                        .Canny(Canny.ThresholdParam, Canny.ThresholdLinkingParam, Canny.ApertureSize, Canny.I2Gradient)
-                        .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
 
-                }
-                else if (inRange.IsEnabled)
-                {
-                    double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
-                    double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
-                    double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
-                    double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
+                    startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
+                    startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
+                    wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
+                    hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
 
-                    //
-                    Image<Gray, byte> inrageImg = imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))
-                        .InRange(new Bgr(inRange.ColorMinBlue, inRange.ColorMinGreen, inRange.ColorMinRed)
-                        , new Bgr(inRange.ColorMaxBlue, inRange.ColorMaxGreen, inRange.ColorMaxRed));
-                    if (inRange.IsColorMaskSync == false)
+                    if (Canny.IsEnabled == true)
                     {
-                        Image<Gray, byte> mask = imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))
-                            .InRange(new Bgr(inRange.MaskMinBlue, inRange.MaskMinGreen, inRange.MaskMinRed)
-                            , new Bgr(inRange.MaskMaxBlue, inRange.MaskMaxGreen, inRange.MaskMaxRed));
-                        inrageImg = inrageImg.Or(mask);
-                        mask.Dispose();
-                    }
-                    //
-                    inrageImg.Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
-                }
-                else if (ThresHold.IsEnabled)
-                {
-                    double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
-                    double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
-                    double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
-                    double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
+                        Canny.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)))
+                            .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
 
-                    //
-                    IImage img;
-                    img = imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth));
-                    //
-                    switch (ThresHold.CurrentThresHoldValue)
+                    }
+                    else if (inRange.IsEnabled)
                     {
-                        case "ThresHoldBinary":
-                            if (ThresHold.IsColorEnabled == true)
-                            {
-                                img = ((Image<Bgr,byte>)img).ThresholdBinary(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
-                                     , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed)).Convert<Bgr, byte>();
-                            }
-                            else
-                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdBinary(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray)).Convert<Bgr, byte>();
-                            break;
-                        case "ThresHoldBinaryInv":
-                            if (ThresHold.IsColorEnabled == true)
-                            {
-                                img = ((Image<Bgr, byte>)img).ThresholdBinaryInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
-                                , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed)).Convert<Bgr, byte>();
-                            }
-                            else
-                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdBinaryInv(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray)).Convert<Bgr, byte>();
-                            break;
-                        case "ThresHoldToZeroInv":
-                            if (ThresHold.IsColorEnabled == true)
-                                img = ((Image<Bgr, byte>)img).ThresholdToZeroInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)).Convert<Bgr, byte>();
-                            else
-                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdToZeroInv(new Gray(ThresHold.ThresHoldGreenOrGray)).Convert<Bgr, byte>();
-                            break;
-                        case "ThresHoldToZero":
-                            if (ThresHold.IsColorEnabled == true)
-                                img = ((Image<Bgr, byte>)img).ThresholdToZero(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)).Convert<Bgr, byte>();
-                            else
-                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdToZero(new Gray(ThresHold.ThresHoldGreenOrGray)).Convert<Bgr, byte>();
-                            break;
-                        case "ThresHoldTrunc":
-                            if (ThresHold.IsColorEnabled == true)
-                                img = ((Image<Bgr, byte>)img).ThresholdTrunc(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)).Convert<Bgr, byte>();
-                            else
-                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHold.ThresHoldGreenOrGray)).Convert<Bgr, byte>();
-                            break;
-                        case "ThresHoldAdaptive":
-
-                            break;
+                        inRange.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)))
+                            .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
                     }
-                    ((Image<Bgr,byte>)img).CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
-                    
+                    else if (ThresHold.IsEnabled)
+                    {
+                        if (ThresHold.IsColorEnabled == true)
+                            ((Image<Bgr, byte>)ThresHold.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))))
+                                .CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+                        else
+                            ((Image<Gray, byte>)ThresHold.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))))
+                                .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+                    }
                 }
                 Dispatcher.Invoke(() =>
                 {
