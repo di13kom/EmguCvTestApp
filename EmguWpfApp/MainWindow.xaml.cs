@@ -27,18 +27,8 @@ namespace EmguWpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        //public string xFileName;
-        private string xFileNameThres;
-        public ObservableCollection<ThresHoldStruct> ThresHoldCollection = new ObservableCollection<ThresHoldStruct>
-        {
-            new ThresHoldStruct("ThresHoldAdaptive"),
-            new ThresHoldStruct("ThresHoldBinaryInv"),
-            new ThresHoldStruct("ThresHoldBinary"),
-            new ThresHoldStruct("ThresHoldToZeroInv"),
-            new ThresHoldStruct("ThresHoldToZero"),
-            new ThresHoldStruct("ThresHoldTrunc"),
-        };
         //private string CannyFileName;
+        ThresHoldStruct ThresHold = new ThresHoldStruct();
         CannyStruct Canny = new CannyStruct();
         InRangeStruct inRange = new InRangeStruct();
 
@@ -61,16 +51,18 @@ namespace EmguWpfApp
         public MainWindow()
         {
             InitializeComponent();
-            ThresHold_Combobox.ItemsSource = ThresHoldCollection;
-            ThresHold_Combobox.DisplayMemberPath = "Name";
+            ThresHold_Combobox.ItemsSource = ThresHold.AvailibleThresholdValues;
             CannyCheckBox_CanvasTab.DataContext = this;
             //CannyTab_ThresholdParam.DataContext = this;
             //CannyTab_ThresholdLinkingParam.DataContext = this;
-            CannyTab.DataContext = Canny;
-            CannyCheckBox_CanvasTab.DataContext = Canny;
-
             InRangeTab.DataContext = inRange;
+            ThresHoldTab.DataContext = ThresHold;
+            CannyTab.DataContext = Canny;
+
+
             InRangeCheckBox_CanvasTab.DataContext = inRange;
+            ThresHoldCheckBox_CanvasTab.DataContext = ThresHold;
+            CannyCheckBox_CanvasTab.DataContext = Canny;
             //CannyTab_ListBox_Aperture.ItemsSource = ApertureValues;
         }
 
@@ -154,68 +146,61 @@ namespace EmguWpfApp
         private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //Slider curSlider = (Slider)sender;
-            if (ThresHold_Combobox.SelectedValue != null && string.IsNullOrEmpty(xFileNameThres) == false)
+            try
             {
-                IImage img;
-                if (ThresHold_Color_CheckBox.IsChecked == true)
-                    img = new Image<Bgr, byte>(xFileNameThres);
-                else
-                    img = new Image<Gray, byte>(xFileNameThres);
-                ThresHoldStruct curStruct = (ThresHoldStruct)ThresHold_Combobox.SelectedItem;
-                //var y = ThresHold_Combobox.SelectedValue;
-                curStruct.ThresHoldBlue = ThresHoldColor_blue.Value;
-                curStruct.ThresHoldGreenOrGray = ThresHoldColor_green.Value;
-                curStruct.ThresHoldRed = ThresHoldColor_red.Value;
-
-                curStruct.MaxValueBlue = ThresHoldMaxValue_blue.Value;
-                curStruct.MaxValueGreenOrGray = ThresHoldMaxValue_green.Value;
-                curStruct.MaxValueRed = ThresHoldMaxValue_red.Value;
-
-                switch (curStruct.Name)
+                if (ThresHold.IsEnabled == true)
                 {
-                    case "ThresHoldBinary":
-                        if (ThresHold_Color_CheckBox.IsChecked == true)
-                        {
-                            ((Image<Bgr, byte>)img)._ThresholdBinary(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed)
-                                , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreenOrGray, curStruct.MaxValueRed));
-                        }
-                        else
-                            ((Image<Gray, byte>)img)._ThresholdBinary(new Gray(curStruct.ThresHoldGreenOrGray), new Gray(curStruct.MaxValueGreenOrGray));
-                        break;
-                    case "ThresHoldBinaryInv":
-                        if (ThresHold_Color_CheckBox.IsChecked == true)
-                        {
-                            ((Image<Bgr, byte>)img)._ThresholdBinaryInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed)
-                            , new Bgr(curStruct.MaxValueBlue, curStruct.MaxValueGreenOrGray, curStruct.MaxValueRed));
-                        }
-                        else
-                            ((Image<Gray, byte>)img)._ThresholdBinaryInv(new Gray(curStruct.ThresHoldGreenOrGray), new Gray(curStruct.MaxValueGreenOrGray));
-                        break;
-                    case "ThresHoldToZeroInv":
-                        if (ThresHold_Color_CheckBox.IsChecked == true)
-                            ((Image<Bgr, byte>)img)._ThresholdToZeroInv(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed));
-                        else
-                            ((Image<Gray, byte>)img)._ThresholdToZeroInv(new Gray(curStruct.ThresHoldGreenOrGray));
-                        break;
-                    case "ThresHoldToZero":
-                        if (ThresHold_Color_CheckBox.IsChecked == true)
-                            ((Image<Bgr, byte>)img)._ThresholdToZero(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed));
-                        else
-                            ((Image<Gray, byte>)img)._ThresholdToZero(new Gray(curStruct.ThresHoldGreenOrGray));
-                        break;
-                    case "ThresHoldTrunc":
-                        if (ThresHold_Color_CheckBox.IsChecked == true)
-                            ((Image<Bgr, byte>)img)._ThresholdTrunc(new Bgr(curStruct.ThresHoldBlue, curStruct.ThresHoldGreenOrGray, curStruct.ThresHoldRed));
-                        else
-                            ((Image<Gray, byte>)img)._ThresholdTrunc(new Gray(curStruct.ThresHoldGreenOrGray));
-                        break;
-                    case "ThresHoldAdaptive":
+                    IImage img = null;
+                    switch (ThresHold.CurrentThresHoldValue)
+                    {
+                        case "ThresHoldBinary":
+                            if (ThresHold.IsColorEnabled == true)
+                            {
+                                img = ImgRegion.ThresholdBinary(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
+                                     , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed));
+                            }
+                            else
+                                img = ImgRegion.Convert<Gray, byte>().ThresholdBinary(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray));
+                            break;
+                        case "ThresHoldBinaryInv":
+                            if (ThresHold.IsColorEnabled == true)
+                            {
+                                img = ImgRegion.ThresholdBinaryInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
+                                , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed));
+                            }
+                            else
+                                img = ImgRegion.Convert<Gray, byte>().ThresholdBinaryInv(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray));
+                            break;
+                        case "ThresHoldToZeroInv":
+                            if (ThresHold.IsColorEnabled == true)
+                                img = ImgRegion.ThresholdToZeroInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed));
+                            else
+                                img = ImgRegion.Convert<Gray, byte>().ThresholdToZeroInv(new Gray(ThresHold.ThresHoldGreenOrGray));
+                            break;
+                        case "ThresHoldToZero":
+                            if (ThresHold.IsColorEnabled == true)
+                                img = ImgRegion.ThresholdToZero(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed));
+                            else
+                                img = ImgRegion.Convert<Gray, byte>().ThresholdToZero(new Gray(ThresHold.ThresHoldGreenOrGray));
+                            break;
+                        case "ThresHoldTrunc":
+                            if (ThresHold.IsColorEnabled == true)
+                                img = ImgRegion.ThresholdTrunc(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed));
+                            else
+                                img = ImgRegion.Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHold.ThresHoldGreenOrGray));
+                            break;
+                        case "ThresHoldAdaptive":
 
-                        break;
+                            break;
 
+                    }
+                    ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    img.Dispose();
                 }
-                ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
-                img.Dispose();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -337,7 +322,7 @@ namespace EmguWpfApp
                     ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
                     //xFileName = "1";
                     CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-
+                    ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
 
                     this.CanvasElement_CanvasTab.Children.Remove(rct);
                     //CvInvoke.NamedWindow("wnd");
@@ -437,6 +422,62 @@ namespace EmguWpfApp
                     //
                     inrageImg.Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
                 }
+                else if (ThresHold.IsEnabled)
+                {
+                    double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
+                    double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
+                    double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
+                    double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
+
+                    //
+                    IImage img;
+                    img = imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth));
+                    //
+                    switch (ThresHold.CurrentThresHoldValue)
+                    {
+                        case "ThresHoldBinary":
+                            if (ThresHold.IsColorEnabled == true)
+                            {
+                                img = ((Image<Bgr,byte>)img).ThresholdBinary(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
+                                     , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed)).Convert<Bgr, byte>();
+                            }
+                            else
+                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdBinary(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray)).Convert<Bgr, byte>();
+                            break;
+                        case "ThresHoldBinaryInv":
+                            if (ThresHold.IsColorEnabled == true)
+                            {
+                                img = ((Image<Bgr, byte>)img).ThresholdBinaryInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)
+                                , new Bgr(ThresHold.MaxValueBlue, ThresHold.MaxValueGreenOrGray, ThresHold.MaxValueRed)).Convert<Bgr, byte>();
+                            }
+                            else
+                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdBinaryInv(new Gray(ThresHold.ThresHoldGreenOrGray), new Gray(ThresHold.MaxValueGreenOrGray)).Convert<Bgr, byte>();
+                            break;
+                        case "ThresHoldToZeroInv":
+                            if (ThresHold.IsColorEnabled == true)
+                                img = ((Image<Bgr, byte>)img).ThresholdToZeroInv(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)).Convert<Bgr, byte>();
+                            else
+                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdToZeroInv(new Gray(ThresHold.ThresHoldGreenOrGray)).Convert<Bgr, byte>();
+                            break;
+                        case "ThresHoldToZero":
+                            if (ThresHold.IsColorEnabled == true)
+                                img = ((Image<Bgr, byte>)img).ThresholdToZero(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)).Convert<Bgr, byte>();
+                            else
+                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdToZero(new Gray(ThresHold.ThresHoldGreenOrGray)).Convert<Bgr, byte>();
+                            break;
+                        case "ThresHoldTrunc":
+                            if (ThresHold.IsColorEnabled == true)
+                                img = ((Image<Bgr, byte>)img).ThresholdTrunc(new Bgr(ThresHold.ThresHoldBlue, ThresHold.ThresHoldGreenOrGray, ThresHold.ThresHoldRed)).Convert<Bgr, byte>();
+                            else
+                                img = ((Image<Bgr, byte>)img).Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHold.ThresHoldGreenOrGray)).Convert<Bgr, byte>();
+                            break;
+                        case "ThresHoldAdaptive":
+
+                            break;
+                    }
+                    ((Image<Bgr,byte>)img).CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+                    
+                }
                 Dispatcher.Invoke(() =>
                 {
                     Tbox_CanvasTab.Text = xCp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames).ToString();
@@ -450,7 +491,7 @@ namespace EmguWpfApp
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error in cp_ImageGrabbed: {ex.Message}");
+                MessageBox.Show($"Error in cp_ImageGrabbed: {ex.Message}");
             }
         }
 
@@ -477,9 +518,18 @@ namespace EmguWpfApp
             {
                 case "CannyCheckBox_CanvasTab":
                     inRange.IsEnabled = false;
+                    ThresHold.IsEnabled = false;
+                    Canny.IsEnabled = true;
                     break;
                 case "InRangeCheckBox_CanvasTab":
                     Canny.IsEnabled = false;
+                    ThresHold.IsEnabled = false;
+                    inRange.IsEnabled = true;
+                    break;
+                case "ThresHoldCheckBox_CanvasTab":
+                    Canny.IsEnabled = false;
+                    inRange.IsEnabled = false;
+                    ThresHold.IsEnabled = true;
                     break;
                 default:
                     break;
@@ -502,376 +552,6 @@ namespace EmguWpfApp
         {
             if (Canny.IsEnabled && ImgRegion != null)
                 Canny_ValueChanged();
-        }
-    }
-
-    public class ThresHoldStruct
-    {
-        string _name;
-        double _ThresHoldBlueValue;
-        double _ThresHoldGreenOrGrayValue;
-        double _ThresHoldRedValue;
-
-        double _MaxValueBlue;
-        double _MaxValueGreenOrGray;
-        double _MaxValueRed;
-
-        public string Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-        public double[] GetBGR
-        {
-            get { return new double[3] { _ThresHoldBlueValue, _ThresHoldGreenOrGrayValue, _ThresHoldRedValue }; }
-        }
-        public double ThresHoldBlue
-        {
-            get { return _ThresHoldBlueValue; }
-            set { _ThresHoldBlueValue = value; }
-        }
-
-        public double ThresHoldRed
-        {
-            get { return _ThresHoldRedValue; }
-            set { _ThresHoldRedValue = value; }
-        }
-
-        public double ThresHoldGreenOrGray
-        {
-            get { return _ThresHoldGreenOrGrayValue; }
-            set { _ThresHoldGreenOrGrayValue = value; }
-        }
-
-        public double MaxValueBlue
-        {
-            get { return _MaxValueBlue; }
-            set { _MaxValueBlue = value; }
-        }
-
-        public double MaxValueGreenOrGray
-        {
-            get { return _MaxValueGreenOrGray; }
-            set { _MaxValueGreenOrGray = value; }
-        }
-
-        public double MaxValueRed
-        {
-            get { return _MaxValueRed; }
-            set { _MaxValueRed = value; }
-        }
-
-        public ThresHoldStruct(string name)
-        {
-            Name = name;
-            _ThresHoldBlueValue = 0;
-            _ThresHoldGreenOrGrayValue = 0;
-            _ThresHoldRedValue = 0;
-            _MaxValueBlue = 0;
-            _MaxValueGreenOrGray = 0;
-            _MaxValueRed = 0;
-        }
-    }
-
-    public class CannyStruct : INotifyPropertyChanged
-    {
-        bool _isEnabled = false;
-        double _thresholdParam;
-        double _thresholdLinkingParam;
-        int _apertureSize = 5;
-        bool _i2Gradient = false;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-            //if (PropertyChanged != null)
-            //{
-            //    PropertyChanged(this, new PropertyChangedEventArgs(info));
-            //}
-        }
-
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-            set
-            {
-                if (value != _isEnabled)
-                {
-                    _isEnabled = value;
-                    NotifyPropertyChanged("IsEnabled");
-                }
-            }
-        }
-
-        public double ThresholdParam
-        {
-            get { return _thresholdParam; }
-            set
-            {
-                if (value != _thresholdParam)
-                {
-                    _thresholdParam = value;
-                    NotifyPropertyChanged("ThresholdParam");
-                }
-            }
-        }
-
-        public double ThresholdLinkingParam
-        {
-            get { return _thresholdLinkingParam; }
-            set
-            {
-                if (value != _thresholdLinkingParam)
-                {
-                    _thresholdLinkingParam = value;
-                    NotifyPropertyChanged("ThresholdLinkingParam");
-                }
-            }
-        }
-
-        public int ApertureSize
-        {
-            get { return _apertureSize; }
-            set
-            {
-                if (value != _apertureSize)
-                {
-                    _apertureSize = value;
-                    NotifyPropertyChanged("ApertureSize");
-                }
-            }
-        }
-
-        public bool I2Gradient
-        {
-            get { return _i2Gradient; }
-            set
-            {
-                if (value != _i2Gradient)
-                {
-                    _i2Gradient = value;
-                    NotifyPropertyChanged("i2Gradient");
-                }
-            }
-        }
-    }
-
-    public class InRangeStruct : INotifyPropertyChanged
-    {
-        bool _isEnabled = false;
-        bool _isColorMaskSync = true;
-        /// <summary>
-        /// MainColor
-        /// </summary>
-        int _colMaxR = 255;
-        int _colMaxG = 255;
-        int _colMaxB = 255;
-
-        int _colMinR = 0;
-        int _colMinG = 0;
-        int _colMinB = 0;
-
-        /// <summary>
-        /// MaskColor
-        /// </summary>
-        int _maskMaxR;
-        int _maskMaxG;
-        int _maskMaxB;
-
-        int _maskMinR;
-        int _maskMinG;
-        int _maskMinB;
-
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(String info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-        public bool IsEnabled
-        {
-            get { return _isEnabled; }
-            set
-            {
-                if (value != _isEnabled)
-                {
-                    _isEnabled = value;
-                    NotifyPropertyChanged("IsEnabled");
-                }
-            }
-        }
-
-        public bool IsColorMaskSync
-        {
-            get { return _isColorMaskSync; }
-            set
-            {
-                if (value != _isColorMaskSync)
-                {
-                    _isColorMaskSync = value;
-                    NotifyPropertyChanged("IsColorMaskSync");
-                }
-            }
-        }
-
-        public int ColorMaxRed
-        {
-            get { return _colMaxR; }
-            set
-            {
-                if (value != _colMaxR)
-                {
-                    _colMaxR = value;
-                    NotifyPropertyChanged("ColorMaxRed");
-                }
-            }
-        }
-
-        public int ColorMaxGreen
-        {
-            get { return _colMaxG; }
-            set
-            {
-                if (value != _colMaxG)
-                {
-                    _colMaxG = value;
-                    NotifyPropertyChanged("ColorMaxGreen");
-                }
-            }
-        }
-
-        public int ColorMaxBlue
-        {
-            get { return _colMaxB; }
-            set
-            {
-                if (value != _colMaxB)
-                {
-                    _colMaxB = value;
-                    NotifyPropertyChanged("ColorMaxBlue");
-                }
-            }
-        }
-
-        public int ColorMinRed
-        {
-            get { return _colMinR; }
-            set
-            {
-                if (value != _colMinR)
-                {
-                    _colMinR = value;
-                    NotifyPropertyChanged("ColorMinRed");
-                }
-            }
-        }
-
-        public int ColorMinGreen
-        {
-            get { return _colMinG; }
-            set
-            {
-                if (value != _colMinG)
-                {
-                    _colMinG = value;
-                    NotifyPropertyChanged("ColorMinGreen");
-                }
-            }
-        }
-
-        public int ColorMinBlue
-        {
-            get { return _colMinB; }
-            set
-            {
-                if (value != _colMinB)
-                {
-                    _colMinB = value;
-                    NotifyPropertyChanged("ColorMinBlue");
-                }
-            }
-        }
-
-        public int MaskMaxRed
-        {
-            get { return _maskMaxR; }
-            set
-            {
-                if (value != _maskMaxR)
-                {
-                    _maskMaxR = value;
-                    NotifyPropertyChanged("MaskMaxRed");
-                }
-            }
-        }
-
-        public int MaskMaxGreen
-        {
-            get { return _maskMaxG; }
-            set
-            {
-                if (value != _maskMaxG)
-                {
-                    _maskMaxG = value;
-                    NotifyPropertyChanged("MaskMaxGreen");
-                }
-            }
-        }
-
-        public int MaskMaxBlue
-        {
-            get { return _maskMaxB; }
-            set
-            {
-                if (value != _maskMaxB)
-                {
-                    _maskMaxB = value;
-                    NotifyPropertyChanged("MaskMaxBlue");
-                }
-            }
-        }
-
-        public int MaskMinRed
-        {
-            get { return _maskMinR; }
-            set
-            {
-                if (value != _maskMinR)
-                {
-                    _maskMinR = value;
-                    NotifyPropertyChanged("MaskMinRed");
-                }
-            }
-        }
-
-        public int MaskMinGreen
-        {
-            get { return _maskMinG; }
-            set
-            {
-                if (value != _maskMinG)
-                {
-                    _maskMinG = value;
-                    NotifyPropertyChanged("MaskMinGreen");
-                }
-            }
-        }
-
-        public int MaskMinBlue
-        {
-            get { return _maskMinB; }
-            set
-            {
-                if (value != _maskMinB)
-                {
-                    _maskMinB = value;
-                    NotifyPropertyChanged("MaskMinBlue");
-                }
-            }
         }
     }
 }
