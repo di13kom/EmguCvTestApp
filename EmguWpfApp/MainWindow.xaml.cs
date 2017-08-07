@@ -27,14 +27,13 @@ namespace EmguWpfApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private string CannyFileName;
         ThresHoldStruct ThresHold = new ThresHoldStruct();
         CannyStruct Canny = new CannyStruct();
         InRangeStruct inRange = new InRangeStruct();
 
         private string CanvasFileName;
         Capture cp;
-        //private bool isMouseButtonPressed;
+
         private Point StartPoint;
         private Point EndPoint;
         Rectangle rct = null;
@@ -43,11 +42,7 @@ namespace EmguWpfApp
         Image<Bgr, byte> PreviousImage;
 
         bool IsVideoPlaying = false;
-        Image<Gray, byte> cannyImg;
-        //public bool IsCannyEnabled { get; set; }
-        //public int CannyParam1 { get; set; }
-        //public int CannyParam2 { get; set; }
-
+        
         public MainWindow()
         {
             InitializeComponent();
