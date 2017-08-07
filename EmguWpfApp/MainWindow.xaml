@@ -312,9 +312,9 @@
                     <Button Margin="5" x:Name="PlayButton_CanvasTab" ToolTip="Play" Click="PlayButton_Click_CanvasTab" IsEnabled="False">
                         <Image Source="..\..\Resources\PlayButton.png"/>
                     </Button>
-                    <!--<Button Margin="5" ToolTip="Pause" Click="PauseButton_Click_CanvasTab" IsEnabled="False">
+                    <Button Margin="5" ToolTip="Pause" Click="PauseButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
                         <Image Source="..\..\Resources\PauseButton.png"/>
-                    </Button>-->
+                    </Button>
                     <Button Margin="5" x:Name="StopButton_CanvasTab" ToolTip="Stop" Click="StopButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
                         <Image Source="..\..\Resources\StopButton.png"/>
                     </Button>

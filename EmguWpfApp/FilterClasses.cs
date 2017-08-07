@@ -297,13 +297,13 @@ namespace EmguWpfApp
         /// <summary>
         /// MaskColor
         /// </summary>
-        int _maskMaxR;
-        int _maskMaxG;
-        int _maskMaxB;
+        int _maskMaxR = 255;
+        int _maskMaxG = 255;
+        int _maskMaxB = 255;
 
-        int _maskMinR;
-        int _maskMinG;
-        int _maskMinB;
+        int _maskMinR = 0;
+        int _maskMinG = 0;
+        int _maskMinB = 0;
 
 
         public event PropertyChangedEventHandler PropertyChanged;

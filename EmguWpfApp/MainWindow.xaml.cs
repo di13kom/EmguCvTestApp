@@ -22,6 +22,14 @@ using System.ComponentModel;
 
 namespace EmguWpfApp
 {
+    public enum VideoStatus
+    {
+        Unknown,
+        Chosen,
+        Play,
+        Pause,
+        Stop
+    }
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -31,7 +39,7 @@ namespace EmguWpfApp
         CannyStruct Canny = new CannyStruct();
         InRangeStruct inRange = new InRangeStruct();
 
-        private string CanvasFileName;
+        private string CanvasFileName = null;
         Capture cp;
 
         private Point StartPoint;
@@ -41,8 +49,12 @@ namespace EmguWpfApp
         Image<Bgr, byte> ImgRegion;
         Image<Bgr, byte> PreviousImage;
 
-        bool IsVideoPlaying = false;
-        
+        //bool IsVideoPlaying = false;
+        //bool IsVideoPaused = false;
+        //bool IsVideoPlayStarted = false;
+        double FrameNumOnPause;
+        VideoStatus Status = VideoStatus.Unknown;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -173,105 +185,60 @@ namespace EmguWpfApp
 
         private void CanvasElement_CanvasTab_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Mouse.LeftButton == MouseButtonState.Pressed && IsVideoPlaying == false)
+            if (string.IsNullOrEmpty(CanvasFileName) != true && Status > VideoStatus.Play)
             {
-                EndPoint = e.GetPosition(CanvasElement_CanvasTab);
-                if (rct != null)
-                    CanvasElement_CanvasTab.Children.Remove(rct);
-                rct = new Rectangle();
-                rct.Stroke = Brushes.Red;
-                rct.StrokeThickness = 3;
-
-                rct.StrokeStartLineCap = PenLineCap.Square;
-
-                if (EndPoint.X > StartPoint.X)
+                if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
-                    Canvas.SetLeft(rct, StartPoint.X);
-                    rct.Width = EndPoint.X - StartPoint.X;
+                    EndPoint = e.GetPosition(CanvasElement_CanvasTab);
+                    if (rct != null)
+                        CanvasElement_CanvasTab.Children.Remove(rct);
+                    rct = new Rectangle();
+                    rct.Stroke = Brushes.Red;
+                    rct.StrokeThickness = 3;
+
+                    rct.StrokeStartLineCap = PenLineCap.Square;
+
+                    if (EndPoint.X > StartPoint.X)
+                    {
+                        Canvas.SetLeft(rct, StartPoint.X);
+                        rct.Width = EndPoint.X - StartPoint.X;
+                    }
+                    else
+                    {
+                        Canvas.SetLeft(rct, EndPoint.X);
+                        rct.Width = StartPoint.X - EndPoint.X;
+                    }
+                    if (EndPoint.Y > StartPoint.Y)
+                    {
+                        rct.Height = EndPoint.Y - StartPoint.Y;
+                        Canvas.SetTop(rct, StartPoint.Y);
+                    }
+                    else
+                    {
+                        rct.Height = StartPoint.Y - EndPoint.Y;
+                        Canvas.SetTop(rct, EndPoint.Y);
+                    }
+                    CanvasElement_CanvasTab.Children.Add(rct);
                 }
                 else
                 {
-                    Canvas.SetLeft(rct, EndPoint.X);
-                    rct.Width = StartPoint.X - EndPoint.X;
-                }
-                if (EndPoint.Y > StartPoint.Y)
-                {
-                    rct.Height = EndPoint.Y - StartPoint.Y;
-                    Canvas.SetTop(rct, StartPoint.Y);
-                }
-                else
-                {
-                    rct.Height = StartPoint.Y - EndPoint.Y;
-                    Canvas.SetTop(rct, EndPoint.Y);
-                }
-                CanvasElement_CanvasTab.Children.Add(rct);
-            }
-            else
-            {
-                if (CanvasElement_CanvasTab.Children.Contains(rct) && IsVideoPlaying == false)
-                {
-                    //Transform transform = this.CanvasElement_CanvasTab.LayoutTransform;
-                    // Get the size of canvas
+                    if (CanvasElement_CanvasTab.Children.Contains(rct) && Status > VideoStatus.Play)
+                    {
+                        double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
+                        double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
+                        double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
+                        double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
+                        ImgRegion = PreviousImage.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth));
 
-                    //Size size = new Size(EndPoint.X - StartPoint.X, EndPoint.Y - StartPoint.Y);
-                    //// Measure and arrange the surface
-                    //// VERY IMPORTANT
-                    ////CanvasElement_CanvasTab.Measure(size);
-                    ////CanvasElement_CanvasTab.Arrange(new Rect(StartPoint, EndPoint));
+                        ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
+                        //xFileName = "1";
+                        CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
+                        ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
 
-                    //newImg = new Image();
-                    //newImg.Source = ImageViewer_CanvasTab.Source;
-                    //RectangleGeometry rctG = new RectangleGeometry(new Rect(StartPoint.X, StartPoint.Y, EndPoint.X - StartPoint.X, EndPoint.Y - StartPoint.Y));
-                    //newImg.Clip = rctG;
-
-                    //// Create a render bitmap and push the surface to it
-                    //RenderTargetBitmap renderBitmap =
-                    //  new RenderTargetBitmap(
-                    //    (int)size.Width,
-                    //    (int)size.Height,
-                    //    96d,
-                    //    96d,
-                    //    PixelFormats.Pbgra32);
-                    //renderBitmap.Render(newImg);
-
-                    //// Create a file stream for saving image
-                    //Uri path = new Uri(@"d:\1.bmp");
-
-                    //using (FileStream outStream = new FileStream(path.LocalPath, FileMode.Create))
-                    //{
-                    //    // Use png encoder for our data
-                    //    PngBitmapEncoder encoder = new PngBitmapEncoder();
-                    //    // push the rendered bitmap to it
-                    //    encoder.Frames.Add(BitmapFrame.Create(renderBitmap));
-                    //    // save the data to the stream
-                    //    encoder.Save(outStream);
-                    //}
-
-                    //// Restore previously saved layout
-                    ////CanvasElement_CanvasTab.LayoutTransform = transform;
-
-
-
-                    //Canvas.SetTop(newImg, 200);
-                    //this.CanvasElement_CanvasTab.Children.Add(newImg);
-
-                    //BitmapImage bi = new BitmapImage(path);
-                    //ImageViewer.Source = bi;
-                    //xFileName = path.OriginalString;
-                    double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
-                    double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
-                    double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
-                    double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
-                    ImgRegion = PreviousImage.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth));
-
-                    ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-                    //xFileName = "1";
-                    CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-                    ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-
-                    this.CanvasElement_CanvasTab.Children.Remove(rct);
-                    //CvInvoke.NamedWindow("wnd");
-                    //CvInvoke.Imshow("wnd", ImgRegion);
+                        this.CanvasElement_CanvasTab.Children.Remove(rct);
+                        //CvInvoke.NamedWindow("wnd");
+                        //CvInvoke.Imshow("wnd", ImgRegion);
+                    }
                 }
             }
         }
@@ -286,7 +253,8 @@ namespace EmguWpfApp
         private void CanvasElement_CanvasTab_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             //isMouseButtonPressed = true;
-            StartPoint = e.GetPosition(CanvasElement_CanvasTab);
+            if (string.IsNullOrEmpty(CanvasFileName) != true && Status > VideoStatus.Play)
+                StartPoint = e.GetPosition(CanvasElement_CanvasTab);
             //Console.WriteLine($"Hello position:{x}");
         }
 
@@ -296,6 +264,7 @@ namespace EmguWpfApp
             dlg.DefaultExt = "*.mp4";
             dlg.Filter = "MPEG-4(*.mp4) | *.mp4";
             dlg.Multiselect = false;
+            Status = VideoStatus.Chosen;
             bool? res = dlg.ShowDialog();
 
             if (res == true)
@@ -309,14 +278,24 @@ namespace EmguWpfApp
         {
             try
             {
-                if (CanvasFileName != null && File.Exists(CanvasFileName))
+                if (CanvasFileName != null && File.Exists(CanvasFileName) && Status >= VideoStatus.Chosen)
                 {
-                    cp = new Capture(CanvasFileName);
-                    cp.ImageGrabbed += Cp_ImageGrabbed;
+                    if (Status == VideoStatus.Pause)
+                        cp.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames, FrameNumOnPause);
+                    else if(Status==VideoStatus.Stop)
+                    {
+                        FrameNumOnPause = 0;
+                        cp.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames, 0);
+                    }
+                    else if (Status == VideoStatus.Chosen)
+                    {
+                        cp = new Capture(CanvasFileName);
+                        cp.ImageGrabbed += Cp_ImageGrabbed;
+                    }
                     cp.Start();
                     PlayButton_CanvasTab.IsEnabled = false;
                     StopButton_CanvasTab.IsEnabled = true;
-                    IsVideoPlaying = true;
+                    Status = VideoStatus.Play;
                 }
             }
             catch (Exception ex)
@@ -386,16 +365,22 @@ namespace EmguWpfApp
 
         private void PauseButton_Click_CanvasTab(object sender, RoutedEventArgs e)
         {
-            cp.Pause();
+            if (cp != null && Status == VideoStatus.Play)
+            {
+                cp.Pause();
+                PlayButton_CanvasTab.IsEnabled = true;
+                Status = VideoStatus.Pause;
+                FrameNumOnPause = cp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames);
+            }
         }
 
         private void StopButton_Click_CanvasTab(object sender, RoutedEventArgs e)
         {
-            if (cp != null)
+            if (cp != null && Status == VideoStatus.Play)
             {
                 cp.Stop();
                 PlayButton_CanvasTab.IsEnabled = true;
-                IsVideoPlaying = false;
+                Status = VideoStatus.Stop;
             }
         }
 
