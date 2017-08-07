@@ -19,6 +19,7 @@ using System.Threading;
 using System.IO;
 using EmguLearnPredict;
 using EmguLearnPredict_Tekken7;
+//using EmguLearnPredict_KOFXIV;
 
 
 namespace EmguTestApp
@@ -57,19 +58,21 @@ namespace EmguTestApp
         static void Main(string[] args)
         {
 
-            ProcessVideo(@"d:\t7Video\WithPause\Test\3697985c-19e1-4266-b5ef-e6067877d0b7.mp4"
+            ProcessVideo(@"d:\t7Video\6b062e72-cd83-4173-9600-fd02154376c0.mp4"
                 //, ImageType.Ingame_Player1Name
                 //, ImageType.Ingame_Player2Name
                 //, ImageType.OnSelect_Player1Name
                 //, ImageType.OnSelect_Player2Name
                 //, ImageType.RoundReadyMessage
-                //, ImageType.PlayerPause
                 //, ImageType.KoGoMessage
+                //, ImageType.CurrentTime
                 //, ImageType.TitleMenu
                 //, ImageType.Result_Player1
                 //, ImageType.Result_Player2
+                //Tekken
+                , ImageType.PlayerPause
                 //, ImageType.ResumeGame
-                , ImageType.GameMessages
+                //, ImageType.GameMessages
                 );
         }
 
@@ -139,10 +142,11 @@ namespace EmguTestApp
             }
 
 
-            foreach (ImageType key in ResultDict.Keys)
-            {
-                CvInvoke.NamedWindow(key.ToString());
-            }
+            //foreach (ImageType key in ResultDict.Keys)
+            //{
+            //    CvInvoke.NamedWindow(key.ToString());
+            //}
+            CvInvoke.NamedWindow("BigScreen");
             //
             capture = new Capture(FileToPlay);
             TotalFrames = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
@@ -212,8 +216,14 @@ namespace EmguTestApp
 
             foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict)
             {
-                CvInvoke.Imshow(kvRes.Key.ToString(), kvRes.Value);
+                //CvInvoke.Imshow(kvRes.Key.ToString(), kvRes.Value);
+                double backConvertValue = 1 / ImageFormat.ImageParam[kvRes.Key].Scale;
+                kvRes.Value.Resize(backConvertValue, Emgu.CV.CvEnum.Inter.Linear).Convert<Bgr, byte>().CopyTo(imgFrame.GetSubRect(new System.Drawing.Rectangle(ImageFormat.ImageParam[kvRes.Key].XPos
+                                                                                                        , ImageFormat.ImageParam[kvRes.Key].YPos
+                                                                                                        , ImageFormat.ImageParam[kvRes.Key].Width
+                                                                                                        , ImageFormat.ImageParam[kvRes.Key].Height)));
             }
+            CvInvoke.Imshow("BigScreen", imgFrame.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear));
 
 #if SHOWREPREDICTRESULT
 
