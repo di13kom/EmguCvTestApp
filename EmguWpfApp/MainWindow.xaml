@@ -305,6 +305,8 @@
                     <Menu DockPanel.Dock="Top">
                         <MenuItem Header="File" >
                             <MenuItem Header="_Open" Click="FileOpenHeader_CanvasTab_Click"  x:Name="FileOpenHeader_CanvasTab"/>
+                            <MenuItem Header="_Save to Xml" Click="SaveFileMenuItem_CanvasTab_Click"  x:Name="SaveFileMenuItem_CanvasTab"/>
+                            <MenuItem Header="_Load from Xml" Click="LoadFileMenuItem_CanvasTab_Click"  x:Name="LoadFileMenuItem_CanvasTab"/>
                         </MenuItem>
                     </Menu>
                 </DockPanel>

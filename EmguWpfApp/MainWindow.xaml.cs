@@ -19,6 +19,7 @@ using EmguWpfApp;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.ComponentModel;
+using System.Xml.Linq;
 
 namespace EmguWpfApp
 {
@@ -54,6 +55,8 @@ namespace EmguWpfApp
         //bool IsVideoPlayStarted = false;
         double FrameNumOnPause;
         VideoStatus Status = VideoStatus.Unknown;
+        double CaptureWidth;
+        double CaptureHeight;
 
         public MainWindow()
         {
@@ -282,7 +285,7 @@ namespace EmguWpfApp
                 {
                     if (Status == VideoStatus.Pause)
                         cp.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames, FrameNumOnPause);
-                    else if(Status==VideoStatus.Stop)
+                    else if (Status == VideoStatus.Stop)
                     {
                         FrameNumOnPause = 0;
                         cp.SetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames, 0);
@@ -290,6 +293,8 @@ namespace EmguWpfApp
                     else if (Status == VideoStatus.Chosen)
                     {
                         cp = new Capture(CanvasFileName);
+                        CaptureWidth = cp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameWidth);
+                        CaptureHeight = cp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameHeight);
                         cp.ImageGrabbed += Cp_ImageGrabbed;
                     }
                     cp.Start();
@@ -309,7 +314,7 @@ namespace EmguWpfApp
             try
             {
                 Capture xCp = (Capture)sender;
-                Image<Bgr, byte> imgX = new Image<Bgr, byte>(1920, 1080);
+                Image<Bgr, byte> imgX = new Image<Bgr, byte>((int)CaptureWidth, (int)CaptureHeight);
                 xCp.Retrieve(imgX);
                 //CannyTab_ImageViewer.Dispatcher.Invoke(() => {
                 //imgX = imgX.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
@@ -426,6 +431,174 @@ namespace EmguWpfApp
         {
             if (Canny.IsEnabled && ImgRegion != null)
                 Canny_ValueChanged();
+        }
+
+        private void SaveFileMenuItem_CanvasTab_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if ((Canny.IsEnabled || ThresHold.IsEnabled || inRange.IsEnabled) && Status > VideoStatus.Chosen && StartPoint != null && EndPoint != null)
+                {
+                    XElement rootDoc = new XElement(XName.Get("ImageProperties"));
+
+                    XElement StartPosX = new XElement(XName.Get("StartPositionX"));
+                    StartPosX.Value = (EndPoint.X > StartPoint.X ? StartPoint.X : EndPoint.X).ToString();
+                    rootDoc.Add(StartPosX);
+
+                    XElement StartPosY = new XElement(XName.Get("StartPositionY"));
+                    StartPosY.Value = (EndPoint.Y > StartPoint.Y ? StartPoint.Y : EndPoint.Y).ToString();
+                    rootDoc.Add(StartPosY);
+
+                    XElement Width = new XElement(XName.Get("ImageWidth"));
+                    Width.Value = (EndPoint.X > StartPoint.X ? EndPoint.X - StartPoint.X : StartPoint.X - EndPoint.X).ToString();
+                    rootDoc.Add(Width);
+
+                    XElement Height = new XElement(XName.Get("ImageHeight"));
+                    Height.Value = (EndPoint.Y > StartPoint.Y ? EndPoint.Y - StartPoint.Y : StartPoint.Y - EndPoint.Y).ToString();
+                    rootDoc.Add(Height);
+
+                    XElement ProcessType = new XElement(XName.Get("ProcessingFilter"));
+                    if (Canny.IsEnabled == true)
+                        ProcessType.Value = "Canny";
+                    else if (ThresHold.IsEnabled == true)
+                        ProcessType.Value = "ThresHold";
+                    else if (inRange.IsEnabled == true)
+                    {
+                        //ProcessType.Value = "InRange";
+                        XAttribute xatr = new XAttribute(XName.Get("Type"), "InRange");
+                        ProcessType.Add(xatr);
+
+                        //Colors Min
+                        XElement ColorMinB = new XElement(XName.Get("ColorMinimumBlue"));
+                        ColorMinB.Value = inRange.ColorMinBlue.ToString();
+                        ProcessType.Add(ColorMinB);
+
+                        XElement ColorMinG = new XElement(XName.Get("ColorMinimumGreen"));
+                        ColorMinG.Value = inRange.ColorMinGreen.ToString();
+                        ProcessType.Add(ColorMinG);
+
+                        XElement ColorMinR = new XElement(XName.Get("ColorMinimumRed"));
+                        ColorMinR.Value = inRange.ColorMinRed.ToString();
+                        ProcessType.Add(ColorMinR);
+
+                        //Colors Max
+                        XElement ColorMaxB = new XElement(XName.Get("ColorMaximumBlue"));
+                        ColorMaxB.Value = inRange.ColorMaxBlue.ToString();
+                        ProcessType.Add(ColorMaxB);
+
+                        XElement ColorMaxG = new XElement(XName.Get("ColorMaximumGreen"));
+                        ColorMaxG.Value = inRange.ColorMaxGreen.ToString();
+                        ProcessType.Add(ColorMaxG);
+
+                        XElement ColorMaxR = new XElement(XName.Get("ColorMaximumRed"));
+                        ColorMaxR.Value = inRange.ColorMaxRed.ToString();
+                        ProcessType.Add(ColorMaxR);
+
+                        //MaskSyncColor
+                        XElement isSync = new XElement(XName.Get("ColorSyncMask"));
+                        isSync.Value = inRange.IsColorMaskSync.ToString();
+                        ProcessType.Add(isSync);
+
+                        //Mask Min
+                        XElement MaskMinB = new XElement(XName.Get("MaskMinimumBlue"));
+                        MaskMinB.Value = inRange.MaskMinBlue.ToString();
+                        ProcessType.Add(MaskMinB);
+
+                        XElement MaskMinG = new XElement(XName.Get("MaskMinimumGreen"));
+                        MaskMinG.Value = inRange.MaskMinGreen.ToString();
+                        ProcessType.Add(MaskMinG);
+
+                        XElement MaskMinR = new XElement(XName.Get("MaskMinimumRed"));
+                        MaskMinR.Value = inRange.MaskMinRed.ToString();
+                        ProcessType.Add(MaskMinR);
+
+                        //Colors Max
+                        XElement MaskMaxB = new XElement(XName.Get("MaskMaximumBlue"));
+                        MaskMaxB.Value = inRange.MaskMaxBlue.ToString();
+                        ProcessType.Add(MaskMaxB);
+
+                        XElement MaskMaxG = new XElement(XName.Get("MaskMaximumGreen"));
+                        MaskMaxG.Value = inRange.MaskMaxGreen.ToString();
+                        ProcessType.Add(MaskMaxG);
+
+                        XElement MaskMaxR = new XElement(XName.Get("MaskMaximumRed"));
+                        MaskMaxR.Value = inRange.MaskMaxRed.ToString();
+                        ProcessType.Add(MaskMaxR);
+                    }
+
+                    rootDoc.Add(ProcessType);
+
+                    SaveFileDialog dlg = new SaveFileDialog();
+                    dlg.DefaultExt = "*.xml";
+                    dlg.Filter = "XML(*.xml) | *.xml";
+                    bool? res = dlg.ShowDialog();
+
+                    if (res == true)
+                    {
+                        rootDoc.Save(dlg.FileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error on Save xml: {ex.Message}");
+            }
+        }
+
+        private void LoadFileMenuItem_CanvasTab_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpenFileDialog dlg = new OpenFileDialog();
+                dlg.DefaultExt = "*.xml";
+                dlg.Filter = "XML(*.xml) | *.xml";
+                dlg.Multiselect = false;
+                bool? res = dlg.ShowDialog();
+
+                if (res == true)
+                {
+                    XElement xDoc = XElement.Load(dlg.FileName);
+                    double startX = double.Parse(xDoc.Element("StartPositionX").Value);
+                    double startY = double.Parse(xDoc.Element("StartPositionY").Value);
+                    rct = new Rectangle();
+
+                    StartPoint = new Point(startX, startY);
+                    double width = double.Parse(xDoc.Element("ImageWidth").Value);
+                    double height = double.Parse(xDoc.Element("ImageHeight").Value);
+                    EndPoint = new Point(startX + width, startY + height);
+
+                    XElement xElem = xDoc.Element("ProcessingFilter");
+                    XAttribute xAttr = xElem.Attribute("Type");
+                    if (xAttr != null && xAttr.Value == "InRange" && InRangeTab.IsEnabled == true)
+                    {
+                        inRange.IsEnabled = true;
+                        //Color Max
+                        //inRange.PropertyChanged+= dontwork
+
+                        inRange.ColorMaxBlue = int.Parse(xElem.Element("ColorMaximumBlue").Value);
+                        inRange.ColorMaxGreen = int.Parse(xElem.Element("ColorMaximumGreen").Value);
+                        inRange.ColorMaxRed = int.Parse(xElem.Element("ColorMaximumRed").Value);
+                        //Color Min
+                        inRange.ColorMinBlue = int.Parse(xElem.Element("ColorMinimumBlue").Value);
+                        inRange.ColorMinGreen = int.Parse(xElem.Element("ColorMinimumGreen").Value);
+                        inRange.ColorMinRed = int.Parse(xElem.Element("ColorMinimumRed").Value);
+
+                        inRange.IsColorMaskSync = bool.Parse(xElem.Element("ColorSyncMask").Value);
+                        //Mask Max
+                        inRange.MaskMaxBlue = int.Parse(xElem.Element("MaskMaximumBlue").Value);
+                        inRange.MaskMaxGreen = int.Parse(xElem.Element("MaskMaximumGreen").Value);
+                        inRange.MaskMaxRed = int.Parse(xElem.Element("MaskMaximumRed").Value);
+                        //Mask Min
+                        inRange.MaskMinBlue = int.Parse(xElem.Element("MaskMinimumBlue").Value);
+                        inRange.MaskMinGreen = int.Parse(xElem.Element("MaskMinimumGreen").Value);
+                        inRange.MaskMinRed = int.Parse(xElem.Element("MaskMinimumRed").Value);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }
