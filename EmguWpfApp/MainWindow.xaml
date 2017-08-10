@@ -11,6 +11,61 @@
         <local:ValueConverter x:Key="ValueConverter"/>
     </Window.Resources>
     <TabControl >
+        <TabItem Header="Canvas">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition MaxHeight="20"></RowDefinition>
+                    <!--<RowDefinition MaxHeight="100"></RowDefinition>
+                    <RowDefinition MaxHeight="100"></RowDefinition>-->
+
+                    <RowDefinition MaxHeight="30"></RowDefinition>
+                    <RowDefinition MaxHeight="30"></RowDefinition>
+                    <!--<RowDefinition MaxHeight="100"></RowDefinition>-->
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <DockPanel Grid.Row="0">
+                    <Menu DockPanel.Dock="Top">
+                        <MenuItem Header="File" >
+                            <MenuItem Header="_Video Open" Click="FileOpenHeader_CanvasTab_Click"  x:Name="FileOpenVideoHeader_CanvasTab"/>
+                            <MenuItem Header="_Image Open" Click="FileOpenImageHeader_CanvasTab_Click"  x:Name="FileOpenImageHeader_CanvasTab"/>
+                            <MenuItem Header="_Save to Xml" Click="SaveFileMenuItem_CanvasTab_Click"  x:Name="SaveFileMenuItem_CanvasTab"/>
+                            <MenuItem Header="_Load from Xml" Click="LoadFileMenuItem_CanvasTab_Click"  x:Name="LoadFileMenuItem_CanvasTab"/>
+                        </MenuItem>
+                    </Menu>
+                </DockPanel>
+                <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
+                    <Button Margin="5" x:Name="PlayButton_CanvasTab" ToolTip="Play" Click="PlayButton_Click_CanvasTab" IsEnabled="False">
+                        <Image Source="..\..\Resources\PlayButton.png"/>
+                    </Button>
+                    <Button Margin="5" ToolTip="Pause" Click="PauseButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
+                        <Image Source="..\..\Resources\PauseButton.png"/>
+                    </Button>
+                    <Button Margin="5" x:Name="StopButton_CanvasTab" ToolTip="Stop" Click="StopButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
+                        <Image Source="..\..\Resources\StopButton.png"/>
+                    </Button>
+                </WrapPanel>
+                <Border Grid.Row="2" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <TextBlock x:Name="Tbox_CanvasTab" VerticalAlignment="Center" Padding="5"></TextBlock>
+                        <Label>InRange</Label>
+                        <CheckBox x:Name="InRangeCheckBox_CanvasTab" IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
+                        <Label>ThresHold</Label>
+                        <CheckBox x:Name="ThresHoldCheckBox_CanvasTab" IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
+                        <Label VerticalAlignment="Center">Canny</Label>
+                        <CheckBox x:Name="CannyCheckBox_CanvasTab"  IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
+                    </WrapPanel>
+                </Border>
+                <Canvas Grid.Row="3" x:Name="CanvasElement_CanvasTab" 
+                        MouseLeftButtonDown="CanvasElement_CanvasTab_MouseLeftButtonDown" 
+                        MouseMove="CanvasElement_CanvasTab_MouseMove" 
+                        MouseLeftButtonUp="CanvasElement_CanvasTab_MouseLeftButtonUp"
+                        Background="Transparent">
+                    <!--PreviewMouseLeftButtonUp="CanvasElement_CanvasTab_MouseLeftButtonUp"-->
+                    <Image x:Name="ImageViewer_CanvasTab"/>
+                    <!--<Image x:Name="ImageViewer_CanvasTab" Width="{Binding ElementName=CanvasElement_CanvasTab,Path=ActualWidth}" Height="{Binding ElementName=CanvasElement_CanvasTab, Path=ActualHeight}"/>-->
+                </Canvas>
+            </Grid>
+        </TabItem>
         <TabItem x:Name="InRangeTab" Header="InRange" IsEnabled="{Binding Path=IsEnabled}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -287,60 +342,6 @@
                 <Border Grid.Row="2" MinHeight="100" Margin="5" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
                     <Image x:Name="CannyTab_ImageViewer" />
                 </Border>
-            </Grid>
-        </TabItem>
-        <TabItem Header="Canvas">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition MaxHeight="20"></RowDefinition>
-                    <!--<RowDefinition MaxHeight="100"></RowDefinition>
-                    <RowDefinition MaxHeight="100"></RowDefinition>-->
-
-                    <RowDefinition MaxHeight="30"></RowDefinition>
-                    <RowDefinition MaxHeight="30"></RowDefinition>
-                    <!--<RowDefinition MaxHeight="100"></RowDefinition>-->
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <DockPanel Grid.Row="0">
-                    <Menu DockPanel.Dock="Top">
-                        <MenuItem Header="File" >
-                            <MenuItem Header="_Open" Click="FileOpenHeader_CanvasTab_Click"  x:Name="FileOpenHeader_CanvasTab"/>
-                            <MenuItem Header="_Save to Xml" Click="SaveFileMenuItem_CanvasTab_Click"  x:Name="SaveFileMenuItem_CanvasTab"/>
-                            <MenuItem Header="_Load from Xml" Click="LoadFileMenuItem_CanvasTab_Click"  x:Name="LoadFileMenuItem_CanvasTab"/>
-                        </MenuItem>
-                    </Menu>
-                </DockPanel>
-                <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
-                    <Button Margin="5" x:Name="PlayButton_CanvasTab" ToolTip="Play" Click="PlayButton_Click_CanvasTab" IsEnabled="False">
-                        <Image Source="..\..\Resources\PlayButton.png"/>
-                    </Button>
-                    <Button Margin="5" ToolTip="Pause" Click="PauseButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
-                        <Image Source="..\..\Resources\PauseButton.png"/>
-                    </Button>
-                    <Button Margin="5" x:Name="StopButton_CanvasTab" ToolTip="Stop" Click="StopButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
-                        <Image Source="..\..\Resources\StopButton.png"/>
-                    </Button>
-                </WrapPanel>
-                <Border Grid.Row="2" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
-                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <TextBlock x:Name="Tbox_CanvasTab" VerticalAlignment="Center" Padding="5"></TextBlock>
-                        <Label>InRange</Label>
-                        <CheckBox x:Name="InRangeCheckBox_CanvasTab" IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
-                        <Label>ThresHold</Label>
-                        <CheckBox x:Name="ThresHoldCheckBox_CanvasTab" IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
-                        <Label VerticalAlignment="Center">Canny</Label>
-                        <CheckBox x:Name="CannyCheckBox_CanvasTab"  IsChecked="{Binding Path=IsEnabled,Mode=TwoWay}" Checked="CheckBox_CanvasTab_Checked"/>
-                    </WrapPanel>
-                </Border>
-                <Canvas Grid.Row="3" x:Name="CanvasElement_CanvasTab" 
-                        MouseLeftButtonDown="CanvasElement_CanvasTab_MouseLeftButtonDown" 
-                        MouseMove="CanvasElement_CanvasTab_MouseMove" 
-                        MouseLeftButtonUp="CanvasElement_CanvasTab_MouseLeftButtonUp"
-                        Background="Transparent">
-                    <!--PreviewMouseLeftButtonUp="CanvasElement_CanvasTab_MouseLeftButtonUp"-->
-                    <Image x:Name="ImageViewer_CanvasTab"/>
-                    <!--<Image x:Name="ImageViewer_CanvasTab" Width="{Binding ElementName=CanvasElement_CanvasTab,Path=ActualWidth}" Height="{Binding ElementName=CanvasElement_CanvasTab, Path=ActualHeight}"/>-->
-                </Canvas>
             </Grid>
         </TabItem>
     </TabControl>
