@@ -64,7 +64,7 @@ namespace EmguWpfApp
         {
             InitializeComponent();
             ThresHold_Combobox.ItemsSource = ThresHold.AvailibleThresholdValues;
-            CannyCheckBox_CanvasTab.DataContext = this;
+            //CannyCheckBox_CanvasTab.DataContext = this;
             //CannyTab_ThresholdParam.DataContext = this;
             //CannyTab_ThresholdLinkingParam.DataContext = this;
             InRangeTab.DataContext = inRange;
@@ -129,22 +129,10 @@ namespace EmguWpfApp
         //    }
         //}
 
-        private void Color_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void InRange_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            try
-            {
-                if (inRange.IsEnabled)
-                {
-                    using (IImage img = inRange.ProccessImage(ImgRegion))
-                    {
-                        ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            if (inRange.IsEnabled && ImgRegion != null)
+                InRange_ValueChanged();
         }
 
         private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -169,6 +157,24 @@ namespace EmguWpfApp
         {
             if (Canny.IsEnabled && ImgRegion != null)
                 Canny_ValueChanged();
+        }
+
+        private void InRange_ValueChanged()
+        {
+            try
+            {
+                if (inRange.IsEnabled)
+                {
+                    using (IImage img = inRange.ProccessImage(ImgRegion))
+                    {
+                        ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void Canny_ValueChanged()
@@ -641,11 +647,17 @@ namespace EmguWpfApp
                     //Put to filter tabs
                     CanvasElement_CanvasTab.Children.Add(rct);
                     ReleaseMouseWithRectangel();
+
+                    //Show image on tab's ImageSource if exist
+                    if (xAttr != null && xAttr.Value == "InRange" && PreviousImage != null)
+                        InRange_ValueChanged();
+                    else if (xAttr != null && xAttr.Value == "Canny" && PreviousImage != null)
+                        Canny_ValueChanged();
                 }
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

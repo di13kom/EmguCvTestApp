@@ -267,7 +267,7 @@ namespace EmguWpfApp
                 if (value != _i2Gradient)
                 {
                     _i2Gradient = value;
-                    NotifyPropertyChanged("i2Gradient");
+                    NotifyPropertyChanged("I2Gradient");
                 }
             }
         }
