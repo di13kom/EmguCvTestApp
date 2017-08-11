@@ -190,7 +190,7 @@ namespace EmguWpfApp
 
         private void CanvasElement_CanvasTab_MouseMove(object sender, MouseEventArgs e)
         {
-            if (CanvasStatus > Status.Play) 
+            if (CanvasStatus > Status.Play)
             {
                 if (Mouse.LeftButton == MouseButtonState.Pressed)
                 {
@@ -227,7 +227,7 @@ namespace EmguWpfApp
                 }
                 else
                 {
-                    ReleaseMouseWithRectangel();       
+                    ReleaseMouseWithRectangel();
                 }
             }
         }
@@ -469,7 +469,33 @@ namespace EmguWpfApp
 
                     XElement ProcessType = new XElement(XName.Get("ProcessingFilter"));
                     if (Canny.IsEnabled == true)
-                        ProcessType.Value = "Canny";
+                    {
+                        XAttribute xatr = new XAttribute(XName.Get("Type"), "Canny");
+                        ProcessType.Add(xatr);
+
+                        //
+                        double _thresholdParam;
+                        double _thresholdLinkingParam;
+                        int _apertureSize = 5;
+                        bool _i2Gradient = false;
+                        //
+
+                        XElement CannyThresHoldParam = new XElement(XName.Get("ThresHoldParam"));
+                        CannyThresHoldParam.Value = Canny.ThresholdParam.ToString();
+                        ProcessType.Add(CannyThresHoldParam);
+
+                        XElement CannyThresHoldLinkingParam = new XElement(XName.Get("ThresHoldLinkingParam"));
+                        CannyThresHoldLinkingParam.Value = Canny.ThresholdLinkingParam.ToString();
+                        ProcessType.Add(CannyThresHoldLinkingParam);
+
+                        XElement CannyApertureSize = new XElement(XName.Get("ApertureSize"));
+                        CannyApertureSize.Value = Canny.ApertureSize.ToString();
+                        ProcessType.Add(CannyApertureSize);
+
+                        XElement CannyI2Gradient = new XElement(XName.Get("I2Gradient"));
+                        CannyI2Gradient.Value = Canny.I2Gradient.ToString();
+                        ProcessType.Add(CannyI2Gradient);
+                    }
                     else if (ThresHold.IsEnabled == true)
                         ProcessType.Value = "ThresHold";
                     else if (inRange.IsEnabled == true)
@@ -571,7 +597,7 @@ namespace EmguWpfApp
                     double startX = double.Parse(xDoc.Element("StartPositionX").Value);
                     double startY = double.Parse(xDoc.Element("StartPositionY").Value);
                     rct = new Rectangle();
-                    
+
                     StartPoint = new Point(startX, startY);
                     double width = double.Parse(xDoc.Element("ImageWidth").Value);
                     double height = double.Parse(xDoc.Element("ImageHeight").Value);
@@ -602,6 +628,15 @@ namespace EmguWpfApp
                         inRange.MaskMinBlue = int.Parse(xElem.Element("MaskMinimumBlue").Value);
                         inRange.MaskMinGreen = int.Parse(xElem.Element("MaskMinimumGreen").Value);
                         inRange.MaskMinRed = int.Parse(xElem.Element("MaskMinimumRed").Value);
+                    }
+                    else if (xAttr != null && xAttr.Value == "Canny")
+                    {
+                        Canny.IsEnabled = true;
+
+                        Canny.ThresholdParam = int.Parse(xElem.Element("ThresHoldParam").Value);
+                        Canny.ThresholdLinkingParam = int.Parse(xElem.Element("ThresHoldLinkingParam").Value);
+                        Canny.I2Gradient = bool.Parse(xElem.Element("I2Gradient").Value);
+                        Canny.ApertureSize = int.Parse(xElem.Element("ApertureSize").Value);
                     }
                     //Put to filter tabs
                     CanvasElement_CanvasTab.Children.Add(rct);
