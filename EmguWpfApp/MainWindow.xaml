@@ -130,7 +130,7 @@
                 </StackPanel>
                 <Border Grid.Row="3" HorizontalAlignment="Stretch" BorderThickness="1" Background="GhostWhite" BorderBrush="Gainsboro">
                     <DockPanel HorizontalAlignment="Center"  VerticalAlignment="Center">
-                        <CheckBox x:Name="ColorMask_Sync" IsChecked="{Binding Path=IsColorMaskSync, Mode=TwoWay}" Margin="5"/>
+                        <CheckBox x:Name="ColorMask_Sync" IsChecked="{Binding Path=IsColorMaskSync, Mode=TwoWay}" Margin="5" Checked="ColorMask_Sync_Checked" Unchecked="ColorMask_Sync_Checked"/>
                         <Label>Synchronize ColorRange and ColorMask?</Label>
                     </DockPanel>
                 </Border>

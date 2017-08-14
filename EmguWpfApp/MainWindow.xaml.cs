@@ -679,5 +679,11 @@ namespace EmguWpfApp
                 CanvasStatus = Status.ImageChosen;
             }
         }
+
+        private void ColorMask_Sync_Checked(object sender, RoutedEventArgs e)
+        {
+            if (inRange.IsEnabled && ImgRegion != null)
+                InRange_ValueChanged();
+        }
     }
 }
