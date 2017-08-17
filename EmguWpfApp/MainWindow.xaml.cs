@@ -50,11 +50,8 @@ namespace EmguWpfApp
         Rectangle rct = null;
 
         Image<Bgr, byte> ImgRegion;
-        Image<Bgr, byte> PreviousImage;
+        Image<Bgr, byte> CurrentFrame;
 
-        //bool IsVideoPlaying = false;
-        //bool IsVideoPaused = false;
-        //bool IsVideoPlayStarted = false;
         double FrameNumOnPause;
         Status CanvasStatus = Status.Unknown;
         double CaptureWidth;
@@ -64,9 +61,7 @@ namespace EmguWpfApp
         {
             InitializeComponent();
             ThresHold_Combobox.ItemsSource = ThresHold.AvailibleThresholdTypes;
-            //CannyCheckBox_CanvasTab.DataContext = this;
-            //CannyTab_ThresholdParam.DataContext = this;
-            //CannyTab_ThresholdLinkingParam.DataContext = this;
+            
             InRangeTab.DataContext = inRange;
             ThresHoldTab.DataContext = ThresHold;
             CannyTab.DataContext = Canny;
@@ -75,77 +70,8 @@ namespace EmguWpfApp
             InRangeCheckBox_CanvasTab.DataContext = inRange;
             ThresHoldCheckBox_CanvasTab.DataContext = ThresHold;
             CannyCheckBox_CanvasTab.DataContext = Canny;
-            //CannyTab_ListBox_Aperture.ItemsSource = ApertureValues;
         }
 
-        //private void MenuItemOpen_Click(object sender, RoutedEventArgs e)
-        //{
-        //    MenuItem mItem = (MenuItem)sender;
-        //    try
-        //    {
-        //        OpenFileDialog dlg = new OpenFileDialog();
-        //        dlg.DefaultExt = "*.png";
-        //        dlg.Filter = "BMP Files(*.bmp) | *.bmp|JPEG Files(*.jpeg) | *.jpeg| PNG Files(*.png) | *.png| JPG Files(*.jpg) | *.jpg| GIF Files(*.gif) | *.gif";
-        //        dlg.Multiselect = false;
-        //        bool? res = dlg.ShowDialog();
-
-        //        if (res == true)
-        //        {
-        //            IImage img;
-        //            //MessageBox.Show($"File chosen:{dlg.FileName}");
-        //            if (mItem.Name == "FileOpenHeader_InRangeTab")
-        //            {
-        //                xFileName = dlg.FileName;
-        //                img = new Image<Rgb, byte>(xFileName);
-        //                ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
-        //            }
-        //            else if (mItem.Name == "FileOpenHeader_ThresHoldTab")
-        //            {
-        //                xFileNameThres = dlg.FileName;
-        //                if (ThresHold_Color_CheckBox.IsChecked == true)
-        //                    img = new Image<Rgb, byte>(xFileNameThres);
-        //                else
-        //                    img = new Image<Gray, byte>(xFileNameThres);
-
-        //                ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
-        //            }
-        //            else if (mItem.Name == "FileOpenHeader_CannyTab")
-        //            {
-        //                CannyFileName = dlg.FileName;
-        //                img = new Image<Rgb, byte>(CannyFileName);
-        //                CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(img);
-        //            }
-        //            else if (mItem.Name == "FileOpenVideoHeader_CanvasTab")
-        //            {
-        //                CanvasVideoFileName = dlg.FileName;
-        //                img = new Image<Rgb, byte>(CanvasVideoFileName);
-        //                ImageViewer_CanvasTab.Source = EmguWpfBitmap.ToBitmapSource(img);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show(ex.Message);
-        //    }
-        //}
-
-        private void InRange_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (inRange.IsEnabled && ImgRegion != null)
-                InRange_ValueChanged();
-        }
-
-        private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (ThresHold.IsEnabled && ImgRegion != null)
-                ThresHold_ValueChanged();
-        }
-
-        private void Canny_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (Canny.IsEnabled && ImgRegion != null)
-                Canny_ValueChanged();
-        }
 
         private void InRange_ValueChanged()
         {
@@ -199,7 +125,88 @@ namespace EmguWpfApp
             }
         }
 
+        private void ReleaseMouseWithRectangel()
+        {
+            if (CanvasElement_CanvasTab.Children.Contains(rct) && CanvasStatus > Status.Play)
+            {
+                double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
+                double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
+                double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
+                double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
+                ImgRegion = CurrentFrame.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth));
 
+                ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
+                //xFileName = "1";
+                CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
+                ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
+
+                this.CanvasElement_CanvasTab.Children.Remove(rct);
+                //CvInvoke.NamedWindow("wnd");
+                //CvInvoke.Imshow("wnd", ImgRegion);
+            }
+        }
+
+        private void Cp_ImageGrabbed(object sender, EventArgs e)
+        {
+            try
+            {
+                Capture xCp = (Capture)sender;
+                Image<Bgr, byte> imgX = new Image<Bgr, byte>((int)CaptureWidth, (int)CaptureHeight);
+                xCp.Retrieve(imgX);
+                //CannyTab_ImageViewer.Dispatcher.Invoke(() => {
+                //imgX = imgX.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
+                double startX = 0;
+                double startY = 0;
+                double wdth = 0;
+                double hgth = 0;
+                if (StartPoint != null && EndPoint != null & rct != null)
+                {
+
+                    startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
+                    startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
+                    wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
+                    hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
+
+                    if (Canny.IsEnabled == true)
+                    {
+                        Canny.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)))
+                            .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+
+                    }
+                    else if (inRange.IsEnabled)
+                    {
+                        inRange.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)))
+                            .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+                    }
+                    else if (ThresHold.IsEnabled)
+                    {
+                        if (ThresHold.IsColorEnabled == true)
+                            ((Image<Bgr, byte>)ThresHold.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))))
+                                .CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+                        else
+                            ((Image<Gray, byte>)ThresHold.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))))
+                                .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
+                    }
+                }
+                Dispatcher.Invoke(() =>
+                {
+                    Tbox_CanvasTab.Text = xCp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames).ToString();
+                    ImageViewer_CanvasTab.Source = EmguWpfBitmap.ToBitmapSource(imgX);
+                });
+
+                if (CurrentFrame != null)
+                    CurrentFrame.Dispose();
+                CurrentFrame = imgX;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error in cp_ImageGrabbed: {ex.Message}");
+            }
+        }
+
+//UI handlers
+    //Canvas Tab
         private void CanvasElement_CanvasTab_MouseMove(object sender, MouseEventArgs e)
         {
             if (CanvasStatus > Status.Play)
@@ -241,27 +248,6 @@ namespace EmguWpfApp
                 {
                     ReleaseMouseWithRectangel();
                 }
-            }
-        }
-
-        private void ReleaseMouseWithRectangel()
-        {
-            if (CanvasElement_CanvasTab.Children.Contains(rct) && CanvasStatus > Status.Play)
-            {
-                double startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
-                double startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
-                double wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
-                double hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
-                ImgRegion = PreviousImage.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth));
-
-                ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-                //xFileName = "1";
-                CannyTab_ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-                ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(ImgRegion);
-
-                this.CanvasElement_CanvasTab.Children.Remove(rct);
-                //CvInvoke.NamedWindow("wnd");
-                //CvInvoke.Imshow("wnd", ImgRegion);
             }
         }
 
@@ -331,65 +317,6 @@ namespace EmguWpfApp
             }
         }
 
-        private void Cp_ImageGrabbed(object sender, EventArgs e)
-        {
-            try
-            {
-                Capture xCp = (Capture)sender;
-                Image<Bgr, byte> imgX = new Image<Bgr, byte>((int)CaptureWidth, (int)CaptureHeight);
-                xCp.Retrieve(imgX);
-                //CannyTab_ImageViewer.Dispatcher.Invoke(() => {
-                //imgX = imgX.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear);
-                double startX = 0;
-                double startY = 0;
-                double wdth = 0;
-                double hgth = 0;
-                if (StartPoint != null && EndPoint != null & rct != null)
-                {
-
-                    startX = StartPoint.X < EndPoint.X ? StartPoint.X : EndPoint.X;
-                    startY = StartPoint.Y < EndPoint.Y ? StartPoint.Y : EndPoint.Y;
-                    wdth = StartPoint.X > EndPoint.X ? StartPoint.X - EndPoint.X : EndPoint.X - StartPoint.X;
-                    hgth = StartPoint.Y > EndPoint.Y ? StartPoint.Y - EndPoint.Y : EndPoint.Y - StartPoint.Y;
-
-                    if (Canny.IsEnabled == true)
-                    {
-                        Canny.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)))
-                            .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
-
-                    }
-                    else if (inRange.IsEnabled)
-                    {
-                        inRange.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)))
-                            .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
-                    }
-                    else if (ThresHold.IsEnabled)
-                    {
-                        if (ThresHold.IsColorEnabled == true)
-                            ((Image<Bgr, byte>)ThresHold.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))))
-                                .CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
-                        else
-                            ((Image<Gray, byte>)ThresHold.ProccessImage(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth))))
-                                .Convert<Bgr, byte>().CopyTo(imgX.GetSubRect(new System.Drawing.Rectangle((int)startX, (int)startY, (int)wdth, (int)hgth)));
-                    }
-                }
-                Dispatcher.Invoke(() =>
-                {
-                    Tbox_CanvasTab.Text = xCp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames).ToString();
-                    ImageViewer_CanvasTab.Source = EmguWpfBitmap.ToBitmapSource(imgX);
-                });
-
-                if (PreviousImage != null)
-                    PreviousImage.Dispose();
-                PreviousImage = imgX;
-
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error in cp_ImageGrabbed: {ex.Message}");
-            }
-        }
-
         private void PauseButton_Click_CanvasTab(object sender, RoutedEventArgs e)
         {
             if (CanvasStatus == Status.Play)
@@ -410,7 +337,6 @@ namespace EmguWpfApp
                 CanvasStatus = Status.Stop;
             }
         }
-
 
         private void CheckBox_CanvasTab_Checked(object sender, RoutedEventArgs e)
         {
@@ -436,25 +362,7 @@ namespace EmguWpfApp
                     break;
             }
         }
-
-        //private void CannyTab_ListBox_Aperture_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (Canny.IsEnabled && ImgRegion != null)
-        //        Canny_ValueChanged();
-        //}
-
-        private void CannyTab_Checkbox_I2Gradien_Checked(object sender, RoutedEventArgs e)
-        {
-            if (Canny.IsEnabled && ImgRegion != null)
-                Canny_ValueChanged();
-        }
-
-        private void CannyTab_Aperture_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (Canny.IsEnabled && ImgRegion != null)
-                Canny_ValueChanged();
-        }
-
+        //Menu Items
         private void SaveFileMenuItem_CanvasTab_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -727,11 +635,11 @@ namespace EmguWpfApp
                     ReleaseMouseWithRectangel();
 
                     //Show image on tab's ImageSource if exist
-                    if (xAttr != null && xAttr.Value == "InRange" && PreviousImage != null)
+                    if (xAttr != null && xAttr.Value == "InRange" && CurrentFrame != null)
                         InRange_ValueChanged();
-                    else if (xAttr != null && xAttr.Value == "Canny" && PreviousImage != null)
+                    else if (xAttr != null && xAttr.Value == "Canny" && CurrentFrame != null)
                         Canny_ValueChanged();
-                    else if (xAttr != null && xAttr.Value == "ThresHold" && PreviousImage != null)
+                    else if (xAttr != null && xAttr.Value == "ThresHold" && CurrentFrame != null)
                         ThresHold_ValueChanged();
                 }
             }
@@ -754,16 +662,47 @@ namespace EmguWpfApp
             {
                 CanvasImageFileName = dlg.FileName;
                 CanvasVideoFileName = null;
-                PreviousImage = new Image<Bgr, byte>(CanvasImageFileName);
-                ImageViewer_CanvasTab.Source = EmguWpfBitmap.ToBitmapSource(PreviousImage);
+                CurrentFrame = new Image<Bgr, byte>(CanvasImageFileName);
+                ImageViewer_CanvasTab.Source = EmguWpfBitmap.ToBitmapSource(CurrentFrame);
                 CanvasStatus = Status.ImageChosen;
             }
+        }
+
+    //InRange Tab 
+        private void InRange_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (inRange.IsEnabled && ImgRegion != null)
+                InRange_ValueChanged();
         }
 
         private void ColorMask_Sync_Checked(object sender, RoutedEventArgs e)
         {
             if (inRange.IsEnabled && ImgRegion != null)
                 InRange_ValueChanged();
+        }
+    //Canny Tab
+        private void Canny_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (Canny.IsEnabled && ImgRegion != null)
+                Canny_ValueChanged();
+        }
+
+        private void CannyTab_Checkbox_I2Gradien_Checked(object sender, RoutedEventArgs e)
+        {
+            if (Canny.IsEnabled && ImgRegion != null)
+                Canny_ValueChanged();
+        }
+
+        private void CannyTab_Aperture_Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (Canny.IsEnabled && ImgRegion != null)
+                Canny_ValueChanged();
+        }
+    //ThresHold Tab
+        private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (ThresHold.IsEnabled && ImgRegion != null)
+                ThresHold_ValueChanged();
         }
 
         private void ThresHold_Color_CheckBox_Checked(object sender, RoutedEventArgs e)
