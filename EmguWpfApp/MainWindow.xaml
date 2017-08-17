@@ -247,10 +247,10 @@
                     </Menu>-->
                 </DockPanel>
                 <StackPanel x:Name="Panel1_ThresHoldTab" Grid.Row="1" Margin="10,0,10,0" HorizontalAlignment="Stretch">
-                    <ComboBox x:Name="ThresHold_Combobox" SelectedValue="{Binding Path=CurrentThresHoldValue, Mode=TwoWay}"></ComboBox>
+                    <ComboBox x:Name="ThresHold_Combobox" SelectedValue="{Binding Path=CurrentThresHoldType, Mode=TwoWay}" SelectionChanged="ThresHold_Combobox_SelectionChanged"></ComboBox>
                     <DockPanel VerticalAlignment="Bottom" HorizontalAlignment="Center">
                         <Label>Use Color Threshold?</Label>
-                        <CheckBox x:Name="ThresHold_Color_CheckBox" IsChecked="{Binding Path=IsColorEnabled,Mode=TwoWay}" Margin="5"/>
+                        <CheckBox x:Name="ThresHold_Color_CheckBox" IsChecked="{Binding Path=IsColorEnabled,Mode=TwoWay}" Checked="ThresHold_Color_CheckBox_Checked" Unchecked="ThresHold_Color_CheckBox_Checked" Margin="5"/>
                     </DockPanel>
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>
                     <DockPanel IsEnabled="{Binding Path=IsColorEnabled}">

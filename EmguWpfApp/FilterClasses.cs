@@ -14,7 +14,7 @@ namespace EmguWpfApp
     {
         bool _isEnabled;
         bool _isColorsEnabled = false;
-        string _currenValue;
+        string _currentType;
         double _ThresHoldBlueValue = 0;
         double _ThresHoldGreenOrGrayValue = 0;
         double _ThresHoldRedValue = 0;
@@ -23,9 +23,9 @@ namespace EmguWpfApp
         double _MaxValueGreenOrGray = 0;
         double _MaxValueRed = 0;
 
-        public ObservableCollection<string> AvailibleThresholdValues = new ObservableCollection<string>
+        public ObservableCollection<string> AvailibleThresholdTypes = new ObservableCollection<string>
         {
-            "ThresHoldAdaptive",
+            //"ThresHoldAdaptive",
             "ThresHoldBinaryInv",
             "ThresHoldBinary",
             "ThresHoldToZeroInv",
@@ -60,13 +60,13 @@ namespace EmguWpfApp
             }
         }
 
-        public string CurrentThresHoldValue
+        public string CurrentThresHoldType
         {
-            get { return _currenValue; }
+            get { return _currentType; }
             set
             {
-                _currenValue = value;
-                NotifyPropertyChanged("CurrentThresHoldValue");
+                _currentType = value;
+                NotifyPropertyChanged("CurrentThresHoldType");
             }
         }
         public double[] GetBGR
@@ -136,13 +136,13 @@ namespace EmguWpfApp
 
         public ThresHoldStruct()
         {
-            CurrentThresHoldValue = AvailibleThresholdValues[2];
+            CurrentThresHoldType = AvailibleThresholdTypes[1];
         }
 
         public IImage ProccessImage(Image<Bgr, byte> inImage)
         {
             IImage img = null;
-            switch (CurrentThresHoldValue)
+            switch (CurrentThresHoldType)
             {
                 case "ThresHoldBinary":
                     if (IsColorEnabled == true)
@@ -180,9 +180,9 @@ namespace EmguWpfApp
                     else
                         img = inImage.Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHoldGreenOrGray));
                     break;
-                case "ThresHoldAdaptive":
+                //case "ThresHoldAdaptive":
 
-                    break;
+                //    break;
             }
             return img;
         }

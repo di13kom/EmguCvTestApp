@@ -63,7 +63,7 @@ namespace EmguWpfApp
         public MainWindow()
         {
             InitializeComponent();
-            ThresHold_Combobox.ItemsSource = ThresHold.AvailibleThresholdValues;
+            ThresHold_Combobox.ItemsSource = ThresHold.AvailibleThresholdTypes;
             //CannyCheckBox_CanvasTab.DataContext = this;
             //CannyTab_ThresholdParam.DataContext = this;
             //CannyTab_ThresholdLinkingParam.DataContext = this;
@@ -137,20 +137,8 @@ namespace EmguWpfApp
 
         private void ThresHold_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            try
-            {
-                if (ThresHold.IsEnabled == true)
-                {
-                    using (IImage img = ThresHold.ProccessImage(ImgRegion))
-                    {
-                        ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
+            if (ThresHold.IsEnabled && ImgRegion != null)
+                ThresHold_ValueChanged();
         }
 
         private void Canny_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -190,6 +178,24 @@ namespace EmguWpfApp
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void ThresHold_ValueChanged()
+        {
+            try
+            {
+                if (ThresHold.IsEnabled == true)
+                {
+                    using (IImage img = ThresHold.ProccessImage(ImgRegion))
+                    {
+                        ImageViewer_ThresHoldTab.Source = EmguWpfBitmap.ToBitmapSource(img);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -479,13 +485,6 @@ namespace EmguWpfApp
                         XAttribute xatr = new XAttribute(XName.Get("Type"), "Canny");
                         ProcessType.Add(xatr);
 
-                        //
-                        double _thresholdParam;
-                        double _thresholdLinkingParam;
-                        int _apertureSize = 5;
-                        bool _i2Gradient = false;
-                        //
-
                         XElement CannyThresHoldParam = new XElement(XName.Get("ThresHoldParam"));
                         CannyThresHoldParam.Value = Canny.ThresholdParam.ToString();
                         ProcessType.Add(CannyThresHoldParam);
@@ -503,7 +502,59 @@ namespace EmguWpfApp
                         ProcessType.Add(CannyI2Gradient);
                     }
                     else if (ThresHold.IsEnabled == true)
-                        ProcessType.Value = "ThresHold";
+                    {
+                        XAttribute xatr = new XAttribute(XName.Get("Type"), "ThresHold");
+                        ProcessType.Add(xatr);
+
+                        XElement ThresholdTypeOperation = new XElement(XName.Get("ThresholdTypeOperation"));
+                        ThresholdTypeOperation.Value = ThresHold.CurrentThresHoldType.ToString();
+                        ProcessType.Add(ThresholdTypeOperation);
+
+                        XElement IsColorThresholding = new XElement(XName.Get("IsColorThresHolding"));
+                        IsColorThresholding.Value = ThresHold.IsColorEnabled.ToString();
+                        ProcessType.Add(IsColorThresholding);
+
+                        if (ThresHold.IsColorEnabled == true)
+                        {
+                            //Colors
+                            XElement BlueThresHoldValue = new XElement(XName.Get("BlueThresHoldValue"));
+                            BlueThresHoldValue.Value = ThresHold.ThresHoldBlue.ToString();
+                            ProcessType.Add(BlueThresHoldValue);
+
+                            XElement GreenThresHoldValue = new XElement(XName.Get("GreenThresHoldValue"));
+                            GreenThresHoldValue.Value = ThresHold.ThresHoldGreenOrGray.ToString();
+                            ProcessType.Add(GreenThresHoldValue);
+
+                            XElement RedThresHoldValue = new XElement(XName.Get("RedThresHoldValue"));
+                            RedThresHoldValue.Value = ThresHold.ThresHoldRed.ToString();
+                            ProcessType.Add(RedThresHoldValue);
+                            //
+
+                            //MaxValues 
+                            XElement BlueMaxValue = new XElement(XName.Get("BlueMaxValue"));
+                            BlueMaxValue.Value = ThresHold.MaxValueBlue.ToString();
+                            ProcessType.Add(BlueMaxValue);
+
+                            XElement GreenMaxValue = new XElement(XName.Get("GreenMaxValue"));
+                            GreenMaxValue.Value = ThresHold.MaxValueGreenOrGray.ToString();
+                            ProcessType.Add(GreenMaxValue);
+
+                            XElement RedMaxValue = new XElement(XName.Get("RedMaxValue"));
+                            RedMaxValue.Value = ThresHold.MaxValueRed.ToString();
+                            ProcessType.Add(RedMaxValue);
+                        }
+                        else
+                        {
+                            XElement GrayThresHoldValue = new XElement(XName.Get("GrayThresHoldValue"));
+                            GrayThresHoldValue.Value = ThresHold.ThresHoldGreenOrGray.ToString();
+                            ProcessType.Add(GrayThresHoldValue);
+
+                            XElement GrayMaxValue = new XElement(XName.Get("GrayMaxValue"));
+                            GrayMaxValue.Value = ThresHold.MaxValueGreenOrGray.ToString();
+                            ProcessType.Add(GrayMaxValue);
+                        }
+
+                    }
                     else if (inRange.IsEnabled == true)
                     {
                         //ProcessType.Value = "InRange";
@@ -644,6 +695,33 @@ namespace EmguWpfApp
                         Canny.I2Gradient = bool.Parse(xElem.Element("I2Gradient").Value);
                         Canny.ApertureSize = int.Parse(xElem.Element("ApertureSize").Value);
                     }
+                    else if (xAttr != null && xAttr.Value == "ThresHold")
+                    {
+                        ThresHold.IsEnabled = true;
+
+                        //Type
+                        ThresHold.CurrentThresHoldType = xElem.Element("ThresholdTypeOperation").Value;
+                        //IsColor
+                        ThresHold.IsColorEnabled = bool.Parse(xElem.Element("IsColorThresHolding").Value);
+
+                        if (ThresHold.IsColorEnabled == true)
+                        {
+                            //ThresHold
+                            ThresHold.ThresHoldBlue = int.Parse(xElem.Element("BlueThresHoldValue").Value);
+                            ThresHold.ThresHoldGreenOrGray = int.Parse(xElem.Element("GreenThresHoldValue").Value);
+                            ThresHold.ThresHoldRed = int.Parse(xElem.Element("RedThresHoldValue").Value);
+                            //MaxValue
+                            ThresHold.MaxValueBlue = int.Parse(xElem.Element("BlueMaxValue").Value);
+                            ThresHold.MaxValueGreenOrGray = int.Parse(xElem.Element("GreenMaxValue").Value);
+                            ThresHold.MaxValueRed = int.Parse(xElem.Element("RedMaxValue").Value);
+
+                        }
+                        else
+                        {
+                            ThresHold.ThresHoldGreenOrGray = int.Parse(xElem.Element("GrayThresHoldValue").Value);
+                            ThresHold.MaxValueGreenOrGray = int.Parse(xElem.Element("GrayMaxValue").Value);
+                        }
+                    }
                     //Put to filter tabs
                     CanvasElement_CanvasTab.Children.Add(rct);
                     ReleaseMouseWithRectangel();
@@ -653,6 +731,8 @@ namespace EmguWpfApp
                         InRange_ValueChanged();
                     else if (xAttr != null && xAttr.Value == "Canny" && PreviousImage != null)
                         Canny_ValueChanged();
+                    else if (xAttr != null && xAttr.Value == "ThresHold" && PreviousImage != null)
+                        ThresHold_ValueChanged();
                 }
             }
             catch (Exception ex)
@@ -684,6 +764,18 @@ namespace EmguWpfApp
         {
             if (inRange.IsEnabled && ImgRegion != null)
                 InRange_ValueChanged();
+        }
+
+        private void ThresHold_Color_CheckBox_Checked(object sender, RoutedEventArgs e)
+        {
+            if (ThresHold.IsEnabled && ImgRegion != null)
+                ThresHold_ValueChanged();
+        }
+
+        private void ThresHold_Combobox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ThresHold.IsEnabled && ImgRegion != null)
+                ThresHold_ValueChanged();
         }
     }
 }
