@@ -35,13 +35,13 @@
                 </DockPanel>
                 <WrapPanel Grid.Row="1" HorizontalAlignment="Center">
                     <Button Margin="5" x:Name="PlayButton_CanvasTab" ToolTip="Play" Click="PlayButton_Click_CanvasTab" IsEnabled="False">
-                        <Image Source="..\..\Resources\PlayButton.png"/>
+                        <Image Source="pack://application:,,,/Resources/PlayButton.png"/>
                     </Button>
                     <Button Margin="5" ToolTip="Pause" Click="PauseButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
-                        <Image Source="..\..\Resources\PauseButton.png"/>
+                        <Image Source="pack://application:,,,/Resources/PauseButton.png"/>
                     </Button>
                     <Button Margin="5" x:Name="StopButton_CanvasTab" ToolTip="Stop" Click="StopButton_Click_CanvasTab" IsEnabled="{Binding ElementName=PlayButton_CanvasTab, Path=IsEnabled, Converter={StaticResource SyncConverter}}">
-                        <Image Source="..\..\Resources\StopButton.png"/>
+                        <Image Source="pack://application:,,,/Resources/StopButton.png"/>
                     </Button>
                 </WrapPanel>
                 <Border Grid.Row="2" BorderThickness="2" Background="GhostWhite" BorderBrush="Gainsboro">
