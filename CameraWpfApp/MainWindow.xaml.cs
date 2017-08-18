@@ -36,6 +36,7 @@ namespace CameraWpfApp
             cp = new Capture(1);
             cp.SetCaptureProperty(CapProp.FrameWidth, 1920);
             cp.SetCaptureProperty(CapProp.FrameHeight, 1080);
+            //CvInvoke.NamedWindow("win");
             cp.ImageGrabbed += Cp_ImageGrabbed;
             cp.Start();
 
@@ -57,6 +58,9 @@ namespace CameraWpfApp
                 {
                     ImageViewer.Source = EmguWpfBitmap.ToBitmapSource(imgFrame);
                 });
+
+                //Imshow Faster. almost no delay.
+                //CvInvoke.Imshow("win", imgFrame);
                 imgFrame.Dispose();
             }
             catch(Exception ex)
