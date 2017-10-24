@@ -1,10 +1,4 @@
-﻿//#define FIGHT
-//#define CHOOSEPLAYER
-//#define RESULT
-//#define KOMESSAGE
-//#define TITLE
-
-//#define SAVEREQUIRED
+﻿//#define SAVEREQUIRED
 #define SHOWREPREDICTRESULT
 
 using System;
@@ -27,18 +21,11 @@ namespace EmguTestApp
     class Program
     {
         static string FileToPlay;
-
-        //static string FileToPlay = @"d:\Q4Vid\20170404162850.mp4";
-
         static string CurrentName = "Common";
-
-        //static string fileVideoExtension = ".mp4";
         static string fileImageExtension = ".bmp";
 
 
         static Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(1920, 1080);
-        //static Image<Bgr, byte> BackGr = new Image<Bgr, byte>(@"C:\Users\User\Desktop\rgb\black2.bmp");
-
 
         static double TotalFrames;
         static double currentFrame = 0;
@@ -50,7 +37,6 @@ namespace EmguTestApp
         static Dictionary<ImageType, Image<Gray, byte>> ResultDict = new Dictionary<ImageType, Image<Gray, byte>>();
 
 #if SHOWREPREDICTRESULT
-        //static List<PredictModel> PredictList = new List<PredictModel>();
         static Dictionary<ImageType, PredictModel> PredictList = new Dictionary<ImageType, PredictModel>();
         static Dictionary<ImageType, Tuple<string, bool>> PredictedValues = new Dictionary<ImageType, Tuple<string, bool>>();
 #endif
@@ -82,7 +68,6 @@ namespace EmguTestApp
             foreach (var ing in ImageProps)
             {
                 PredictList.Add(ing, new PredictModel(ing, ModelType.SvmModel));
-                //PredictedValues.Add(new Tuple<string, string, bool>(string.Empty, string.Empty, true));
                 PredictedValues.Add(ing, new Tuple<string, bool>(string.Empty, true));
             }
 #endif
@@ -94,60 +79,12 @@ namespace EmguTestApp
 
             CurrentName = Path.GetFileNameWithoutExtension(videoName);
 
-            //Test main menu
-#if TITLE
-            #region Title Test
-            //FileToPlay = @"d:\Q4Vid\Menus.mp4";
-            //FileToPlay = @"d:\Q4Vid\ResultWinLose.mp4";
-            FileToPlay = @"d:\Q4Vid\ResultWithChoi.mp4";
-            #endregion
-
-#endif
-            //Test Players Choose
-#if CHOOSEPLAYER
-            #region Player Choose
-            //FileToPlay = @"d:\Q4Vid\RamonChoose.mp4";
-            //FileToPlay = @"d:\Q4Vid\ChoosePlayers.mp4";
-            //FileToPlay = @"d:\Q4Vid\ChoosePlayersLong.mp4";
-            FileToPlay = @"d:\Q4Vid\ChoosePlayerRandom.mp4";
-            #endregion
-#endif
-            //Test Figth
-#if FIGHT
-            #region Fight Test
-            //FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Alice.mp4";
-            //FileToPlay = @"d:\Q4Vid\Round1Message.mp4";
-            //FileToPlay = @"d:\Q4Vid\20170404111842.mp4";
-            //FileToPlay = @"d:\Q4Vid\ReadyMessage.mp4";
-            FileToPlay = @"d:\Q4Vid\RoundFinalMessage.mp4";
-            //FileToPlay = @"d:\Q4Vid\Round2_0.mp4";
-            //FileToPlay = @"d:\Q4Vid\Player1Wins_0.mp4";
-            //FileToPlay = playersDir + CurrentName + fileVideoExtension;
-            #endregion
-#endif
-            //WinLose
-#if RESULT
-            #region WinLose After Match
-            //FileToPlay = @"d:\Q4Vid\PerfectGame.mp4";
-            //FileToPlay = @"d:\Q4Vid\ResultLoseWin.mp4";
-            FileToPlay = @"d:\Q4Vid\ResultWinLose.mp4";
-            #endregion
-#endif
-#if KOMESSAGE
-            FileToPlay = @"d:\Q4Vid\Players\LongVideoWithImages\10sec\Mai.mp4";
-#endif
             foreach (ImageType img in ImageProps)
             {
                 ResultDict.Add(img, null);
             }
 
-
-            //foreach (ImageType key in ResultDict.Keys)
-            //{
-            //    CvInvoke.NamedWindow(key.ToString());
-            //}
             CvInvoke.NamedWindow("BigScreen");
-            //
             capture = new Capture(FileToPlay);
             TotalFrames = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
             Console.WriteLine("total frames:{0}", TotalFrames);
@@ -163,25 +100,11 @@ namespace EmguTestApp
 
         private static void Capture_ImageGrabbed(object sender, EventArgs e)
         {
-            //lock (locker)
-            //{
+
             LastUpdateTime = DateTime.Now;
-            //}
             Capture cp = sender as Capture;
 
             cp.Retrieve(imgFrame);
-            #region Definitions
-#if FIGHT
-#endif
-#if CHOOSEPLAYER
-#endif
-#if TITLE
-#endif
-#if RESULT
-#endif
-#if KOMESSAGE
-#endif
-            #endregion
 
             foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict.ToList())
             {
@@ -226,28 +149,19 @@ namespace EmguTestApp
             CvInvoke.Imshow("BigScreen", imgFrame.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear));
 
 #if SHOWREPREDICTRESULT
-
-            //Console.WriteLine();
-            //int ind = 0;
-
-            //Task<float>[] taskList = new Task<float>[ResultDict.Count];
             Dictionary<ImageType, Task<float>> taskList = new Dictionary<ImageType, Task<float>>();
 
 
             foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
             {
-
-                //int i = ind;
                 taskList[kvpair.Key] = Task<float>.Factory.StartNew(() =>
                 {
                     return PredictList[kvpair.Key].PredictImage(kvpair.Value);
                 }
                     );
-                //ind++;
             }
             Task.WaitAll(taskList.Values.ToArray());
 
-            //ind = 0;
             foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
             {
                 float fl = taskList[kvpair.Key].Result;
@@ -258,13 +172,9 @@ namespace EmguTestApp
                     PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, true);
                 else
                     PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, false);
-                //Console.WriteLine($"{kvpair.Key.ToString()} :{val}");
-                //ind++;
             }
             if (PredictedValues.Any(x => x.Value.Item2 == true))
             {
-                //Console.Clear();
-
                 foreach(KeyValuePair<ImageType, Tuple<string,bool>> kvpair in PredictedValues)
                 {
                     Console.WriteLine($"{currentFrame} - {kvpair.Key.ToString()} : {PredictedValues[kvpair.Key].Item1}");
@@ -299,11 +209,9 @@ namespace EmguTestApp
             DateTime dt = DateTime.Now;
             if ((dt - LastUpdateTime) > TimeSpan.FromSeconds(2))
             {
-                //Console.WriteLine("Stoping capture");
                 capture.Stop();
 
                 Environment.Exit(1);
-                //capture.Dispose();
             }
         }
 
