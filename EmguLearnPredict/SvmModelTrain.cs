@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EmguLearnPredict_Tekken7;
+using EmguLearnPredict_KOFXIV;
 
 namespace EmguLearnPredict
 {
