@@ -35,7 +35,7 @@ namespace EmguWpfApp
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(String info)
+        private void NotifyPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
@@ -198,7 +198,7 @@ namespace EmguWpfApp
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(String info)
+        private void NotifyPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
             //if (PropertyChanged != null)
@@ -308,7 +308,7 @@ namespace EmguWpfApp
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private void NotifyPropertyChanged(String info)
+        private void NotifyPropertyChanged(string info)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
