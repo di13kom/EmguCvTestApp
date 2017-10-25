@@ -22,13 +22,11 @@ namespace EmguTestApp
     {
         static string FileToPlay;
         static string CurrentName = "Common";
-        static string fileImageExtension = ".bmp";
-        public static readonly int FullHDWigth = 1920;
+        static readonly int FullHDWigth = 1920;
         public static readonly int FullHDHeight = 1080;
-        //static Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(1920, 1080);
 
         static double TotalFrames;
-        static double currentFrame = 0;
+
         static Capture capture;
 
         static Dictionary<ImageType, Image<Gray, byte>> ResultDict = new Dictionary<ImageType, Image<Gray, byte>>();
@@ -97,93 +95,97 @@ namespace EmguTestApp
         //private static void Capture_ImageGrabbed(object sender, EventArgs e)
         private static void Capture_ImageGrabbed()
         {
-            Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(FullHDWigth, FullHDHeight);
             try
             {
-                Capture cp = capture;
-
-                bool retVal = cp.Retrieve(imgFrame);
-                if (retVal == false)
-                    throw new Exception("nothing Retrieve");
-
-                foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict.ToList())
+                using (Image<Bgr, byte> imgFrame = new Image<Bgr, byte>(FullHDWigth, FullHDHeight))
                 {
-                    //grab Image
-                    Image<Gray, byte> image = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                        ImageFormat.ImageParam[kvRes.Key].XPos,
-                        ImageFormat.ImageParam[kvRes.Key].YPos,
-                        ImageFormat.ImageParam[kvRes.Key].Width,
-                        ImageFormat.ImageParam[kvRes.Key].Height))
-                    .InRange(
-                        ImageFormat.ImageParam[kvRes.Key].ColorLowerThreshold,
-                        ImageFormat.ImageParam[kvRes.Key].ColorHigherThreshold)
-                    .Resize(
-                        ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                    Capture cp = capture;
 
-                    //grab Mask
-                    Image<Gray, byte> mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                        ImageFormat.ImageParam[kvRes.Key].XPos,
-                        ImageFormat.ImageParam[kvRes.Key].YPos,
-                        ImageFormat.ImageParam[kvRes.Key].Width,
-                        ImageFormat.ImageParam[kvRes.Key].Height))
-                    .InRange(
-                        ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold,
-                        ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold)
-                    .Resize(
-                        ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                    bool retVal = cp.Retrieve(imgFrame);
+                    if (retVal == false)
+                        throw new Exception("nothing Retrieve");
+                    double currentFrame = cp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.PosFrames);
+                    #region Prepare SubImages
+                    foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict.ToList())
+                    {
+                        //grab Image
+                        Image<Gray, byte> image = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                            ImageFormat.ImageParam[kvRes.Key].XPos,
+                            ImageFormat.ImageParam[kvRes.Key].YPos,
+                            ImageFormat.ImageParam[kvRes.Key].Width,
+                            ImageFormat.ImageParam[kvRes.Key].Height))
+                        .InRange(
+                            ImageFormat.ImageParam[kvRes.Key].ColorLowerThreshold,
+                            ImageFormat.ImageParam[kvRes.Key].ColorHigherThreshold)
+                        .Resize(
+                            ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
-                    //save it together
-                    ResultDict[kvRes.Key] = image.Or(mask);
-                }
-                //Windows Show
-                #region Show Window
-                foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict)
-                {
-                    //CvInvoke.Imshow(kvRes.Key.ToString(), kvRes.Value);
-                    double backConvertValue = 1 / ImageFormat.ImageParam[kvRes.Key].Scale;
-                    kvRes.Value.Resize(backConvertValue, Emgu.CV.CvEnum.Inter.Linear).Convert<Bgr, byte>().CopyTo(imgFrame.GetSubRect(new System.Drawing.Rectangle(ImageFormat.ImageParam[kvRes.Key].XPos
-                                                                                                            , ImageFormat.ImageParam[kvRes.Key].YPos
-                                                                                                            , ImageFormat.ImageParam[kvRes.Key].Width
-                                                                                                            , ImageFormat.ImageParam[kvRes.Key].Height)));
-                }
-                CvInvoke.Imshow("BigScreen", imgFrame.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear));
-                CvInvoke.WaitKey(1);
-                #endregion
+                        //grab Mask
+                        Image<Gray, byte> mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                            ImageFormat.ImageParam[kvRes.Key].XPos,
+                            ImageFormat.ImageParam[kvRes.Key].YPos,
+                            ImageFormat.ImageParam[kvRes.Key].Width,
+                            ImageFormat.ImageParam[kvRes.Key].Height))
+                        .InRange(
+                            ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold,
+                            ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold)
+                        .Resize(
+                            ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
+                        //save it together
+                        ResultDict[kvRes.Key] = image.Or(mask);
+                    }
+                    #endregion
+
+                    #region Show Window
+                    foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict)
+                    {
+                        //CvInvoke.Imshow(kvRes.Key.ToString(), kvRes.Value);
+                        double backConvertValue = 1 / ImageFormat.ImageParam[kvRes.Key].Scale;
+                        kvRes.Value.Resize(backConvertValue, Emgu.CV.CvEnum.Inter.Linear).Convert<Bgr, byte>().CopyTo(imgFrame.GetSubRect(new System.Drawing.Rectangle(ImageFormat.ImageParam[kvRes.Key].XPos
+                                                                                                                , ImageFormat.ImageParam[kvRes.Key].YPos
+                                                                                                                , ImageFormat.ImageParam[kvRes.Key].Width
+                                                                                                                , ImageFormat.ImageParam[kvRes.Key].Height)));
+                    }
+                    CvInvoke.Imshow("BigScreen", imgFrame.Resize(0.5, Emgu.CV.CvEnum.Inter.Linear));
+                    CvInvoke.WaitKey(1);
+                    #endregion
+                    #region Show Predicted Result
 #if SHOWREPREDICTRESULT
-                Dictionary<ImageType, Task<float>> taskList = new Dictionary<ImageType, Task<float>>();
+                    Dictionary<ImageType, Task<float>> taskList = new Dictionary<ImageType, Task<float>>();
 
 
-                foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
-                {
-                    taskList[kvpair.Key] = Task<float>.Factory.StartNew(() =>
+                    foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
                     {
-                        return PredictList[kvpair.Key].PredictImage(kvpair.Value);
+                        taskList[kvpair.Key] = Task<float>.Factory.StartNew(() =>
+                        {
+                            return PredictList[kvpair.Key].PredictImage(kvpair.Value);
+                        }
+                            );
                     }
-                        );
-                }
-                Task.WaitAll(taskList.Values.ToArray());
+                    Task.WaitAll(taskList.Values.ToArray());
 
-                foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
-                {
-                    float fl = taskList[kvpair.Key].Result;
-
-                    string val = ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum == fl).FirstOrDefault().Key;
-
-                    if (PredictedValues[kvpair.Key].Item1 != val)
-                        PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, true);
-                    else
-                        PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, false);
-                }
-                if (PredictedValues.Any(x => x.Value.Item2 == true))
-                {
-                    foreach (KeyValuePair<ImageType, Tuple<string, bool>> kvpair in PredictedValues)
+                    foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
                     {
-                        Console.WriteLine($"{currentFrame} - {kvpair.Key.ToString()} : {PredictedValues[kvpair.Key].Item1}");
+                        float fl = taskList[kvpair.Key].Result;
+
+                        string val = ImageFormat.ImageParam[kvpair.Key].Dict.Where(x => x.Value.ClassNum == fl).FirstOrDefault().Key;
+
+                        if (PredictedValues[kvpair.Key].Item1 != val)
+                            PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, true);
+                        else
+                            PredictedValues[kvpair.Key] = new Tuple<string, bool>(val, false);
                     }
-                }
+                    if (PredictedValues.Any(x => x.Value.Item2 == true))
+                    {
+                        foreach (KeyValuePair<ImageType, Tuple<string, bool>> kvpair in PredictedValues)
+                        {
+                            Console.WriteLine($"{currentFrame} - {kvpair.Key.ToString()} : {PredictedValues[kvpair.Key].Item1}");
+                        }
+                    }
 #endif
-
+                    #endregion
+                    #region Save frames
 #if SAVEREQUIRED
             foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
             {
@@ -197,13 +199,13 @@ namespace EmguTestApp
                 kvpair.Value.ToBitmap().Save(saveFileFullName);
             }
 #endif
+                    #endregion SAVEREQUIRED
 
-                foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict)
-                {
-                    kvRes.Value.Dispose();
+                    foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvRes in ResultDict)
+                    {
+                        kvRes.Value.Dispose();
+                    }
                 }
-                //imgFrame.Dispose();
-                currentFrame++;
             }
             catch (Exception ex)
             {
