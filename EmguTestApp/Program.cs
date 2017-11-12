@@ -120,20 +120,31 @@ namespace EmguTestApp
                         .Resize(
                             ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
 
-                        //grab Mask
-                        Image<Gray, byte> mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(
-                            ImageFormat.ImageParam[kvRes.Key].XPos,
-                            ImageFormat.ImageParam[kvRes.Key].YPos,
-                            ImageFormat.ImageParam[kvRes.Key].Width,
-                            ImageFormat.ImageParam[kvRes.Key].Height))
-                        .InRange(
-                            ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold,
-                            ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold)
-                        .Resize(
-                            ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+                        //grab Mask if differ any of thresholds
+                        if (ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold.Red != ImageFormat.ImageParam[kvRes.Key].ColorLowerThreshold.Red
+                            || ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold.Green != ImageFormat.ImageParam[kvRes.Key].ColorLowerThreshold.Green
+                            || ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold.Blue != ImageFormat.ImageParam[kvRes.Key].ColorLowerThreshold.Blue
+                            //HigherThreshold
+                            || ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Red != ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Red
+                            || ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Green != ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Green
+                            || ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Blue != ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Blue)
+                        {
+                            Image<Gray, byte> mask = imgFrame.GetSubRect(new System.Drawing.Rectangle(
+                                ImageFormat.ImageParam[kvRes.Key].XPos,
+                                ImageFormat.ImageParam[kvRes.Key].YPos,
+                                ImageFormat.ImageParam[kvRes.Key].Width,
+                                ImageFormat.ImageParam[kvRes.Key].Height))
+                            .InRange(
+                                ImageFormat.ImageParam[kvRes.Key].MaskLowerThreshold,
+                                ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold)
+                            .Resize(
+                                ImageFormat.ImageParam[kvRes.Key].Scale, Emgu.CV.CvEnum.Inter.Linear);
+
+                            image = image.Or(mask);
+                        }
 
                         //save it together
-                        ResultDict[kvRes.Key] = image.Or(mask);
+                        ResultDict[kvRes.Key] = image;
                     }
                     #endregion
 
