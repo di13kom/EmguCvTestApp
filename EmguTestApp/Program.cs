@@ -1,4 +1,4 @@
-﻿//#define SAVEREQUIRED
+﻿#define SAVEREQUIRED
 //#define SHOWREPREDICTRESULT
 
 using System;
@@ -25,12 +25,13 @@ namespace EmguTestApp
         static string CurrentName = "Common";
         static readonly int FullHDWigth = 1920;
         public static readonly int FullHDHeight = 1080;
+        private static string fileSaveExtension= ".bmp";
 
         static double TotalFrames;
 
         static Capture capture;
 
-        static Dictionary<ImageType, UMat> ResultDict = new Dictionary<ImageType, UMat>();
+        static Dictionary<ImageType, Mat> ResultDict = new Dictionary<ImageType, Mat>();
 
 #if SHOWREPREDICTRESULT
         static Dictionary<ImageType, PredictModel> PredictList = new Dictionary<ImageType, PredictModel>();
@@ -47,7 +48,7 @@ namespace EmguTestApp
                 //, ImageType.OnSelect_Player2Name
                 //, ImageType.RoundReadyMessage
                 , ImageType.KoGoMessage
-                , ImageType.CurrentTime
+                //, ImageType.CurrentTime
                 //, ImageType.TitleMenu
                 //, ImageType.Result_Player1
                 //, ImageType.Result_Player2
@@ -98,7 +99,7 @@ namespace EmguTestApp
         {
             try
             {
-                using (UMat imgFrame = new UMat())
+                using (Mat imgFrame = new Mat())
                 {
                     Capture cp = capture;
 
@@ -110,7 +111,7 @@ namespace EmguTestApp
                     foreach (var kvRes in ResultDict.ToList())
                     {
                         //grab Image
-                        UMat newImage = new UMat(imgFrame, new System.Drawing.Rectangle(
+                        Mat newImage = new Mat(imgFrame, new System.Drawing.Rectangle(
                             ImageFormat.ImageParam[kvRes.Key].XPos,
                             ImageFormat.ImageParam[kvRes.Key].YPos,
                             ImageFormat.ImageParam[kvRes.Key].Width,
@@ -137,7 +138,7 @@ namespace EmguTestApp
                             || ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Green != ImageFormat.ImageParam[kvRes.Key].ColorHigherThreshold.Green
                             || ImageFormat.ImageParam[kvRes.Key].MaskHigherThreshold.Blue != ImageFormat.ImageParam[kvRes.Key].ColorHigherThreshold.Blue)
                         {
-                            UMat maskU = new UMat(imgFrame, new System.Drawing.Rectangle(
+                            Mat maskU = new Mat(imgFrame, new System.Drawing.Rectangle(
                             ImageFormat.ImageParam[kvRes.Key].XPos,
                             ImageFormat.ImageParam[kvRes.Key].YPos,
                             ImageFormat.ImageParam[kvRes.Key].Width,
@@ -166,7 +167,7 @@ namespace EmguTestApp
                     foreach (var kvRes in ResultDict)
                     {
 
-                        kvRes.Value.CopyTo(new UMat(imgFrame, new Rectangle(ImageFormat.ImageParam[kvRes.Key].XPos,
+                        kvRes.Value.CopyTo(new Mat(imgFrame, new Rectangle(ImageFormat.ImageParam[kvRes.Key].XPos,
                            ImageFormat.ImageParam[kvRes.Key].YPos, ImageFormat.ImageParam[kvRes.Key].Width, ImageFormat.ImageParam[kvRes.Key].Height)));
 
                         //kvRes.Value.Resize(backConvertValue, Emgu.CV.CvEnum.Inter.Linear).Convert<Bgr, byte>().CopyTo(imgFrame.GetSubRect(new System.Drawing.Rectangle(ImageFormat.ImageParam[kvRes.Key].XPos
@@ -218,17 +219,17 @@ namespace EmguTestApp
                     #endregion
                     #region Save frames
 #if SAVEREQUIRED
-            foreach (KeyValuePair<ImageType, Image<Gray, byte>> kvpair in ResultDict)
-            {
-                string saveDirPath = Path.Combine(ImageFormat.ImageParam[kvpair.Key].AimPath, kvpair.Key.ToString());
+                    foreach (var kvpair in ResultDict)
+                    {
+                        string saveDirPath = Path.Combine(ImageFormat.ImageParam[kvpair.Key].AimPath, kvpair.Key.ToString());
 
-                if (Directory.Exists(saveDirPath) == false)
-                    Directory.CreateDirectory(saveDirPath);
+                        if (Directory.Exists(saveDirPath) == false)
+                            Directory.CreateDirectory(saveDirPath);
 
-                string saveFileFullName = Path.Combine(saveDirPath, CurrentName + "_" + DateTime.Now.ToString("yyyyMMdd_HHmmssffff_") + currentFrame + fileImageExtension);
+                        string saveFileFullName = Path.Combine(saveDirPath, DateTime.Now.ToString("yyyyMMdd_HHmmssffff_") + currentFrame + "_" + kvpair.Key.ToString() + fileSaveExtension);
 
-                kvpair.Value.ToBitmap().Save(saveFileFullName);
-            }
+                        kvpair.Value.Save(saveFileFullName);
+                    }
 #endif
                     #endregion SAVEREQUIRED
 
