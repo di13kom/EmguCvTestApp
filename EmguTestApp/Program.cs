@@ -29,7 +29,7 @@ namespace EmguTestApp
 
         static double TotalFrames;
 
-        static Capture capture;
+        static VideoCapture capture;
 
         static Dictionary<ImageType, Mat> ResultDict = new Dictionary<ImageType, Mat>();
 
@@ -78,7 +78,7 @@ namespace EmguTestApp
             }
 
             CvInvoke.NamedWindow("BigScreen");
-            capture = new Capture(FileToPlay);
+            capture = new VideoCapture(FileToPlay);
             TotalFrames = capture.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameCount);
             Console.WriteLine("total frames:{0}", TotalFrames);
 
@@ -101,7 +101,7 @@ namespace EmguTestApp
             {
                 using (Mat imgFrame = new Mat())
                 {
-                    Capture cp = capture;
+                    VideoCapture cp = capture;
 
                     bool retVal = cp.Retrieve(imgFrame);
                     if (retVal == false)
