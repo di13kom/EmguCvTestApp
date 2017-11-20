@@ -69,7 +69,7 @@
         <TabItem x:Name="InRangeTab" Header="InRange" IsEnabled="{Binding Path=IsEnabled}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition MaxHeight="20"></RowDefinition>
+                    <RowDefinition MaxHeight="30"></RowDefinition>
                     <RowDefinition MaxHeight="100"></RowDefinition>
                     <RowDefinition MaxHeight="100"></RowDefinition>
 
@@ -80,11 +80,10 @@
                 </Grid.RowDefinitions>
 
                 <DockPanel Grid.Row="0">
-                    <!--<Menu DockPanel.Dock="Top">
-                        <MenuItem Header="File">
-                            <MenuItem Header="_Open" Click="MenuItemOpen_Click" x:Name="FileOpenHeader_InRangeTab"/>
-                        </MenuItem>
-                    </Menu>-->
+                    <WrapPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <RadioButton GroupName="ColorTypes" Content="BGR" Checked="ColorType_InRangeTab_Checked" IsChecked="True"/>
+                        <RadioButton GroupName="ColorTypes" Content="HSV" Checked="ColorType_InRangeTab_Checked"/>
+                    </WrapPanel>
                 </DockPanel>
                 <StackPanel x:Name="Panel1" Grid.Row="1" Margin="10,0,10,0" HorizontalAlignment="Stretch">
                     <Label HorizontalAlignment="Center" FontWeight="Bold">ColorMin</Label>

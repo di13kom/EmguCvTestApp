@@ -1,9 +1,11 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Structure;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -180,9 +182,9 @@ namespace EmguWpfApp
                     else
                         img = inImage.Convert<Gray, byte>().ThresholdTrunc(new Gray(ThresHoldGreenOrGray));
                     break;
-                //case "ThresHoldAdaptive":
+                    //case "ThresHoldAdaptive":
 
-                //    break;
+                    //    break;
             }
             return img;
         }
@@ -279,8 +281,17 @@ namespace EmguWpfApp
         }
     }
 
+    public enum ColorType_enum
+    {
+        BGR = 1,
+        HLS = 2,
+        HSV = 3,
+        HSI = 4
+    }
+
     public class InRangeStruct : INotifyPropertyChanged
     {
+        ColorType_enum _colorType = ColorType_enum.BGR;
         bool _isEnabled = false;
         bool _isColorMaskSync = true;
         /// <summary>
@@ -495,16 +506,48 @@ namespace EmguWpfApp
             }
         }
 
+        public ColorType_enum ColorType
+        {
+            get => _colorType;
+            set
+            {
+                //Enum.GetName(typeof(ColorType_enum), value);
+                //ColorType_enum colVal =(ColorType_enum)Enum.Parse(typeof(ColorType_enum), value.ToString());
+                if (value != _colorType)
+                {
+                    _colorType = value;
+                    NotifyPropertyChanged("ColorType");
+                }
+            }
+        }
+
         public Image<Gray, byte> ProccessImage(Image<Bgr, byte> inImage)
         {
-            Image<Gray, byte> img = inImage.InRange(new Bgr(ColorMinBlue, ColorMinGreen, ColorMinRed)
-                        , new Bgr(ColorMaxBlue, ColorMaxGreen, ColorMaxRed));
-            if (IsColorMaskSync == false)
+            Image<Gray, byte> img = null;
+            if (ColorType == ColorType_enum.BGR)
             {
-                using (Image<Gray, byte> mask = inImage.InRange(new Bgr(MaskMinBlue, MaskMinGreen, MaskMinRed)
-                    , new Bgr(MaskMaxBlue, MaskMaxGreen, MaskMaxRed)))
+                img = inImage.InRange(new Bgr(ColorMinBlue, ColorMinGreen, ColorMinRed)
+                            , new Bgr(ColorMaxBlue, ColorMaxGreen, ColorMaxRed));
+                if (IsColorMaskSync == false)
                 {
-                    img = img.Or(mask);
+                    using (Image<Gray, byte> mask = inImage.InRange(new Bgr(MaskMinBlue, MaskMinGreen, MaskMinRed)
+                        , new Bgr(MaskMaxBlue, MaskMaxGreen, MaskMaxRed)))
+                    {
+                        img = img.Or(mask);
+                    }
+                }
+            }
+            else if (ColorType == ColorType_enum.HSV)
+            {
+                img = inImage.Convert<Hsv, byte>().InRange(new Hsv(ColorMinBlue, ColorMinGreen, ColorMinRed)
+                            , new Hsv(ColorMaxBlue, ColorMaxGreen, ColorMaxRed));
+                if (IsColorMaskSync == false)
+                {
+                    using (Image<Gray, byte> mask = inImage.InRange(new Bgr(MaskMinBlue, MaskMinGreen, MaskMinRed)
+                        , new Bgr(MaskMaxBlue, MaskMaxGreen, MaskMaxRed)))
+                    {
+                        img = img.Or(mask);
+                    }
                 }
             }
             return img;

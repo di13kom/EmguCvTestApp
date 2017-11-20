@@ -716,5 +716,25 @@ namespace EmguWpfApp
             if (ThresHold.IsEnabled && ImgRegion != null)
                 ThresHold_ValueChanged();
         }
+
+        private void ColorType_InRangeTab_Checked(object sender, RoutedEventArgs e)
+        {
+            RadioButton chkB = (RadioButton)sender;
+            switch (chkB.Content)
+            {
+                case "RGB":
+                    inRange.ColorType = ColorType_enum.BGR;
+                    break;
+                case "HSV":
+                    inRange.ColorType = ColorType_enum.HSV;
+                    break;
+                //case "HSI_CheckBox_InRangeTab":
+                //    inRange.ColorType = (int)ColorType_enum.HSI;
+                //    break;
+                //case "HSL_CheckBox_InRangeTab":
+                //    inRange.ColorType = (int)ColorType_enum.HLS;
+                //    break;
+            }
+        }
     }
 }
