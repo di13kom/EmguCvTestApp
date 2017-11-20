@@ -43,7 +43,7 @@ namespace EmguWpfApp
 
         private string CanvasVideoFileName = null;
         private string CanvasImageFileName = null;
-        Capture cp;
+        VideoCapture cp;
 
         private Point StartPoint;
         private Point EndPoint;
@@ -150,7 +150,7 @@ namespace EmguWpfApp
         {
             try
             {
-                Capture xCp = (Capture)sender;
+                VideoCapture xCp = (VideoCapture)sender;
                 Image<Bgr, byte> imgX = new Image<Bgr, byte>((int)CaptureWidth, (int)CaptureHeight);
                 xCp.Retrieve(imgX);
                 //CannyTab_ImageViewer.Dispatcher.Invoke(() => {
@@ -300,7 +300,7 @@ namespace EmguWpfApp
                     }
                     else if (CanvasStatus == Status.VideoChosen)
                     {
-                        cp = new Capture(CanvasVideoFileName);
+                        cp = new VideoCapture(CanvasVideoFileName);
                         CaptureWidth = cp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameWidth);
                         CaptureHeight = cp.GetCaptureProperty(Emgu.CV.CvEnum.CapProp.FrameHeight);
                         cp.ImageGrabbed += Cp_ImageGrabbed;
