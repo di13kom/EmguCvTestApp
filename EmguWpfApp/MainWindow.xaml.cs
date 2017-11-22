@@ -720,9 +720,9 @@ namespace EmguWpfApp
         private void ColorType_InRangeTab_Checked(object sender, RoutedEventArgs e)
         {
             RadioButton chkB = (RadioButton)sender;
-            switch (chkB.Content)
+            switch (chkB.Content.ToString())
             {
-                case "RGB":
+                case "BGR":
                     inRange.ColorType = ColorType_enum.BGR;
                     break;
                 case "HSV":
@@ -735,6 +735,11 @@ namespace EmguWpfApp
                 //    inRange.ColorType = (int)ColorType_enum.HLS;
                 //    break;
             }
+                
+            //if (chkB.Content.ToString() == "HSV")
+            //    inRange.ColorType = ColorType_enum.HSV;
+            //else
+            //    inRange.ColorType = ColorType_enum.BGR;
         }
     }
 }

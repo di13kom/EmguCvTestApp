@@ -41,4 +41,19 @@ namespace EmguWpfApp
             //throw new NotImplementedException();
         }
     }
+
+    public class LetterConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            string str = value.ToString();
+            int ind = int.Parse(parameter.ToString());
+            return str[ind];
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }
