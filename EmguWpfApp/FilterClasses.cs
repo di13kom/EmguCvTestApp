@@ -508,7 +508,7 @@ namespace EmguWpfApp
 
         public ColorType_enum ColorType
         {
-            get => _colorType;
+            get { return _colorType; }
             set
             {
                 //Enum.GetName(typeof(ColorType_enum), value);
